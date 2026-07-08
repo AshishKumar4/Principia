@@ -1,4 +1,5 @@
 import Atlas.Witnesses.Minkowski
+import Atlas.Witnesses.MinkowskiCausal
 
 /-!
 # Atlas.Witnesses — non-vacuity witnesses

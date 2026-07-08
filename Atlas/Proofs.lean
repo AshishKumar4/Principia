@@ -1,3 +1,5 @@
+import Atlas.Proofs.CausalLemmas
+
 /-!
 # Atlas.Proofs — proof developments
 
