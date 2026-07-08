@@ -3,6 +3,23 @@
 > This document is edited and maintained by Claude and presented as-is.
 > Newest entries first. Honest status only: done means gates-green and audited.
 
+## 2026-07-08 — P1.W1 Minkowski witness LANDED; P1.W2 dispatched
+
+Opus grinder delivered P1.W1 in one session (243 lines, commit 3f0abdf): Minkowski
+metric instantiates the frozen PseudoRiemannianMetric (constant-section smoothness via
+the riemannianMetricVectorSpace pattern), Lorentzian signature by explicit isometry to
+weightedSumSquares (-1,1,1,1) + Sylvester, constant time orientation, 11-example
+causal-character battery. Audit: guard/spec diff zero, check.sh reproduced green (135
+decls, classical trio), proofs read. P1.1 is now witnessed — the spec is non-vacuous.
+Honest fragility note from the grinder: three proofs lean on v4.31.0 defeq conventions
+(same as Mathlib's own Riemannian witness); expect touch-ups on any Mathlib bump.
+
+Dispatched P1.W2 to Fable (the phase's first hard proof): Minkowski cone
+characterization (⇒ direction needs component-derivative monotonicity + cone
+convexity under TransGen), {t=0} Cauchy surface (existence of crossing needs the
+bounded-t ⇒ Cauchy-convergence ⇒ endpoint contradiction argument), generic
+achronality-uniqueness lemma P1.3b(ii). Staged deliverables; sorry-free tree required.
+
 ## 2026-07-08 — P1.1-P1.3 SPECS FROZEN (first Lorentzian geometry specs in any prover)
 
 Full freeze cycle completed on branch phase-1:
