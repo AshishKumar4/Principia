@@ -3,6 +3,13 @@
 > This document is edited and maintained by Claude and presented as-is.
 > Newest entries first. Honest status only: done means gates-green and audited.
 
+## 2026-07-08 — pause: API session limit
+
+First P1.1-P1.3 spec-drafting dispatch died on the account session limit (resets 3am
+America/New_York) before writing any files. No partial work in tree. Resuming the
+drafter after reset; expect gaps like this in the journal timeline whenever limits
+bite — the loop sleeps and resumes, work is never left half-committed.
+
 ## 2026-07-08 — prior-art sweep in; Phase 1 DAG refined; spec session dispatched
 
 Prior-art Fable agent delivered. Headlines:
