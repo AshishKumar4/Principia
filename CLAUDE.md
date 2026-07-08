@@ -58,6 +58,29 @@ only experiment verifies axioms about nature. Never claim otherwise.
   physics content toward physlib.
 - Once per clone, run: `git config core.hooksPath .githooks`
 
+## Autonomous operation (owner's standing orders, 2026-07-08)
+
+The owner is away for several months; the orchestrator session runs the project
+autonomously through the whole blueprint. Rules:
+
+- **Guard files** — `scripts/**`, `.githooks/**`, `CLAUDE.md`, `lakefile.toml`,
+  `lean-toolchain` — may be modified only by the orchestrator, never by subagents.
+  Any subagent diff touching a guard file is rejected wholesale, no matter how good
+  the rest of the work is.
+- **Model policy**: Fable 5 subagents for hard/planning/sensitive work (spec drafting,
+  adversarial spec review vs. sources, proof strategy, audits). Opus 4.8 subagents only
+  for well-specified mechanical grinding inside frozen boundaries (proving stated
+  lemmas, churn). Never give an Opus grinder spec-writing or guard-adjacent work.
+- **Audit before merge**: subagent output is untrusted until independently audited —
+  guard-file and spec diff review, `scripts/check.sh` reproduced by the auditor (not
+  taken from the worker's report), witnesses re-checked. Enforce the rules; assume
+  clever tricks and look for them.
+- **PROGRESS.md is the durable journal**: dated entries for every milestone, blocker,
+  and decision — written so the owner can catch up months later, and updated before
+  any context compaction could lose state. Honest status only; walls are reported as
+  walls, with evidence.
+- Work on phase branches; merge to main only with gates green and audit complete.
+
 ## Toolchain
 
 - Lean `leanprover/lean4:v4.31.0` + Mathlib `v4.31.0`, pinned to match physlib for
