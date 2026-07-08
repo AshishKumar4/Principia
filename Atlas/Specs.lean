@@ -1,3 +1,7 @@
+import Atlas.Specs.Spacetime.Metric
+import Atlas.Specs.Spacetime.CausalStructure
+import Atlas.Specs.Spacetime.GlobalHyperbolicity
+
 /-!
 # Atlas.Specs — frozen definitions and target theorem statements
 
