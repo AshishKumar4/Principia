@@ -3,6 +3,33 @@
 > This document is edited and maintained by Claude and presented as-is.
 > Newest entries first. Honest status only: done means gates-green and audited.
 
+## 2026-07-08 — P1.1-P1.3 SPECS FROZEN (first Lorentzian geometry specs in any prover)
+
+Full freeze cycle completed on branch phase-1:
+1. Fable drafter produced 483 lines of compiling specs (its report flagged its own
+   risky choices); orchestrator audit reproduced gates + read every line.
+2. Source dossier (verbatim-verified Minguzzi/M-S/Chruściel/Bernal-Sánchez/Wald-scan,
+   O'Neill triple-pinned; committed to docs/dossiers/) adjudicated conventions.
+3. Independent Fable adversarial reviewer machine-checked every claim via probe
+   files: verdict freeze-after-revisions. Real defects found and fixed:
+   - D1 (blocking): IsCauchySurface was causal-exactly-once = Minguzzi's acausal
+     convention (would have made Penrose hypotheses nonstandard); switched to
+     O'Neill/Geroch timelike-exactly-once. My own audit had caught this
+     independently; dossier + reviewer confirmed with sources and Lean probes.
+   - D2: "piecewise-C¹ reading" docstring claim was inaccurate (differentiable class
+     is wider); relabeled honestly, equivalence parked as theorem node P1.3b(iv).
+   - D3: redundant Causal conjunct in FutureCausalOn removed (equivalence
+     machine-checked by reviewer's probe).
+   - D4: 16 citation fixes (achronal = Wald p. 192 not 194; unverifiable "p. 190"
+     softened to §8.1; O'Neill cited by page, def-numbers dropped as unverified).
+   - D5: P1.2/P1.3 declarations wrapped in Spacetime namespace (upstreamability).
+4. check.sh green (2477 jobs, 78 declarations, classical trio only). Frozen via
+   [spec-review] commit. New theorem nodes recorded as P1.3b.
+
+Residual honest risks: O'Neill page cites are third-party-pinned (book inaccessible);
+Wald p. 190 unverifiable (missing from scan). Next: P1.W1 Minkowski witness
+(dispatching now), P1.W2 cone characterization (the big honest proof).
+
 ## 2026-07-08 — pause: API session limit
 
 First P1.1-P1.3 spec-drafting dispatch died on the account session limit (resets 3am

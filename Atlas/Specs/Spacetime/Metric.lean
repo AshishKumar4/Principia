@@ -49,9 +49,9 @@ variable {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
 `(E, H)`: a symmetric, pointwise-nondegenerate continuous bilinear form on each tangent
 space, depending `C^n`-smoothly on the base point.
 
-Authoritative source: O'Neill, *Semi-Riemannian Geometry*, Ch. 3, Def. 3.1: "A metric
-tensor `g` on a smooth manifold `M` is a symmetric nondegenerate (0,2) tensor field on
-`M` of constant index" — minus the constant-index requirement: the index is defined
+Authoritative source: O'Neill, *Semi-Riemannian Geometry*, Ch. 3, p. 54: a metric
+tensor on a smooth manifold is a symmetric nondegenerate (0,2) tensor field of
+constant index — minus the constant-index requirement: the index is defined
 pointwise by `PseudoRiemannianMetric.index`, and signature constraints are imposed by
 predicates such as `PseudoRiemannianMetric.IsLorentzian`. (For a continuous
 nondegenerate metric on a connected manifold the index is automatically constant, so
@@ -66,9 +66,9 @@ structure PseudoRiemannianMetric (I : ModelWithCorners ℝ E H) (n : ℕ∞ω) (
     [TopologicalSpace M] [ChartedSpace H M] [IsManifold I 1 M] where
   /-- The metric at `x`, as a continuous bilinear form on the tangent space at `x`. -/
   val (x : M) : TangentSpace I x →L[ℝ] TangentSpace I x →L[ℝ] ℝ
-  /-- The metric is symmetric (O'Neill, Ch. 3, Def. 3.1). -/
+  /-- The metric is symmetric (O'Neill, Ch. 3, p. 54). -/
   symm (x : M) (v w : TangentSpace I x) : val x v w = val x w v
-  /-- The metric is nondegenerate at every point (O'Neill, Ch. 3, Def. 3.1). -/
+  /-- The metric is nondegenerate at every point (O'Neill, Ch. 3, p. 54). -/
   nondegenerate (x : M) : (val x).toBilinForm.Nondegenerate
   /-- The metric is a `C^n` section of the bundle of continuous bilinear forms on the
   tangent bundle, in the spelling of Mathlib's `ContMDiffRiemannianMetric.contMDiff`. -/
@@ -82,7 +82,8 @@ variable {I : ModelWithCorners ℝ E H} {n : ℕ∞ω} {M : Type*}
 
 /-- The index of the metric `g` at the point `x`: the largest dimension of a subspace of
 the tangent space at `x` on which `g` is negative definite (O'Neill,
-*Semi-Riemannian Geometry*, Ch. 3, p. 54–55, "the index of `g`"), computed via
+*Semi-Riemannian Geometry*, p. 47 (index of a scalar product) and pp. 54–55 (index of
+a metric)), computed via
 Sylvester's law of inertia as `sigNeg` of the quadratic form associated to `g` at `x`
 (`Mathlib.LinearAlgebra.QuadraticForm.Signature`).
 
@@ -96,8 +97,8 @@ noncomputable def index (g : PseudoRiemannianMetric I n M) (x : M) : ℕ :=
 one timelike direction, all complementary directions spacelike, in the mostly-plus
 convention `(-, +, ..., +)`.
 
-Authoritative source: O'Neill, *Semi-Riemannian Geometry*, Ch. 3, p. 55 ("A Lorentz
-manifold is a semi-Riemannian manifold with index 1"). Note O'Neill additionally
+Authoritative source: O'Neill, *Semi-Riemannian Geometry*, Ch. 3, p. 55: a Lorentz
+manifold is a semi-Riemannian manifold of index 1. Note O'Neill additionally
 requires `dim M ≥ 2` for a Lorentz manifold, and Wald (*General Relativity*, §1.3,
 §8.1) works with `dim M = 4`; dimension hypotheses are imposed separately at theorem
 sites, not here. -/
@@ -110,7 +111,10 @@ def Timelike (g : PseudoRiemannianMetric I n M) (x : M) (v : TangentSpace I x) :
   g.val x v v < 0
 
 /-- A tangent vector `v` at `x` is null (= lightlike) if `g x v v = 0` and `v ≠ 0`.
-O'Neill, *Semi-Riemannian Geometry*, Ch. 3, p. 56; Wald, *General Relativity*, §8.1. -/
+O'Neill, *Semi-Riemannian Geometry*, Ch. 3, p. 56; Wald, *General Relativity*, §8.1.
+Note: Minguzzi (*Living Rev. Rel.* 22:3 (2019), §1.3) uses "null" for `g x v v = 0`
+INCLUDING the zero vector and "lightlike" for the nonzero case; our `Null` is O'Neill's
+(= Minguzzi's "lightlike") and excludes `0`. -/
 def Null (g : PseudoRiemannianMetric I n M) (x : M) (v : TangentSpace I x) : Prop :=
   g.val x v v = 0 ∧ v ≠ 0
 
@@ -120,9 +124,10 @@ that the zero vector is spacelike (rather than null) is O'Neill's:
 def Spacelike (g : PseudoRiemannianMetric I n M) (x : M) (v : TangentSpace I x) : Prop :=
   0 < g.val x v v ∨ v = 0
 
-/-- A tangent vector is causal (= nonspacelike) if it is timelike or null. O'Neill,
-*Semi-Riemannian Geometry*, Ch. 14 (causal vectors); Wald, *General Relativity*, §8.1.
-The zero vector is not causal. -/
+/-- A tangent vector is causal (= nonspacelike) if it is timelike or null. Minguzzi,
+*Living Rev. Rel.* 22:3 (2019), §1.3 (his causal ⟺ `g x v v ≤ 0 ∧ v ≠ 0`, equivalent
+to timelike-or-null under our conventions); Wald, *General Relativity*, §8.1. The zero
+vector is not causal — every source that defines causal vectors excludes it. -/
 def Causal (g : PseudoRiemannianMetric I n M) (x : M) (v : TangentSpace I x) : Prop :=
   g.Timelike x v ∨ g.Null x v
 
@@ -148,9 +153,11 @@ structure TimeOrientation (g : PseudoRiemannianMetric I n M) where
 i.e. `g x v (τ.X x) < 0`.
 
 For timelike vectors this is the time-cone criterion of O'Neill,
-*Semi-Riemannian Geometry*, Ch. 5, Lemma 26 (p. 144): timelike `v`, `w` lie in the same
+*Semi-Riemannian Geometry*, Ch. 5, pp. 143–145: timelike `v`, `w` lie in the same
 time cone iff `g v w < 0`; it extends to causal vectors since no nonzero causal vector
-is orthogonal to a timelike vector. Cf. Wald, *General Relativity*, §8.1. -/
+is orthogonal to a timelike vector. The causal-vector criterion is verbatim in
+Minguzzi–Sánchez, *The causal hierarchy of spacetimes*, Prop. 2.3 (causal `v` is
+future-directed iff `g v X < 0`). Cf. Wald, *General Relativity*, §8.1. -/
 def TimeOrientation.FutureDirected {g : PseudoRiemannianMetric I n M}
     (τ : g.TimeOrientation) (x : M) (v : TangentSpace I x) : Prop :=
   g.Causal x v ∧ g.val x v (τ.X x) < 0

@@ -34,12 +34,24 @@ singularity formalization exists in any prover; align with Mathlib PR #26221
 (covariant derivatives/Levi-Civita/geodesics, Rothgang-Massot) rather than build beside
 it. Canonical sources: Wald ch. 8-9; O'Neill ch. 14; Minguzzi Living Rev. Rel. 22:3.
 
-- P1.1 `todo` Spec: `PseudoRiemannianMetric` + index + `IsLorentzian` + causal
+- P1.1 `done` Spec FROZEN: `PseudoRiemannianMetric` + index + `IsLorentzian` + causal
   character of vectors + `TimeOrientation` (`Atlas/Specs/Spacetime/Metric.lean`).
-- P1.2 `todo` Spec: causal curves (Mathlib curve idiom), `≪`/`⤳` via TransGen,
-  I⁺/J⁺, achronal sets (`Atlas/Specs/Spacetime/CausalStructure.lean`).
-- P1.3 `todo` Spec: inextendibility, Cauchy surfaces (curve-crossing form; D± as
-  separate defs), global hyperbolicity (`Atlas/Specs/Spacetime/GlobalHyperbolicity.lean`).
+  Drafted, dossier-anchored (docs/dossiers/P1-causality-sources.md), adversarially
+  reviewed (probe-verified), revised, frozen 2026-07-08.
+- P1.2 `done` Spec FROZEN: causal curves (Mathlib curve idiom), `≪`/`⤳` via TransGen,
+  I⁺/J⁺, achronal sets (`Atlas/Specs/Spacetime/CausalStructure.lean`). Same review
+  cycle. Note: segment class is everywhere-differentiable (wider than piecewise-C¹);
+  coincidence of induced relations is node P1.3b(iv).
+- P1.3 `done` Spec FROZEN: inextendibility (subtype-atTop endpoint filter), Cauchy
+  surfaces (O'Neill/Geroch timelike-exactly-once crossing form — NOT Minguzzi's
+  acausal convention), D± (causal curves, arbitrary S), global hyperbolicity
+  (`Atlas/Specs/Spacetime/GlobalHyperbolicity.lean`). Same review cycle.
+- P1.3b `todo` Cauchy-surface theorem battery (from the review): (i) every
+  inextendible causal curve meets a Cauchy surface at least once (O'Neill Lemma
+  14.29 / Wald Prop. 8.3.4; needs P1.4+ machinery); (ii) crossing-uniqueness from
+  achronality — free lemma, reviewer's probe3 has a complete proof; (iii) equivalence
+  with Wald's D(Σ)=M definition; (iv) differentiable-segment vs piecewise-C¹ relation
+  equivalence (post-P1.4; Darboux-monotonicity argument sketched in review).
 - P1.W1 `todo` Witness: Minkowski metric on `EuclideanSpace ℝ (Fin 4)` — constant η
   section smooth (via `riemannianMetricVectorSpace` pattern), Lorentzian signature
   (Sylvester, weights (-1,1,1,1)), time orientation, causal-character examples.

@@ -45,24 +45,27 @@ curve with bounded-above domain "endpointed". The subtype filter has no such col
 ## Interval domains
 
 Curves in the sources are defined on intervals (Wald, p. 193). The pointwise conditions
-`FutureCausalOn τ γ s` do not constrain the shape of `s`, so the quantifications below
-additionally require `s.OrdConnected` (the Mathlib idiom for "s is an interval").
-Without it, a genuine causal curve with a parameter gap punched out of its domain
-(e.g. `(-∞, 0) ∪ (1, ∞)`) would count as an inextendible causal curve that can skip any
-candidate Cauchy surface, making `IsCauchySurface` unsatisfiable.
+`FutureTimelikeOn`/`FutureCausalOn` do not constrain the shape of `s`, so the
+quantifications below additionally require `s.OrdConnected` (the Mathlib idiom for
+"s is an interval"). Without it, a genuine causal (resp. timelike) curve with a
+parameter gap punched out of its domain (e.g. `(-∞, 0) ∪ (1, ∞)`) would count as an
+inextendible curve that can skip any candidate Cauchy surface, making
+`IsCauchySurface` unsatisfiable.
 
 ## Sources
 
 * Wald, *General Relativity* (1984), §8.1 (p. 193: endpoints, inextendibility) and
   §8.3 (pp. 200–201: domains of dependence, Cauchy surfaces, global hyperbolicity).
-* O'Neill, *Semi-Riemannian Geometry with Applications to Relativity* (1983), Ch. 14
-  (Cauchy hypersurfaces).
+* O'Neill, *Semi-Riemannian Geometry with Applications to Relativity* (1983), Ch. 14,
+  p. 415 (Cauchy hypersurfaces).
 * Geroch, "Domain of dependence", *J. Math. Phys.* 11, 437 (1970).
 * Minguzzi, "Lorentzian causality theory", *Living Rev. Rel.* 22:3 (2019), §3.
 -/
 
 open Bundle Set Filter
 open scoped ContDiff Manifold Topology
+
+namespace Spacetime
 
 section Endpoints
 
@@ -127,26 +130,35 @@ def domainOfDependence (τ : g.TimeOrientation) (S : Set M) : Set M :=
   futureDomainOfDependence τ S ∪ pastDomainOfDependence τ S
 
 /-- A Cauchy surface: a closed achronal set met in exactly one parameter value by every
-inextendible future-directed causal curve (curve-crossing form).
+inextendible future-directed timelike curve (curve-crossing form).
 
-Sources: Wald, *General Relativity*, §8.3, p. 201 defines a Cauchy surface as a closed
-achronal set `Σ` with `D(Σ) = M`, and notes that every inextendible causal curve then
-intersects `Σ`; O'Neill, *Semi-Riemannian Geometry*, Ch. 14 defines a Cauchy
-hypersurface as a set met exactly once by every inextendible timelike curve. This spec
-states the crossing condition for *causal* curves and counts *parameter values*
-(`∃!` over the domain), per the approved blueprint design (P1.3).
+Definitional source: O'Neill, *Semi-Riemannian Geometry*, Ch. 14, p. 415 (a Cauchy
+hypersurface is a set met exactly once by every inextendible timelike curve); Geroch,
+*J. Math. Phys.* 11, 437 (1970). Wald, *General Relativity*, §8.3, p. 201 instead
+defines a Cauchy surface as a closed achronal set `Σ` with `D(Σ) = M`; the equivalence
+is classical and is a theorem node, as is the companion fact that every inextendible
+*causal* curve meets a Cauchy surface at least once, possibly in a null segment
+(O'Neill, Lemma 14.29; Wald, Prop. 8.3.4). Quantifying causal curves with an
+exactly-once count would instead give Minguzzi's strictly narrower acausal convention
+(*Living Rev. Rel.* 22:3 (2019), Def. 3.35), excluding Cauchy surfaces with null
+portions; we deliberately do not use it.
 
-Formalization choices reviewers should scrutinize:
-* "exactly once for causal curves" is stronger than "exactly once for timelike curves":
-  it excludes achronal Cauchy sets containing null segments along which a causal curve
-  can run. Smooth spacelike Cauchy surfaces (in particular `{t = 0}` in Minkowski
-  space, node P1.W2) satisfy it, so `IsGloballyHyperbolic` is unaffected for the
-  atlas's purposes.
-* counting parameter values rather than image points additionally excludes curves
-  revisiting the same point of `S` — impossible anyway without closed causal loops. -/
+Formalization choices:
+* `IsClosed` and `IsAchronal` are definitional conjuncts even though O'Neill derives
+  both from the bare crossing property (Lemma 14.29): downstream consumers (Wald
+  Thm 9.5.1) use them directly, and deriving them would gate this spec on substantial
+  topology. For genuine spacetimes the conjunction is equivalent to O'Neill's bare
+  form.
+* Exactly-once counts parameter values (`∃!` over the domain), not image points. Given
+  achronality and `OrdConnected` the two counts agree: a second crossing parameter
+  yields a timelike segment between two points of `S`, contradicting achronality.
+* Only future-directed curves are quantified: a past-directed inextendible timelike
+  curve is a future-directed one after `t ↦ -t`, with the same crossing count.
+* Parameter domains are intervals (`OrdConnected`), as in `D⁺/D⁻`; see the module
+  docstring. -/
 def IsCauchySurface (τ : g.TimeOrientation) (S : Set M) : Prop :=
   IsClosed S ∧ IsAchronal τ S ∧
-    ∀ (γ : ℝ → M) (s : Set ℝ), s.OrdConnected → FutureCausalOn τ γ s →
+    ∀ (γ : ℝ → M) (s : Set ℝ), s.OrdConnected → FutureTimelikeOn τ γ s →
       Inextendible γ s → ∃! t, t ∈ s ∧ γ t ∈ S
 
 /-- A (time-oriented) spacetime is globally hyperbolic if it possesses a Cauchy
@@ -155,3 +167,5 @@ surface. Wald, *General Relativity*, §8.3, p. 201; Geroch, *J. Math. Phys.* 11,
 diamonds, etc.) are theorems, not part of this spec. -/
 def IsGloballyHyperbolic (τ : g.TimeOrientation) : Prop :=
   ∃ S : Set M, IsCauchySurface τ S
+
+end Spacetime

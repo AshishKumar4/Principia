@@ -31,22 +31,26 @@ require a spec review and a `[spec-review]` commit (see CLAUDE.md).
   requiring curve concatenation and smooth gluing.
 * `CausallyPrecedes` uses the *reflexive*-transitive closure: `p ⤳[τ] p` always holds,
   matching O'Neill's `p ≤ q` and `p ∈ J⁺(p)` (Wald, *General Relativity*, §8.1).
-* Segments are required to be differentiable (`MDifferentiableAt`) with everywhere
-  timelike (resp. causal) future-directed velocity; this is the "piecewise `C¹`" reading
-  of the sources' piecewise-smooth curves, cf. Minguzzi, *Living Rev. Rel.* 22:3 (2019),
-  §2 (causality theory is insensitive to the regularity class between piecewise `C¹`
-  and smooth). `MDifferentiableAt` (not `MDifferentiableWithinAt`) makes the velocity
-  the unrestricted `mfderiv`, at the price of requiring two-sided differentiability at
-  the endpoints of a segment `Icc a b` — harmless, since every `C¹` curve on a closed
-  interval extends to an open neighborhood, and O'Neill's curve segments are
-  restrictions of smooth curves defined on open intervals.
+* Segments are required to be everywhere differentiable (`MDifferentiableAt`) with
+  timelike (resp. causal) future-directed velocity. This class is formally *wider* than
+  the sources' piecewise-smooth curves (the velocity need not be continuous in the
+  parameter), so the step relations contain the classical single-segment ones; Minguzzi,
+  *Living Rev. Rel.* 22:3 (2019), §2 certifies insensitivity of the causality relations
+  between piecewise `C¹` and smooth, and coincidence of the differentiable-segment
+  relations with the piecewise-`C¹` ones is a stated theorem node (post-P1.4
+  normal-neighborhood machinery), not assumed here. `MDifferentiableAt` (not
+  `MDifferentiableWithinAt`) makes the velocity the unrestricted `mfderiv`, at the price
+  of two-sided differentiability at the endpoints of a segment `Icc a b` — harmless for
+  the ∃-quantified step relations (O'Neill's segments are restrictions of smooth curves
+  on open intervals), and vacuous in the ∀-quantified definitions (`D⁺/D⁻`,
+  `IsCauchySurface`), where inextendible curves have min-free, max-free interval
+  domains, which are open.
 
 ## Sources
 
 * O'Neill, *Semi-Riemannian Geometry with Applications to Relativity* (1983), Ch. 14,
   pp. 402–403 (chronology and causality relations, `I⁺`, `J⁺`).
-* Wald, *General Relativity* (1984), §8.1 (pp. 190–191: `I⁺/I⁻/J⁺/J⁻`; p. 194:
-  achronal sets).
+* Wald, *General Relativity* (1984), §8.1 (`I⁺/I⁻/J⁺/J⁻`; p. 192: achronal sets).
 * Minguzzi, "Lorentzian causality theory", *Living Rev. Rel.* 22:3 (2019).
 -/
 
@@ -57,6 +61,8 @@ variable {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
   {H : Type*} [TopologicalSpace H] {I : ModelWithCorners ℝ E H} {n : ℕ∞ω}
   {M : Type*} [TopologicalSpace M] [ChartedSpace H M] [IsManifold I 1 M]
   {g : PseudoRiemannianMetric I n M}
+
+namespace Spacetime
 
 /-- `FutureTimelikeOn τ γ s` means that on the parameter set `s`, the curve `γ : ℝ → M`
 is differentiable with future-directed timelike velocity: `γ` is a future-directed
@@ -72,10 +78,11 @@ def FutureTimelikeOn (τ : g.TimeOrientation) (γ : ℝ → M) (s : Set ℝ) : P
 /-- `FutureCausalOn τ γ s` means that on the parameter set `s`, the curve `γ : ℝ → M` is
 differentiable with future-directed causal velocity: `γ` is a future-directed causal
 curve on `s` (O'Neill, *Semi-Riemannian Geometry*, Ch. 14, p. 402; Wald,
-*General Relativity*, §8.1). Values of `γ` outside `s` are junk. -/
+*General Relativity*, §8.1). `TimeOrientation.FutureDirected` already requires the
+velocity to be causal, so no separate causal conjunct is stated. Values of `γ` outside
+`s` are junk. -/
 def FutureCausalOn (τ : g.TimeOrientation) (γ : ℝ → M) (s : Set ℝ) : Prop :=
   ∀ t ∈ s, MDifferentiableAt 𝓘(ℝ) I γ t ∧
-    g.Causal (γ t) (mfderiv 𝓘(ℝ) I γ t 1) ∧
     τ.FutureDirected (γ t) (mfderiv 𝓘(ℝ) I γ t 1)
 
 /-- `ChronoStep τ p q` means `q` is reachable from `p` by a single future-directed
@@ -97,7 +104,7 @@ curve from `p` to `q`, formalized as the transitive closure of single-segment
 reachability. Definitionally O'Neill's piecewise-smooth definition
 (*Semi-Riemannian Geometry*, Ch. 14, p. 402): a `Relation.TransGen` chain of timelike
 segments is exactly a future-directed piecewise-timelike curve from `p` to `q`.
-Cf. Wald, *General Relativity*, §8.1, p. 190 (`q ∈ I⁺(p)`).
+Cf. Wald, *General Relativity*, §8.1 (`q ∈ I⁺(p)`).
 
 Notation: `p ≪[τ] q` (scoped in the `Spacetime` namespace). -/
 def ChronologicallyPrecedes (τ : g.TimeOrientation) : M → M → Prop :=
@@ -107,33 +114,32 @@ def ChronologicallyPrecedes (τ : g.TimeOrientation) : M → M → Prop :=
 there is a (piecewise) future-directed causal curve from `p` to `q`, formalized as the
 reflexive-transitive closure of single-segment reachability. Definitionally O'Neill's
 piecewise-smooth definition (*Semi-Riemannian Geometry*, Ch. 14, p. 402); reflexivity
-(`p ≤ p`) is part of the sources' convention (Wald, *General Relativity*, §8.1, p. 191:
-`p ∈ J⁺(p)`).
+(`p ≤ p`) is part of the sources' convention (Wald, *General Relativity*, §8.1:
+`p ∈ J⁺(p)`; his p. 200 containment `S ⊂ D⁺(S) ⊂ J⁺(S)` requires it).
 
 Notation: `p ⤳[τ] q` (scoped in the `Spacetime` namespace). -/
 def CausallyPrecedes (τ : g.TimeOrientation) : M → M → Prop :=
   Relation.ReflTransGen (CausalStep τ)
 
 @[inherit_doc ChronologicallyPrecedes]
-scoped[Spacetime] notation:50 p:51 " ≪[" τ "] " q:51 => ChronologicallyPrecedes τ p q
+scoped notation:50 p:51 " ≪[" τ "] " q:51 => ChronologicallyPrecedes τ p q
 
 @[inherit_doc CausallyPrecedes]
-scoped[Spacetime] notation:50 p:51 " ⤳[" τ "] " q:51 => CausallyPrecedes τ p q
+scoped notation:50 p:51 " ⤳[" τ "] " q:51 => CausallyPrecedes τ p q
 
 /-- The chronological future `I⁺(p)` of a point: all points reachable from `p` by a
-future-directed piecewise-timelike curve. Wald, *General Relativity*, §8.1, p. 190;
+future-directed piecewise-timelike curve. Wald, *General Relativity*, §8.1;
 O'Neill, *Semi-Riemannian Geometry*, Ch. 14, p. 402. -/
 def chronologicalFuture (τ : g.TimeOrientation) (p : M) : Set M :=
   {q | ChronologicallyPrecedes τ p q}
 
-/-- The chronological past `I⁻(p)` of a point. Wald, *General Relativity*, §8.1, p. 190;
+/-- The chronological past `I⁻(p)` of a point. Wald, *General Relativity*, §8.1;
 O'Neill, *Semi-Riemannian Geometry*, Ch. 14, p. 402. -/
 def chronologicalPast (τ : g.TimeOrientation) (p : M) : Set M :=
   {q | ChronologicallyPrecedes τ q p}
 
 /-- The causal future `J⁺(p)` of a point: `p` itself together with all points reachable
-from `p` by a future-directed piecewise-causal curve. Wald, *General Relativity*, §8.1,
-p. 191; O'Neill, *Semi-Riemannian Geometry*, Ch. 14, p. 402. -/
+from `p` by a future-directed piecewise-causal curve. Wald, *General Relativity*, §8.1; O'Neill, *Semi-Riemannian Geometry*, Ch. 14, p. 402. -/
 def causalFuture (τ : g.TimeOrientation) (p : M) : Set M :=
   {q | CausallyPrecedes τ p q}
 
@@ -143,26 +149,28 @@ def causalPast (τ : g.TimeOrientation) (p : M) : Set M :=
   {q | CausallyPrecedes τ q p}
 
 /-- The chronological future of a set, `I⁺(S) = ⋃ p ∈ S, I⁺(p)`. Wald,
-*General Relativity*, §8.1, p. 191. -/
+*General Relativity*, §8.1. -/
 def chronologicalFutureOfSet (τ : g.TimeOrientation) (S : Set M) : Set M :=
   ⋃ p ∈ S, chronologicalFuture τ p
 
 /-- The chronological past of a set, `I⁻(S) = ⋃ p ∈ S, I⁻(p)`. Wald,
-*General Relativity*, §8.1, p. 191. -/
+*General Relativity*, §8.1. -/
 def chronologicalPastOfSet (τ : g.TimeOrientation) (S : Set M) : Set M :=
   ⋃ p ∈ S, chronologicalPast τ p
 
 /-- The causal future of a set, `J⁺(S) = ⋃ p ∈ S, J⁺(p)`. Wald, *General Relativity*,
-§8.1, p. 191. -/
+§8.1. -/
 def causalFutureOfSet (τ : g.TimeOrientation) (S : Set M) : Set M :=
   ⋃ p ∈ S, causalFuture τ p
 
 /-- The causal past of a set, `J⁻(S) = ⋃ p ∈ S, J⁻(p)`. Wald, *General Relativity*,
-§8.1, p. 191. -/
+§8.1. -/
 def causalPastOfSet (τ : g.TimeOrientation) (S : Set M) : Set M :=
   ⋃ p ∈ S, causalPast τ p
 
 /-- A set `S` is achronal if no two of its points are chronologically related
-(equivalently, `I⁺(S) ∩ S = ∅`). Wald, *General Relativity*, §8.1, p. 194. -/
+(equivalently, `I⁺(S) ∩ S = ∅`). Wald, *General Relativity*, §8.1, p. 192. -/
 def IsAchronal (τ : g.TimeOrientation) (S : Set M) : Prop :=
   ∀ p ∈ S, ∀ q ∈ S, ¬ ChronologicallyPrecedes τ p q
+
+end Spacetime
