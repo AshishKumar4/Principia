@@ -49,13 +49,13 @@ it. Canonical sources: Wald ch. 8-9; O'Neill ch. 14; Minguzzi Living Rev. Rel. 2
 - P1.3b `todo` Cauchy-surface theorem battery (from the review): (i) every
   inextendible causal curve meets a Cauchy surface at least once (O'Neill Lemma
   14.29 / Wald Prop. 8.3.4; needs P1.4+ machinery); (ii) crossing-uniqueness from
-  achronality — free lemma, reviewer's probe3 has a complete proof; (iii) equivalence
+  achronality — DONE (IsAchronal.eq_of_futureTimelikeOn, with P1.W2); (iii) equivalence
   with Wald's D(Σ)=M definition; (iv) differentiable-segment vs piecewise-C¹ relation
   equivalence (post-P1.4; Darboux-monotonicity argument sketched in review).
 - P1.W1 `done` Witness: Minkowski metric on `EuclideanSpace ℝ (Fin 4)` — constant η
   section smooth (via `riemannianMetricVectorSpace` pattern), Lorentzian signature
   (Sylvester, weights (-1,1,1,1)), time orientation, causal-character examples.
-- P1.W2 `todo` Witness (the big one): Minkowski cone characterization
+- P1.W2 `done` Witness (the big one): Minkowski cone characterization
   `p ≪ q ↔ q - p ∈ future cone` (FTC + Cauchy-Schwarz argument), expected-false
   examples, `{t=0}` is a Cauchy surface, Minkowski globally hyperbolic.
 - P1.4a `todo` Infrastructure: smooth dependence of ODE solutions on initial
