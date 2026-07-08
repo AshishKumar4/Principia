@@ -3,6 +3,29 @@
 > This document is edited and maintained by Claude and presented as-is.
 > Newest entries first. Honest status only: done means gates-green and audited.
 
+## 2026-07-08 — prior-art sweep in; Phase 1 DAG refined; spec session dispatched
+
+Prior-art Fable agent delivered. Headlines:
+- **Open field confirmed**: no Lorentzian manifolds, Schwarzschild, or singularity
+  theorem formalized in ANY prover. Nearest kin: Isabelle AFP Schutz_Spacetime
+  (order-theoretic SR) and Budapest FOL relativity (axiomatic, no geometry).
+- **Mathlib alignment is live**: PR #26221 (Rothgang-Massot, ~6k lines, draft) is
+  building covariant derivatives, Levi-Civita, geodesic flow, exp map. P1.4 must
+  build ON it. Biggest true gap on our path: smooth dependence of ODE solutions on
+  initial conditions (new node P1.4a). Gouëzel's Riemannian structure bakes in
+  positive-definiteness → our pseudo-metric is a parallel sibling structure (matches
+  design agent). Zulip design-floating deferred to owner's return (outward-facing).
+- **Synthetic route assessed and parked**: Cavalletti-Manini-Mondino 2025-26 prove
+  a synthetic Penrose for continuous spacetimes via optimal transport — but Mathlib
+  has zero OT, the math is fresh/unsettled, and witnesses would need the smooth
+  computations anyway. Classical Wald/O'Neill spine stands.
+- **Adjudicated a design conflict**: prior-art agent wanted causal-space-generality
+  specs; design agent rejected the abstraction (deletion test). Ruled for concrete
+  relations with interface-thin order-lemma proofs (locality until reuse is real);
+  K-P extraction deferred until a second instance exists.
+- BLUEPRINT.md Phase 1 refined accordingly (P1.4a, P1.5b, P1.6 battery added).
+- Dispatched: Fable spec-drafting session for P1.1-P1.3 on branch `phase-1`.
+
 ## 2026-07-08 — P1.1-P1.3 design proposal in, spot-audited
 
 Fable design agent delivered the P1.1-P1.3 proposal; I verified its key Mathlib claims

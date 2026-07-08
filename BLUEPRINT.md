@@ -23,19 +23,48 @@ Wald ch. 8-9; O'Neill, *Semi-Riemannian Geometry*; Penrose 1965 (PRL 14, 57).
 Mathlib has smooth manifolds and is weak on (semi-)Riemannian geometry; this phase is
 mostly infrastructure with a famous theorem on top.
 
-- P1.1 `todo` Spec: Lorentzian metric on a smooth manifold (signature, nondegeneracy),
-  time orientation. Witness: Minkowski space ℝ^{1,3}.
-- P1.2 `todo` Spec: causal structure — timelike/null/causal curves, chronological and
-  causal futures I⁺/J⁺, achronal sets. Witnesses + expected-false examples (e.g.
-  spacelike-separated points are not chronologically related in Minkowski).
-- P1.3 `todo` Spec: global hyperbolicity, Cauchy surfaces. Witness: Minkowski.
-- P1.4 `todo` Geodesics, exponential map, conjugate points in the Lorentzian setting
-  (gap: Mathlib geodesic theory is nascent — infrastructure node, Mathlib-upstreamable).
-- P1.5 `todo` Raychaudhuri equation for null congruences (expansion, shear, vorticity).
-- P1.6 `todo` Spec: trapped surfaces; null energy condition as a named hypothesis
-  (this is an atlas hypothesis — it gets its own reusable structure).
-- P1.7 `todo` **Target: Penrose singularity theorem** — null geodesic incompleteness
-  from global hyperbolicity + noncompact Cauchy surface + NEC + trapped surface.
+Design decisions (2026-07-08, from the design + prior-art research; details in
+PROGRESS.md): signature-generic `PseudoRiemannianMetric` in Gouëzel's
+`ContMDiffRiemannianMetric` spelling minus positivity, `IsLorentzian` via `sigNeg`;
+chronology/causality as `Relation.TransGen` of single-C¹-segment reachability
+(= O'Neill's piecewise defs, transitivity free); concrete relations, NOT a
+Kronheimer-Penrose abstraction (deletion test — extract later if a second instance
+materializes; keep order-lemma proofs interface-thin). Prior art: no Lorentzian/GR/
+singularity formalization exists in any prover; align with Mathlib PR #26221
+(covariant derivatives/Levi-Civita/geodesics, Rothgang-Massot) rather than build beside
+it. Canonical sources: Wald ch. 8-9; O'Neill ch. 14; Minguzzi Living Rev. Rel. 22:3.
+
+- P1.1 `todo` Spec: `PseudoRiemannianMetric` + index + `IsLorentzian` + causal
+  character of vectors + `TimeOrientation` (`Atlas/Specs/Spacetime/Metric.lean`).
+- P1.2 `todo` Spec: causal curves (Mathlib curve idiom), `≪`/`⤳` via TransGen,
+  I⁺/J⁺, achronal sets (`Atlas/Specs/Spacetime/CausalStructure.lean`).
+- P1.3 `todo` Spec: inextendibility, Cauchy surfaces (curve-crossing form; D± as
+  separate defs), global hyperbolicity (`Atlas/Specs/Spacetime/GlobalHyperbolicity.lean`).
+- P1.W1 `todo` Witness: Minkowski metric on `EuclideanSpace ℝ (Fin 4)` — constant η
+  section smooth (via `riemannianMetricVectorSpace` pattern), Lorentzian signature
+  (Sylvester, weights (-1,1,1,1)), time orientation, causal-character examples.
+- P1.W2 `todo` Witness (the big one): Minkowski cone characterization
+  `p ≪ q ↔ q - p ∈ future cone` (FTC + Cauchy-Schwarz argument), expected-false
+  examples, `{t=0}` is a Cauchy surface, Minkowski globally hyperbolic.
+- P1.4a `todo` Infrastructure: smooth dependence of ODE solutions on initial
+  conditions — THE load-bearing Mathlib gap between geodesics and conjugate-point
+  theory; pure Mathlib-upstream node (coordinate with Kudryashov/Yin work if merged).
+- P1.4 `todo` Lorentzian geodesics + exponential map + normal/convex neighborhoods —
+  build ON Mathlib PR #26221's covariant-derivative layer (metric-agnostic), not
+  beside it. Gates all general-spacetime causal lemmas (even "I⁺ is open").
+- P1.5 `todo` Jacobi fields, index form, conjugate/focal points along null geodesics
+  (nothing exists even Riemannianly — largest new development of the phase).
+- P1.5b `todo` Raychaudhuri for null congruences (screen bundle; scalar Riccati
+  comparison core), NEC as named atlas hypothesis.
+- P1.6 `todo` Causality-theory battery (post-P1.4): I⁺ open, push-up lemmas, limit
+  curve theorem (Arzelà-Ascoli exists; parametrization is the delicacy — Minguzzi),
+  achronal boundaries are C⁰ hypersurfaces (formalization-hostile), Geroch
+  topological splitting via volume-function time (smooth splitting NOT needed).
+- P1.6b `todo` Spec: trapped surfaces.
+- P1.7 `todo` **Target: Penrose singularity theorem** (Wald Thm 9.5.1; Penrose PRL
+  14, 57 (1965)) — null incompleteness from global hyperbolicity + noncompact Cauchy
+  surface + NEC + trapped surface. Endgame topology (compact ∂I⁺ vs noncompact
+  Cauchy surface) is Mathlib-comfortable once P1.5/P1.6 exist.
 
 ## Phase 2 — flat-space QFT spine → Haag's theorem
 
