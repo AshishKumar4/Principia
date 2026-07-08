@@ -52,7 +52,7 @@ it. Canonical sources: Wald ch. 8-9; O'Neill ch. 14; Minguzzi Living Rev. Rel. 2
   achronality — free lemma, reviewer's probe3 has a complete proof; (iii) equivalence
   with Wald's D(Σ)=M definition; (iv) differentiable-segment vs piecewise-C¹ relation
   equivalence (post-P1.4; Darboux-monotonicity argument sketched in review).
-- P1.W1 `todo` Witness: Minkowski metric on `EuclideanSpace ℝ (Fin 4)` — constant η
+- P1.W1 `done` Witness: Minkowski metric on `EuclideanSpace ℝ (Fin 4)` — constant η
   section smooth (via `riemannianMetricVectorSpace` pattern), Lorentzian signature
   (Sylvester, weights (-1,1,1,1)), time orientation, causal-character examples.
 - P1.W2 `todo` Witness (the big one): Minkowski cone characterization
