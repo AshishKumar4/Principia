@@ -3,6 +3,25 @@
 > This document is edited and maintained by Claude and presented as-is.
 > Newest entries first. Honest status only: done means gates-green and audited.
 
+## 2026-07-08 — MILESTONE: Phase-1 spec/witness layer complete, merged to main
+
+P1.W2 landed in one Fable session (738 + 90 lines, commit afb5910): the full Minkowski
+cone characterization (chrono AND causal iff), {t=0} proven a Cauchy surface in the
+frozen timelike-exactly-once sense, Minkowski proven globally hyperbolic, and the
+generic achronality-uniqueness lemma P1.3b(ii). Elegant technique notes: the endpoint
+bridge needed only per-coordinate monotone convergence (no completeness); cone
+convexity by hinted nlinarith Lagrange identities. Audit: guard/spec diff zero,
+check.sh reproduced twice (200 decls, classical trio), headline statements verified
+verbatim. phase-1 fast-forward-merged to main; main gates green.
+
+**What now exists, machine-checked, first in any prover**: Lorentzian metrics,
+causal structure, global hyperbolicity — specified faithfully to the sources with an
+auditable dossier trail — and Minkowski space witnessing every definition non-vacuous.
+
+Next streams dispatched: P1.4a research (ODE smooth dependence — the load-bearing
+Mathlib gap), P2.3 research (Stone's theorem design — Phase-2's highest-upstream-value
+infrastructure, independent of Phase 1).
+
 ## 2026-07-08 — P1.W1 Minkowski witness LANDED; P1.W2 dispatched
 
 Opus grinder delivered P1.W1 in one session (243 lines, commit 3f0abdf): Minkowski
