@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# Spec-freeze enforcement: commits touching Atlas/Specs/ must be marked [spec-review].
+set -euo pipefail
+
+if git diff --cached --name-only | grep -qE '^Atlas/Specs(/|\.lean$)'; then
+  if ! grep -q '\[spec-review\]' "$1"; then
+    echo "commit-msg: this commit modifies Atlas/Specs/** (frozen)." >&2
+    echo "Spec changes require a spec review and '[spec-review]' in the commit message." >&2
+    echo "Proof sessions must not edit specs; escalate instead (see CLAUDE.md)." >&2
+    exit 1
+  fi
+fi

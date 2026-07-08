@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+# Fast pre-commit checks; the full gate is scripts/check.sh (required before merge).
+# axiom/unsafe/native_decide: blocked on every branch (never legitimate).
+# sorry/admit: blocked on main only (allowed as scaffolding on work branches).
+set -euo pipefail
+
+staged_lean=$(git diff --cached --name-only --diff-filter=ACM -- 'Atlas/*.lean' 'Atlas.lean' || true)
+[ -z "$staged_lean" ] && exit 0
+
+branch=$(git symbolic-ref --short -q HEAD || echo detached)
+fail=0
+for f in $staged_lean; do
+  if git show ":$f" | grep -nE \
+      '(^|[^[:alnum:]_])native_decide([^[:alnum:]_]|$)|^[[:space:]]*(axiom|unsafe)[[:space:]]' \
+      >/dev/null; then
+    echo "pre-commit: forbidden token in $f (axiom/unsafe/native_decide)" >&2
+    fail=1
+  fi
+  if [ "$branch" = "main" ] && git show ":$f" | grep -nE \
+      '(^|[^[:alnum:]_])(sorry|admit)([^[:alnum:]_]|$)' >/dev/null; then
+    echo "pre-commit: sorry/admit in $f on main (allowed only on work branches)" >&2
+    fail=1
+  fi
+done
+exit "$fail"
