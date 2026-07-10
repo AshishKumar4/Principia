@@ -59,8 +59,9 @@ require a spec review and a `[spec-review]` commit (see CLAUDE.md).
 * **Namespace.** Declarations live in `OperatorTheory.LinearPMap`, parallel to
   `OperatorTheory.OneParameterUnitaryGroup` of the P2.3g spec; on upstreaming to
   Mathlib they would move to the root `LinearPMap` namespace. Beware that dot
-  notation on an *operator* (`A.IsSymmetric`) does not resolve to a project
-  namespace — write `LinearPMap.IsSymmetric A` from inside `OperatorTheory`. Dot
+  notation on an *operator* (`A.IsSymmetric`) does not resolve from inside
+  `namespace OperatorTheory` — write `LinearPMap.IsSymmetric A` there; it does
+  resolve under `open OperatorTheory` from outside (probe-verified). Dot
   notation on a *hypothesis* (`hA.le_adjoint`, `hA.norm_add_I_smul_sq`) works as
   usual, since `IsSymmetric`'s full name is the project one.
 
