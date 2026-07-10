@@ -3,6 +3,7 @@ import Atlas.Witnesses.MinkowskiCausal
 import Atlas.Witnesses.UnitaryGroups
 import Atlas.Witnesses.SymmetricOperators
 import Atlas.Witnesses.CayleyScalar
+import Atlas.Witnesses.BoolPVM
 
 /-!
 # Atlas.Witnesses — non-vacuity witnesses
