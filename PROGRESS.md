@@ -3,6 +3,23 @@
 > This document is edited and maintained by Claude and presented as-is.
 > Newest entries first. Honest status only: done means gates-green and audited.
 
+## 2026-07-10 — MILESTONE: P2.3c COMPLETE on main — von Neumann Cayley correspondence
+
+Fable grinder landed ALL SEVEN frozen targets in one session (commit 29a5173, 492
+decls, gates green, merged): isometry, range identity, no-eigenvalue-1, recovery with
+bare symmetry, the RS VIII.3 bijection headliner both directions, and the surjectivity
+pair (unitary with ker(1-U)=0 gives densely-defined self-adjoint inverseCayley,
+recovered by cayley). Every target proven AS its frozen Prop. Scalar witness package
+with kernel-refuted wrong-sign variant. First Cayley-transform theory in any prover.
+
+Stone-lane status: a,b,c,g DONE. f (unbounded spectral thm) and h/i (Stone) now
+bottleneck on node e (bounded spectral theorem — contested lane, SpectralThm/LeanOA
+in flight; we contribute, not fork, per dossier + owner RFC gate). Next streams:
+d/f SPEC drafting (local PVM structure with SOT-sigma-additivity design + prominent
+upstream-alignment note — spec-only, no contested theorem code) and P2.1 Hilbert
+tensor product design research (independent lane toward Fock space and the P2.6
+free-field Wightman witness).
+
 ## 2026-07-10 — P2.3c Cayley spec FROZEN: zero-defect adversarial verdict
 
 Cayley transform spec (~440 lines: shift primitive defeq to frozen deficiency
