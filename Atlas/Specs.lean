@@ -4,6 +4,7 @@ import Atlas.Specs.Spacetime.GlobalHyperbolicity
 import Atlas.Specs.OperatorTheory.UnitaryGroup
 import Atlas.Specs.OperatorTheory.Symmetric
 import Atlas.Specs.OperatorTheory.Cayley
+import Atlas.Specs.OperatorTheory.ProjectionValuedMeasure
 
 /-!
 # Atlas.Specs — frozen definitions and target theorem statements
