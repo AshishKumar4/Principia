@@ -32,7 +32,7 @@ projects are approaching the same definition:
   multiplicativity, landing in Mathlib's `IsStarProjection` (already in v4.31.0);
   (ii) they store finite additivity as a separate field, which is derivable from
   `empty'` + weak σ-additivity and therefore omitted here; (iii) they currently have
-  **no** `E univ = 1` field, which Rudin (Def 12.17(b)) requires and we include.
+  **no** `E univ = 1` field, which Rudin (Def 12.17(a)) requires and we include.
 * **LeanOA** (Loreaux/Bannon/Dedecker, checked 2026-07-10): no PVM or spectral-measure
   development exists in the repository (CFC, W*-topologies, masas only). No constraint.
 * **physlib** (Loges): a `SpectralMeasure` structure reportedly (— *unverified*, see
@@ -85,7 +85,9 @@ revised by a `[spec-review]` pass**; downstream proof nodes should treat the fie
     converges strongly and weakly. The same argument kills norm σ-additivity for
     *every* PVM taking infinitely many mutually orthogonal nonzero values, i.e. for
     the spectral measure of every operator with infinite spectrum (Rudin, remarks
-    following Def 12.17: the series converges in the strong operator topology, "not
+    following Def 12.17: the series converges in the strong operator topology (Rudin
+    Prop 12.18 proves SOT sigma-additivity as a THEOREM from the weak field — direct
+    book authority for our design), "not
     usually in the norm topology"). A norm-σ-additive "PVM" structure would make the
     node-P2.3f existence target *false*. This is the design decision the three
     converging projects are about to make incompatibly (see the alignment preamble).
@@ -140,7 +142,7 @@ revised by a `[spec-review]` pass**; downstream proof nodes should treat the fie
   - `inner_apply` — the diagonal values: `⟪x, A x⟫ = ∫ f dμ_x` (Bochner integral
     against the finite measure `μ_x`; integrable on the domain since
     `L²(μ_x) ⊆ L¹(μ_x)` for finite `μ_x`);
-  - `norm_sq_apply` — the graph norm: `‖A x‖² = ∫ ‖f‖² dμ_x` (Rudin, Thm 13.24(b)).
+  - `norm_sq_apply` — the graph norm: `‖A x‖² = ∫ ‖f‖² dμ_x` (Rudin, Thm 13.24(a), eq. (2)).
   The diagonal clauses determine `A` given `(P, f)`: the natural domain is a
   submodule, so complex polarization recovers `⟪y, A x⟫` for `y, x ∈ D(A)` from the
   diagonal, and density of the natural domain (a grind-node theorem) does the rest.
@@ -149,7 +151,7 @@ revised by a `[spec-review]` pass**; downstream proof nodes should treat the fie
   `VectorMeasure`/`ComplexMeasure` does not exist in Mathlib v4.31.0 (SpectralThm is
   hand-rolling it in `ComplexMeasure/Integral.lean`); it becomes derived API once
   either their version or ours lands. Including `norm_sq_apply` alongside
-  `inner_apply` keeps the relation manifestly equivalent to the textbook one without
+  `inner_apply` mirrors the textbook package (Rudin 13.24(a), eq. (2)); it is redundant for pinning `A` (the domain and inner clauses suffice via polarization + density of the natural domain) but harmless and equivalent to the textbook one without
   leaning on the density theorem at spec level; both clauses hold for the genuine
   spectral integral, so the existence targets are not weakened.
 * **The natural-domain `Submodule` and the `LinearPMap` shape are deferred with the
@@ -305,17 +307,17 @@ theorem coe_mk (f : Set α → H →L[ℂ] H) (hsa h0 h1 hnm hi hU) :
 
 variable (P : ProjectionValuedMeasure α H)
 
-/-- Every value of a projection-valued measure is self-adjoint (Rudin, Def 12.17(a);
+/-- Every value of a projection-valued measure is self-adjoint (Rudin, Def 12.17(b);
 Reed & Simon I, §VII.3). Unconditional: the junk value `0` is self-adjoint. -/
 theorem isSelfAdjoint (s : Set α) : IsSelfAdjoint (P s) :=
   P.isSelfAdjoint' s
 
-/-- A projection-valued measure sends the empty set to `0` (Rudin, Def 12.17(b)). -/
+/-- A projection-valued measure sends the empty set to `0` (Rudin, Def 12.17(a)). -/
 @[simp]
 theorem empty : P ∅ = 0 :=
   P.empty'
 
-/-- A projection-valued measure sends the whole space to `1` (Rudin, Def 12.17(b):
+/-- A projection-valued measure sends the whole space to `1` (Rudin, Def 12.17(a):
 `E(Ω) = I`). This is the normalization SpectralThm currently omits — see the
 upstream-alignment preamble. -/
 @[simp]
@@ -355,7 +357,7 @@ theorem isIdempotentElem (s : Set α) : IsIdempotentElem (P s) := by
   · rw [P.not_measurable hs, mul_zero]
 
 /-- The values of a projection-valued measure are star projections — self-adjoint
-idempotents, i.e. orthogonal projections (Rudin, Def 12.17(a)). Lands in Mathlib's
+idempotents, i.e. orthogonal projections (Rudin, Def 12.17(b)). Lands in Mathlib's
 `IsStarProjection` (v4.31.0), where SpectralThm still carries a bespoke
 `IsOrthogonalProjection` with a sorried bridge. -/
 theorem isStarProjection (s : Set α) : IsStarProjection (P s) :=
@@ -396,7 +398,8 @@ the complex measure `s ↦ ⟪x, P s y⟫` (Rudin, Def 12.17(e) — his `E_{x,y}
 `scalarMeasure y x`, see the module docstring on the inner-product convention;
 Reed & Simon I, §VII.3: `(x, P_Ω y)`). Linear in `y`, conjugate-linear in `x`.
 
-The fields are literal reuse of the structure's fields — the design reason `m_iUnion'`
+The sigma-additivity field is literal reuse of the structure's `m_iUnion'` (empty/
+non-measurable fields need one-line glue) — the design reason `m_iUnion'`
 is shaped like `MeasureTheory.VectorMeasure.m_iUnion'`. -/
 def scalarMeasure (x y : H) : ComplexMeasure α where
   measureOf' s := ⟪x, P s y⟫
@@ -459,7 +462,7 @@ characterized on the diagonal —
   `{x | ∫ ‖f‖² dμ_x < ∞}`, where `μ_x = diagMeasure P x`;
 * `inner_apply`: on it, `⟪x, A x⟫ = ∫ f dμ_x` (a Bochner integral against the finite
   measure `μ_x`, convergent since `L²(μ_x) ⊆ L¹(μ_x)`);
-* `norm_sq_apply`: and `‖A x‖² = ∫ ‖f‖² dμ_x` (the graph norm; Rudin, Thm 13.24(b)).
+* `norm_sq_apply`: and `‖A x‖² = ∫ ‖f‖² dμ_x` (the graph norm; Rudin, Thm 13.24(a), eq. (2)).
 
 These clauses hold for the genuine spectral integral and determine `A` from `(P, f)`
 (polarization on the natural domain plus its density — grind-node lemmas), so the
@@ -477,7 +480,7 @@ structure IsSpectralIntegral (f : α → ℂ) (A : H →ₗ.[ℂ] H) : Prop wher
   /-- The diagonal matrix coefficients of `A` are the integrals of `f` against the
   diagonal spectral measures. -/
   inner_apply : ∀ x : A.domain, ⟪(x : H), A x⟫ = ∫ a, f a ∂(P.diagMeasure (x : H))
-  /-- The graph norm of `A` is the `L²`-norm of `f` (Rudin, Thm 13.24(b):
+  /-- The graph norm of `A` is the `L²`-norm of `f` (Rudin, Thm 13.24(a), eq. (2):
   `‖Ψ(f) x‖² = ∫ |f|² dE_{x,x}`). -/
   norm_sq_apply : ∀ x : A.domain,
     ‖A x‖ ^ 2 = ∫ a, ‖f a‖ ^ 2 ∂(P.diagMeasure (x : H))
