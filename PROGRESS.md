@@ -3,6 +3,19 @@
 > This document is edited and maintained by Claude and presented as-is.
 > Newest entries first. Honest status only: done means gates-green and audited.
 
+## 2026-07-10 — P2.3d/f spec FROZEN: PVMs + spectral-theorem targets
+
+PVM spec (~570 lines) frozen at e4ef3d9 after adversarial review with the deepest
+adequacy probe yet: the IsSpectralIntegral relation (spectral integral as frozen
+RELATION, no choice-based data) was kernel-verified on a genuine two-projection Bool
+PVM — satisfied by the diagonal operator for EVERY f, refuted for a value-perturbed
+impostor (inner clause is the value-pinner) and a domain-restricted one (domain
+clause pins exactly). Review found doc-only defects (Rudin 12.17 sub-labels swapped,
+13.24(b)->(a); fixed) and confirmed our design against the Rudin text directly (SOT
+σ-additivity is his Prop 12.18 — a theorem, not a field; norm additivity provably
+wrong). SpectralThm alignment real; their missing univ=1 field book-confirmed as a
+gap to flag in the owner RFC. Witness grind dispatched (probe promotes directly).
+
 ## 2026-07-10 — P2.1 design adjudicated: tensor-product gap smaller than mapped
 
 Fable research: Mathlib ALREADY has inner products + norms on binary tensor products
