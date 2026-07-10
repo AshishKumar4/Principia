@@ -3,6 +3,25 @@
 > This document is edited and maintained by Claude and presented as-is.
 > Newest entries first. Honest status only: done means gates-green and audited.
 
+## 2026-07-09 — P2.3g COMPLETE and on main: Stone's theorem groundwork frozen
+
+Full node-g cycle in one day: Fable spec draft (294 lines: OneParameterUnitaryGroup,
+deriv-valued Stone generator with physicists' sign convention pinned by round-trip
+lemma, three Stone Prop targets) → my audit → Fable adversarial review with the
+gold-standard probe (proved IN LEAN that the generator of exp(it)·1 on ℂ is the
+identity — sign errors functionally excluded; density-subsumption of IsSelfAdjoint
+verified in Mathlib source; caught my dossier's Reed-Simon Vol II→I citation error) →
+freeze (764b671) → Opus grind: trivialGroup + expI witnesses, sign-flip exclusion at
+operator level, and the BOUNDED-GENERATOR THEOREM: t ↦ exp(itA) for bounded
+self-adjoint A is a one-parameter unitary group with generator A, proven self-adjoint
+(bounded case of StoneTheoremForward). Gates green (301 decls); merged to main.
+
+The Stone lane (P2.3 a→b→c→f→h→i, all world-firsts-in-any-prover) now has its frozen
+public interface. Next: P2.3a symmetric-LinearPMap spec (dispatching), then deficiency
+theory (b), Cayley (c). Part-C finding: bounded-f multiplication groups are already
+boundedGenerator instances; the exp(itM_f) = M_{e^{itf}} identification is its own
+future node (stepping stone to the unbounded dossier witness).
+
 ## 2026-07-09 — P1.4a and P2.3 designs adjudicated; Phase 2 opens
 
 Both research reports landed (each survived a session-limit kill + resume; PR/repo
