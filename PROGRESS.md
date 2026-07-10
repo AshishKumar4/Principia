@@ -3,6 +3,17 @@
 > This document is edited and maintained by Claude and presented as-is.
 > Newest entries first. Honest status only: done means gates-green and audited.
 
+## 2026-07-09 — P2.3a/b spec FROZEN (kernel-refuted sign-trap); node-b grind running
+
+Symmetric-operator spec (297 lines: IsSymmetric = IsFormalAdjoint by rfl, norm
+identities proved, range-orthocomplement deficiency spaces with the dense-range leg
+already proved, IsEssentiallySelfAdjoint with honest junk-value semantics) frozen at
+9dfc680 after the strongest adversarial verdict yet: the reviewer KERNEL-REFUTED both
+the non-conjugated deficiency variant and the K-plus/K-minus label swap — the
+conjugation is provably load-bearing and correctly placed. physlib parallel decls
+found defeq to ours (reconciliation = renaming only). Opus grinding witnesses +
+DeficiencySpaceEqKerAdjoint + the RS VIII.3 essential-self-adjointness criterion.
+
 ## 2026-07-09 — P2.3g COMPLETE and on main: Stone's theorem groundwork frozen
 
 Full node-g cycle in one day: Fable spec draft (294 lines: OneParameterUnitaryGroup,
