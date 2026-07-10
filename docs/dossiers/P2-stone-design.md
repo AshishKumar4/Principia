@@ -65,7 +65,7 @@ three projects are about to make incompatibly) · `PVM.integral` (natural domain
 self-adjointness layer: `LinearPMap.IsSymmetric`, `‖(A±i)x‖² = ‖Ax‖²+‖x‖²`, deficiency
 spaces = ker(A†∓i) = range(A±i)ᗮ, RS VIII.3 criterion.
 
-Citations for specs: Reed-Simon II Thm VIII.3/VIII.6/VIII.7-8; Rudin FA 2e ch. 12-13
+Citations for specs: Reed-Simon I (Functional Analysis, rev. ed.) Thm VIII.3/VIII.6/VIII.7-8 — NOTE: Vol I, not II; drafter-caught correction 2026-07-09; Rudin FA 2e ch. 12-13
 (Thm 13.19); Weidmann (already Mathlib's LinearPMap reference).
 
 ## Sub-node DAG (a→b→c; d→e; c,e→f; g; f,g→h; b,h→i; j stretch)
