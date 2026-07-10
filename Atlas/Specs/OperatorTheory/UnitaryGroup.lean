@@ -81,7 +81,8 @@ clause is needed.
   (Stone's theorem).
 * M. H. Stone, "On one-parameter unitary groups in Hilbert space", *Ann. of Math.* 33
   (1932), 643–648.
-* W. Rudin, *Functional Analysis*, 2nd ed. (1991), ch. 13 (unbounded operators;
+* W. Rudin, *Functional Analysis*, 2nd ed. (1991), ch. 13, Thm 13.38 (Stone, in
+  semigroup form; unbounded operators;
   semigroups of operators and Stone's theorem).
 * J. Weidmann, *Linear Operators in Hilbert Spaces*, GTM 68 (1980), §7.6,
   Thm 7.38 (Stone's theorem; note his opposite "infinitesimal generator" convention,
@@ -166,7 +167,8 @@ differentiation is linear. Reed & Simon I, §VIII.4 (D(A) in the proof of
 Thm VIII.7/VIII.8); Rudin, *Functional Analysis*, 2nd ed., ch. 13.
 
 This definition is needed to construct `OneParameterUnitaryGroup.generator`; the
-preferred spelling is `U.generator.domain` (cf. `LinearPMap.adjointDomain`). Whether
+membership condition is exposed by `mem_generatorDomain` (cf.
+`LinearPMap.adjointDomain`). Whether
 the derivative is taken at `0` or at any other time is immaterial by the group law
 (a future lemma, not part of the spec). -/
 def generatorDomain : Submodule ℂ H where
@@ -241,7 +243,7 @@ theorem generator_apply_of_hasDerivAt {x y : H}
 
 /-- Round-trip pinning the sign convention: for `x` in the generator's domain, the
 orbit map `t ↦ U t x` has derivative `I • A x` at `0` — the differential form of
-`U t = exp(I * t • A)` (Reed & Simon I, §VIII.4, Thm VIII.7(b)). -/
+`U t = exp(I * t • A)` (Reed & Simon I, §VIII.4, Thm VIII.7(c)). -/
 theorem hasDerivAt_of_mem_generatorDomain {x : H} (hx : x ∈ U.generatorDomain) :
     HasDerivAt (fun t : ℝ ↦ (U t : H →L[ℂ] H) x)
       (Complex.I • U.generator ⟨x, hx⟩) 0 := by
