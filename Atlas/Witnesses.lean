@@ -1,5 +1,6 @@
 import Atlas.Witnesses.Minkowski
 import Atlas.Witnesses.MinkowskiCausal
+import Atlas.Witnesses.UnitaryGroups
 
 /-!
 # Atlas.Witnesses — non-vacuity witnesses
