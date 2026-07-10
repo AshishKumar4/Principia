@@ -109,7 +109,7 @@ space, unbounded operator theory, Stone's theorem (see RESEARCH.md infrastructur
   2026-07-09 (docs/dossiers/P2-stone-design.md): Cayley route; our uncontested lane =
   Cayley transform, unbounded spectral theorem, Stone (world-firsts in any prover);
   bounded-normal core is in-flight elsewhere (SpectralThm/LeanOA — contribute, don't
-  fork). Sub-nodes: a `done` + b `done` (spec frozen 9dfc680, witnesses + DeficiencySpaceEqKerAdjoint + EssentialSelfAdjointnessCriterion proven 2026-07-09, incl. keystone adjoint_closure_eq_adjoint); c Cayley spec FROZEN 2026-07-10 (cc066e0, adversarial verdict: zero defects, wrong-sign variants kernel-refuted); seven Prop targets `proving`; d PVMs `todo` (align SpectralThm; SOT-σ-additivity!);
+  fork). Sub-nodes: a `done` + b `done` (spec frozen 9dfc680, witnesses + DeficiencySpaceEqKerAdjoint + EssentialSelfAdjointnessCriterion proven 2026-07-09, incl. keystone adjoint_closure_eq_adjoint); c `done` (spec frozen cc066e0; all seven targets proven 2026-07-10 — full von Neumann Cayley correspondence, world-first); d PVMs `todo` (align SpectralThm; SOT-σ-additivity!);
   e bounded spectral thm `external/contested`; f unbounded spectral thm `todo`;
   g `done` (spec frozen + witnesses + bounded-generator thm, 2026-07-09; mult-operator functional-calculus identification split to future node); h Stone forward `todo`; i Stone converse `todo`;
   j multiplication form + C₀-semigroups `stretch`. Owner Zulip RFC before d/e code
