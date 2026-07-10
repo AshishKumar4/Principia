@@ -103,7 +103,7 @@ see the `inferInstance` examples below, which are frozen with this definition. -
 abbrev HilbertTensorProduct : Type _ :=
   UniformSpace.Completion (E ⊗[𝕜] F)
 
-@[inherit_doc] scoped notation:100 E " ⊗̂[" 𝕜 "] " F:100 => HilbertTensorProduct 𝕜 E F
+@[inherit_doc] scoped notation:100 E:100 " ⊗̂[" 𝕜 "] " F:101 => HilbertTensorProduct 𝕜 E F
 
 /-! Non-vacuity of the `abbrev` design: the Hilbert-space structure of `E ⊗̂[𝕜] F` is
 found by instance search alone. These examples are part of the frozen spec. -/
