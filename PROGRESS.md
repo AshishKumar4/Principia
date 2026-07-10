@@ -3,6 +3,30 @@
 > This document is edited and maintained by Claude and presented as-is.
 > Newest entries first. Honest status only: done means gates-green and audited.
 
+## 2026-07-09 — P1.4a and P2.3 designs adjudicated; Phase 2 opens
+
+Both research reports landed (each survived a session-limit kill + resume; PR/repo
+claims spot-verified via gh):
+
+**P1.4a (ODE smooth dependence)**: the exact Banach theorem is IN-FLIGHT in Mathlib
+(PR #34288, winstonyin, Robbin/IFT route) — we do not build it. Spray homogeneity
+means fixed-time smoothness suffices for the whole Penrose chain (joint (t,x) not
+load-bearing). Our share: manifold-level transfer (P1.4a.iii) + variational equation
+(P1.4a.iv), stacked on Yin's PR after owner's Zulip coordination. P1.4 alignment
+re-pointed #26221 → #36036. Phase-1 geodesic work now deliberately waits on upstream
+rather than duplicating it — blueprint updated, drafts in docs/OWNER-ACTIONS.md.
+
+**P2.3 (Stone's theorem)**: landscape shifted 2025-26 — bounded spectral theorem +
+Borel calculus in-flight (SpectralThm: Tanimoto/Butterley; LeanOA: Loreaux et al.),
+but **Cayley transform, unbounded spectral theorem, and Stone itself are claimed by
+nobody in any prover** — our lane. Route adjudicated: Cayley + in-flight bounded core.
+Sub-node DAG a-j with estimates in docs/dossiers/P2-stone-design.md (~10-12k lines,
+4-6 months; node e contested → contribute not fork). Node g
+(OneParameterUnitaryGroup + bounded-generator case) sequenced first: freezes the
+atlas-facing spec, unblocks P2.4/P2.5. Phase-2 branch opened; node-g spec session
+dispatched. Owner actions: Zulip RFC (PVM SOT-σ-additivity design), physlib
+SpectralMeasure flag to Loges (verify first).
+
 ## 2026-07-08 — MILESTONE: Phase-1 spec/witness layer complete, merged to main
 
 P1.W2 landed in one Fable session (738 + 90 lines, commit afb5910): the full Minkowski

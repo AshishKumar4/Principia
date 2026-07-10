@@ -105,8 +105,17 @@ space, unbounded operator theory, Stone's theorem (see RESEARCH.md infrastructur
   upstream candidate.
 - P2.2 `todo` Infrastructure: symmetric Fock space over a Hilbert space;
   creation/annihilation as unbounded operators.
-- P2.3 `todo` Infrastructure: Stone's theorem / one-parameter unitary groups (Mathlib
-  gap, highest upstream value; prerequisite for dynamics anywhere in the atlas).
+- P2.3 — Stone's theorem + unbounded-operator infrastructure. Design adjudicated
+  2026-07-09 (docs/dossiers/P2-stone-design.md): Cayley route; our uncontested lane =
+  Cayley transform, unbounded spectral theorem, Stone (world-firsts in any prover);
+  bounded-normal core is in-flight elsewhere (SpectralThm/LeanOA — contribute, don't
+  fork). Sub-nodes: a symmetric LinearPMaps `todo`; b deficiency/ess-self-adjointness
+  `todo`; c Cayley `todo`; d PVMs `todo` (align SpectralThm; SOT-σ-additivity!);
+  e bounded spectral thm `external/contested`; f unbounded spectral thm `todo`;
+  g OneParameterUnitaryGroup + bounded case `todo` — FIRST (freezes atlas-facing
+  spec, unblocks P2.4/P2.5); h Stone forward `todo`; i Stone converse `todo`;
+  j multiplication form + C₀-semigroups `stretch`. Owner Zulip RFC before d/e code
+  (docs/OWNER-ACTIONS.md).
 - P2.4 `todo` Spec: unitary representations of the (universal cover of the) Poincaré
   group; add physlib dependency here for Lorentz/SL(2,ℂ) groundwork.
 - P2.5 `todo` Spec: Wightman axioms (fields as operator-valued tempered distributions,

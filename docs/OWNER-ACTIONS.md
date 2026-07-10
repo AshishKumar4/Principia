@@ -30,7 +30,26 @@ Riemannian structure bakes positive-definiteness into the fiber typeclass, so th
 pseudo case needs the parallel-structure decision blessed by the maintainers
 (Gouëzel, Rothgang, Massot are the people).
 
-## 3. Watchlist (no action, awareness)
+## 3. Zulip RFC: PVM design + claim the Stone lane (GATE for P2.3 nodes d/e)
+
+Before we write PVM/bounded-spectral code, post an RFC in #mathlib4 proposing the
+`ProjectionValuedMeasure` design (σ-additivity ONLY in weak/strong operator topology —
+the decision SpectralThm, LeanOA, and physlib are about to make incompatibly) and
+claiming our uncontested lane: Cayley transform, unbounded spectral theorem, Stone's
+theorem. Named counterparts: Tanimoto/Butterley (SpectralThm — he needs our Stone for
+his own Tomita/KMS TODO; natural alliance), Loreaux/Bannon/Dedecker (LeanOA),
+Loges (physlib), Doll (Mathlib LinearPMap PRs, open #29624). Details:
+docs/dossiers/P2-stone-design.md.
+
+## 4. Flag physlib SpectralMeasure design issue to Gregory Loges
+
+Their `SpectralMeasure` (merged 2026-07-01, physlib #1239) reportedly extends
+`VectorMeasure` with NORM countable additivity — genuine PVMs are only SOT-σ-additive,
+which would exclude every operator with infinitely many spectral components. VERIFY
+against physlib source first (my gh code-search didn't confirm), then raise the issue
+and offer our Mathlib-grade nodes a/b as the replacement their in-code TODO requests.
+
+## 5. Watchlist (no action, awareness)
 
 - Mathlib PR #34288 (smooth dependence) — merge unblocks P1.4a.iii/iv.
 - Mathlib PR #36036 (connections/geodesics placeholder, supersedes #26221) — P1.4
