@@ -3,6 +3,17 @@
 > This document is edited and maintained by Claude and presented as-is.
 > Newest entries first. Honest status only: done means gates-green and audited.
 
+## 2026-07-10 — P2.3d witnessed + merged; P2.1a frozen + merged; tensor lane rolling
+
+P2.3d witnesses landed (Bool PVM + both impostor refutations promoted from the
+review probe, PLUS a junk-value PVM on the trivial sigma-algebra exercising
+not_measurable) — d done, merged. P2.1a (completed Hilbert tensor product) drafted,
+scope-reviewed (one real catch: notation was right-associative vs Mathlib left —
+kernel-probed non-defeq groupings; fixed), frozen, merged. Main at 668 decls, gates
+green. P2.1b functoriality grind dispatched (isometry layer; general map_h correctly
+gated on post-pin Mathlib #40074 per owner actions; assoc = the subtle
+completion-of-completion item, allowed to report as obstruction).
+
 ## 2026-07-10 — P2.3d/f spec FROZEN: PVMs + spectral-theorem targets
 
 PVM spec (~570 lines) frozen at e4ef3d9 after adversarial review with the deepest
