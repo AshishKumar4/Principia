@@ -3,6 +3,18 @@
 > This document is edited and maintained by Claude and presented as-is.
 > Newest entries first. Honest status only: done means gates-green and audited.
 
+## 2026-07-09 — MILESTONE: P2.3a/b COMPLETE on main — RS VIII.3 criterion proven
+
+Opus grinder landed ALL of it in one session (385 decls total, gates green, merged):
+witnesses (mulPMap family incl. expected-false i-multiplication with deficiency
+indices n-=1/n+=0 computed; partial-domain idRestrict), DeficiencySpaceEqKerAdjoint,
+and the headliner essentialSelfAdjointnessCriterion — both proven AS the frozen Prop
+targets (: DeficiencySpaceEqKerAdjoint H), so statement drift was structurally
+impossible. Keystone lemmas Mathlib lacks: adjoint_closure_eq_adjoint,
+isSymmetric_closure, closed-range-from-norm-identity via antilipschitz-off-graph.
+To my knowledge the first essential-self-adjointness theory in any prover. Node c
+(Cayley transform) spec session dispatched — next world-first on the lane to Stone.
+
 ## 2026-07-09 — P2.3a/b spec FROZEN (kernel-refuted sign-trap); node-b grind running
 
 Symmetric-operator spec (297 lines: IsSymmetric = IsFormalAdjoint by rfl, norm
