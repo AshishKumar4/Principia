@@ -3,6 +3,7 @@ import Atlas.Specs.Spacetime.CausalStructure
 import Atlas.Specs.Spacetime.GlobalHyperbolicity
 import Atlas.Specs.OperatorTheory.UnitaryGroup
 import Atlas.Specs.OperatorTheory.Symmetric
+import Atlas.Specs.OperatorTheory.Cayley
 
 /-!
 # Atlas.Specs — frozen definitions and target theorem statements
