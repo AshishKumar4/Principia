@@ -58,12 +58,28 @@ it. Canonical sources: Wald ch. 8-9; O'Neill ch. 14; Minguzzi Living Rev. Rel. 2
 - P1.W2 `done` Witness (the big one): Minkowski cone characterization
   `p ≪ q ↔ q - p ∈ future cone` (FTC + Cauchy-Schwarz argument), expected-false
   examples, `{t=0}` is a Cauchy surface, Minkowski globally hyperbolic.
-- P1.4a `todo` Infrastructure: smooth dependence of ODE solutions on initial
-  conditions — THE load-bearing Mathlib gap between geodesics and conjugate-point
-  theory; pure Mathlib-upstream node (coordinate with Kudryashov/Yin work if merged).
+- P1.4a — smooth dependence of ODE solutions on initial conditions. Design report
+  2026-07-09 (verified: PR states checked via gh). KEY REDUCTION: geodesic spray is
+  autonomous + homogeneous, so FIXED-TIME smoothness in the initial condition
+  suffices for exp/Jacobi/conjugate points — joint (t,x) smoothness NOT load-bearing.
+  Sub-nodes:
+  - P1.4a.i `external` Banach fixed-time C^k = Mathlib PR #34288 (winstonyin,
+    Robbin/IFT route, OPEN, awaiting-author, C^k generalization mid-way). Do NOT
+    build independently; optionally co-contribute after coordination.
+  - P1.4a.ii `external` joint (t,x) C^k — Yin/Kudryashov declared roadmap
+    (arXiv:2602.13247); not needed for Penrose.
+  - P1.4a.iii `todo` manifold-level C^k local flow (chart transfer, mirrors
+    IntegralCurve/ExistUnique plumbing) — OURS, ~2-4 sessions, gated on #34288
+    stabilizing + owner's Zulip coordination (docs/OWNER-ACTIONS.md).
+  - P1.4a.iv `todo` variational equation (flow derivative solves linearized ODE) —
+    OURS unless it falls out of #34288's IFT derivative computation; feeds P1.5.
+  - P1.4a.v `reserve` linear ODE global existence (whole-geodesic Jacobi fields).
 - P1.4 `todo` Lorentzian geodesics + exponential map + normal/convex neighborhoods —
-  build ON Mathlib PR #26221's covariant-derivative layer (metric-agnostic), not
-  beside it. Gates all general-spacetime causal lemmas (even "I⁺ is open").
+  build ON the Mathlib connections/geodesics stack: #26221 is stalling and being
+  superseded by #36036 (grunweg placeholder uniting connections+geodesics work,
+  verified OPEN 2026-07). Gates all general-spacetime causal lemmas ("I⁺ is open").
+  The spray/homogeneity/exp-definition layer is #34288-independent — can start
+  before P1.4a.i merges (work branch only).
 - P1.5 `todo` Jacobi fields, index form, conjugate/focal points along null geodesics
   (nothing exists even Riemannianly — largest new development of the phase).
 - P1.5b `todo` Raychaudhuri for null congruences (screen bundle; scalar Riccati
