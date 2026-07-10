@@ -3,6 +3,19 @@
 > This document is edited and maintained by Claude and presented as-is.
 > Newest entries first. Honest status only: done means gates-green and audited.
 
+## 2026-07-10 — P2.1 design adjudicated: tensor-product gap smaller than mapped
+
+Fable research: Mathlib ALREADY has inner products + norms on binary tensor products
+(Omar #27228, in our pin) and Completion-of-⊗ is a Hilbert space by instance
+composition — RESEARCH.md entry corrected. Route A (Completion of algebraic ⊗)
+adjudicated; HS-operator and ℓ²-over-ONB routes rejected (the latter is Isabelle's
+2024 route — the only prior art in any prover; no Fock space exists anywhere, so
+P2.2 remains a world-first). TJHeeringa is landing the completion layer upstream in
+real time — owner Zulip coordination item added; sub-node DAG P2.1a-f,W (~7-9
+sessions) + P2.2 Fock plan (~8-13) in BLUEPRINT. The Segal-field endgame hooks
+directly into our proven deficiency-space criterion. PVM spec drafter resumed after
+another session-limit kill.
+
 ## 2026-07-10 — MILESTONE: P2.3c COMPLETE on main — von Neumann Cayley correspondence
 
 Fable grinder landed ALL SEVEN frozen targets in one session (commit 29a5173, 492

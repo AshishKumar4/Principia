@@ -90,8 +90,7 @@ full theorem external).
 **Missing:** unbounded spectral theorem (biggest single gap), Stone's theorem /
 one-parameter unitary groups / C₀-semigroups, Borel functional calculus + spectral
 measures, von Neumann algebras (bicommutant exists only as an AI-prover benchmark),
-nuclear spaces, Minlos (external only), completed/Hilbert tensor products (**hard
-blocker for Fock space**), Wiener measure (external, upstreaming:
+nuclear spaces, Minlos (external only), Wiener measure (external, upstreaming:
 `RemyDegenne/brownian-motion`), Itô calculus (external: arXiv:2606.15089), SDE/SPDE
 (absent everywhere), concrete Lie groups / Lorentz-Poincaré in Mathlib proper,
 universal covers as groups, unitary representations, Peter-Weyl, Mackey machine /

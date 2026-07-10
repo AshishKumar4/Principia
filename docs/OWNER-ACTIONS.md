@@ -49,7 +49,16 @@ which would exclude every operator with infinitely many spectral components. VER
 against physlib source first (my gh code-search didn't confirm), then raise the issue
 and offer our Mathlib-grade nodes a/b as the replacement their in-code TODO requests.
 
-## 5. Watchlist (no action, awareness)
+## 5. Zulip: coordinate P2.1 tensor-product completion layer with TJHeeringa
+
+TJHeeringa is landing our P2.1a/b-shaped material in Mathlib right now (mapL merged
+#40074 2026-06-30; congrL #40846 and LinearMap.fromCompletion #40151 open). Before we
+build the completion layer, announce the completed-⊗/Fock plan in the existing Zulip
+threads and offer co-development. Also: a Mathlib pin bump past #40074 is a
+spec-review-level decision (physlib-interop constraint) — alternative is a tracked
+vendor copy of mapL + norm_mapL_le with a delete-on-bump note.
+
+## 6. Watchlist (no action, awareness)
 
 - Mathlib PR #34288 (smooth dependence) — merge unblocks P1.4a.iii/iv.
 - Mathlib PR #36036 (connections/geodesics placeholder, supersedes #26221) — P1.4

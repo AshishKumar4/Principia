@@ -101,10 +101,28 @@ the no-go that the interaction picture does not exist. Source of truth: Streater
 Wightman; Reed-Simon II. Heavy Mathlib gaps: completed Hilbert tensor products → Fock
 space, unbounded operator theory, Stone's theorem (see RESEARCH.md infrastructure map).
 
-- P2.1 `todo` Infrastructure: Hilbert space tensor product (completed) — Mathlib gap,
-  upstream candidate.
-- P2.2 `todo` Infrastructure: symmetric Fock space over a Hilbert space;
-  creation/annihilation as unbounded operators.
+- P2.1 — completed Hilbert tensor products. Design adjudicated 2026-07-10: Route A =
+  `UniformSpace.Completion` of Mathlib's algebraic inner-product tensor product.
+  KEY FINDING: RESEARCH.md was stale — Mathlib (Omar PR #27228, Oct 2025, in our pin)
+  already has inner/norm on binary E ⊗ F with isometry API, and Completion is a
+  Hilbert space by instance composition; post-pin #40074 (TJHeeringa, merged
+  2026-06-30) adds mapL with the cross-norm bound. TJHeeringa is actively landing
+  P2.1a/b-shaped material upstream NOW — coordinate before building (owner action).
+  Sub-nodes: P2.1a `todo` def ⊗̂ + tmulₕ + density (1 session); P2.1b `todo`
+  mapₕ/congrₕ/assoc/comm laws (1-2; cross-norm needs #40074 or tracked vendor);
+  P2.1c `todo` adjoint_mapₕ (0.5-1); P2.1d `todo` HilbertBasis.tensorProduct +
+  ≃ ℓ²(ι₁×ι₂) (1); P2.1e `todo` PiTensorProduct SEMILINEAR lift — the one uncertain
+  implementation point, upstream-shaped (1); P2.1f `todo` PiTensorProduct inner
+  product + reindex isometry + mulEquiv isometry (2); P2.1W `todo` witnesses (1).
+  Prior art: Isabelle Hilbert_Space_Tensor_Product (Unruh 2024, ℓ²-route — wrong for
+  Mathlib) is the ONLY completed Hilbert ⊗ in any prover; no Fock space anywhere.
+- P2.2 `todo` Infrastructure: symmetric Fock space (WORLD-FIRST in any prover) —
+  symmetrizer projector route (NOT the SymmetricPower quotient: no inner product,
+  universal property in flux upstream); BosonFock = lp 2 over completed symmetric
+  powers; a/a† as LinearPMaps with mutual formal adjointness + CCR on the
+  finite-particle domain; Segal field essential self-adjointness via a NEW Nelson
+  analytic-vector node (RS X.39) feeding our proven
+  isEssentiallySelfAdjoint_of_deficiencySpace_eq_bot. Est. 8-13 sessions on P2.1.
 - P2.3 — Stone's theorem + unbounded-operator infrastructure. Design adjudicated
   2026-07-09 (docs/dossiers/P2-stone-design.md): Cayley route; our uncontested lane =
   Cayley transform, unbounded spectral theorem, Stone (world-firsts in any prover);
