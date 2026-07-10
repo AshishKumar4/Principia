@@ -1,6 +1,7 @@
 import Atlas.Witnesses.Minkowski
 import Atlas.Witnesses.MinkowskiCausal
 import Atlas.Witnesses.UnitaryGroups
+import Atlas.Witnesses.SymmetricOperators
 
 /-!
 # Atlas.Witnesses — non-vacuity witnesses

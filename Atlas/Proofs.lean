@@ -1,5 +1,6 @@
 import Atlas.Proofs.CausalLemmas
 import Atlas.Proofs.BoundedGenerator
+import Atlas.Proofs.DeficiencyTheory
 
 /-!
 # Atlas.Proofs — proof developments
