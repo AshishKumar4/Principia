@@ -109,8 +109,7 @@ space, unbounded operator theory, Stone's theorem (see RESEARCH.md infrastructur
   2026-07-09 (docs/dossiers/P2-stone-design.md): Cayley route; our uncontested lane =
   Cayley transform, unbounded spectral theorem, Stone (world-firsts in any prover);
   bounded-normal core is in-flight elsewhere (SpectralThm/LeanOA — contribute, don't
-  fork). Sub-nodes: a symmetric LinearPMaps `todo`; b deficiency/ess-self-adjointness
-  `todo`; c Cayley `todo`; d PVMs `todo` (align SpectralThm; SOT-σ-additivity!);
+  fork). Sub-nodes: a `done` + b `done` (spec frozen 9dfc680, witnesses + DeficiencySpaceEqKerAdjoint + EssentialSelfAdjointnessCriterion proven 2026-07-09, incl. keystone adjoint_closure_eq_adjoint); c Cayley `proving` (spec drafting); d PVMs `todo` (align SpectralThm; SOT-σ-additivity!);
   e bounded spectral thm `external/contested`; f unbounded spectral thm `todo`;
   g `done` (spec frozen + witnesses + bounded-generator thm, 2026-07-09; mult-operator functional-calculus identification split to future node); h Stone forward `todo`; i Stone converse `todo`;
   j multiplication form + C₀-semigroups `stretch`. Owner Zulip RFC before d/e code
