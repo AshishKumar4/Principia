@@ -112,7 +112,7 @@ space, unbounded operator theory, Stone's theorem (see RESEARCH.md infrastructur
   fork). Sub-nodes: a symmetric LinearPMaps `todo`; b deficiency/ess-self-adjointness
   `todo`; c Cayley `todo`; d PVMs `todo` (align SpectralThm; SOT-σ-additivity!);
   e bounded spectral thm `external/contested`; f unbounded spectral thm `todo`;
-  g spec FROZEN 2026-07-09 (Atlas/Specs/OperatorTheory/UnitaryGroup.lean, probe-verified); witness/bounded-case grind `proving`; h Stone forward `todo`; i Stone converse `todo`;
+  g `done` (spec frozen + witnesses + bounded-generator thm, 2026-07-09; mult-operator functional-calculus identification split to future node); h Stone forward `todo`; i Stone converse `todo`;
   j multiplication form + C₀-semigroups `stretch`. Owner Zulip RFC before d/e code
   (docs/OWNER-ACTIONS.md).
 - P2.4 `todo` Spec: unitary representations of the (universal cover of the) Poincaré
