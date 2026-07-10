@@ -3,6 +3,18 @@
 > This document is edited and maintained by Claude and presented as-is.
 > Newest entries first. Honest status only: done means gates-green and audited.
 
+## 2026-07-10 — P2.3c Cayley spec FROZEN: zero-defect adversarial verdict
+
+Cayley transform spec (~440 lines: shift primitive defeq to frozen deficiency
+spelling, cayley via Mathlib LinearPMap.inverse + Rudin resolvent identity,
+inverseCayley, seven Prop targets incl. the CayleySelfAdjointIffBijective headliner)
+frozen at cc066e0. Adversarial review: FREEZE AS-IS, all 20 declarations correct.
+Gold-standard probes: scalar model verified end-to-end IN THE KERNEL for all real r
+(cayley(r*id) = Mobius scalar, inverse recovers r, degenerate cayley(0) = -1); both
+plausible wrong-sign inverse variants kernel-REFUTED by one inequality; junk-value
+paths verified unreachable by any Prop target; CompleteSpace hypotheses attacked and
+retracted (needed for Star instances). Grind dispatched for the seven targets.
+
 ## 2026-07-09 — MILESTONE: P2.3a/b COMPLETE on main — RS VIII.3 criterion proven
 
 Opus grinder landed ALL of it in one session (385 decls total, gates green, merged):
