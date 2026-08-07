@@ -1,4 +1,4 @@
-import Atlas.Specs.QFT.FockSpace
+import Atlas.Specs.QFT.CreationAnnihilation
 
 /-!
 # Witnesses — symmetric Fock space (P2.2, slice 1)
@@ -6,6 +6,11 @@ import Atlas.Specs.QFT.FockSpace
 Non-vacuity witnesses for `Atlas/Specs/QFT/FockSpace.lean` on the concrete model
 `E₂ = EuclideanSpace ℂ (Fin 2)`, whose standard basis gives *distinguishable* slots —
 the only setting in which the symmetrizer has observable content.
+
+The one-particle state used by the Fock-layer witnesses is the frozen
+`QFT.BosonFock.oneParticle` of the slice-2 spec `Atlas/Specs/QFT/CreationAnnihilation.lean`
+(hence that import): the slice-1 witnesses double as tests of the spec's version, and
+there is a single definition of `|ψ⟩` in the repository.
 
 * **Algebraic layer.** The degree-`2` symmetrizer in closed form
   (`symmetrizer_tprod_two`), evaluated on `e₀ ⊗ e₁`:
@@ -21,7 +26,8 @@ the only setting in which the symmetrizer has observable content.
   (`symTensorPower_eq_top_of_le_one`), the sharp complement.
 * **Fock layer.** Vacuum and one-particle states as `lp.single` vectors, their norms, their
   orthogonality, the two-sector Pythagorean norm `‖Ω + ψ‖² = 1 + ‖ψ‖²`, and finite-particle
-  membership of both and of their sum.
+  membership of both and of their sum. The operator-level witnesses built on top of these
+  live in `Atlas/Witnesses/CreationAnnihilation.lean` (slice 2).
 
 Import discipline (spec module docstring, "Scope discipline"): this file opens the scoped
 `PiTensorProduct.InnerNorm` instances and replicates the spec's `assert_not_exists` guard,
@@ -84,9 +90,11 @@ what makes the model a genuine test of symmetrization. -/
 /-! ### The algebraic symmetrizer in degree 2 -/
 
 /-- The degree-`2` symmetrizer in closed form: `S(x₀ ⊗ x₁) = ½(x₀ ⊗ x₁ + x₁ ⊗ x₀)`.
-The sum over `S₂ = {1, (0 1)}` is enumerated by `decide`. -/
-theorem symmetrizer_tprod_two (x : Fin 2 → E₂) :
-    symmetrizer ℂ E₂ 2 (tprod ℂ x) = (2 : ℂ)⁻¹ • (tprod ℂ x + tprod ℂ ![x 1, x 0]) := by
+The sum over `S₂ = {1, (0 1)}` is enumerated by `decide`. Stated over an arbitrary
+one-particle space, since the slice-2 witnesses need it there too. -/
+theorem symmetrizer_tprod_two (𝕜 E : Type*) [RCLike 𝕜] [NormedAddCommGroup E]
+    [InnerProductSpace 𝕜 E] (x : Fin 2 → E) :
+    symmetrizer 𝕜 E 2 (tprod 𝕜 x) = (2 : 𝕜)⁻¹ • (tprod 𝕜 x + tprod 𝕜 ![x 1, x 0]) := by
   rw [symmetrizer_tprod]
   have huniv : (Finset.univ : Finset (Equiv.Perm (Fin 2))) = {1, Equiv.swap 0 1} := by decide
   rw [huniv, Finset.sum_insert (by decide), Finset.sum_singleton]
@@ -99,7 +107,7 @@ theorem symmetrizer_tprod_two (x : Fin 2 → E₂) :
 
 /-- The symmetrizer on distinguishable slots: `S(e₀ ⊗ e₁) = ½(e₀ ⊗ e₁ + e₁ ⊗ e₀)`. -/
 theorem symmetrizer_e₀₁ : symmetrizer ℂ E₂ 2 e₀₁ = (2 : ℂ)⁻¹ • (e₀₁ + e₁₀) := by
-  have h := symmetrizer_tprod_two ![e 0, e 1]
+  have h := symmetrizer_tprod_two ℂ E₂ ![e 0, e 1]
   simpa [e₀₁, e₁₀] using h
 
 /-- **The pairing witness**: `⟪e₀ ⊗ e₁, S(e₀ ⊗ e₁)⟫ = ½`. Only the identity permutation
@@ -215,60 +223,41 @@ example (y : HilbertTensorPower ℂ E₂ 2) :
 
 /-! ### The boson Fock space over the model -/
 
-/-- The one-particle sector vector carrying `ψ`. The membership proof is
-`symmetrizer_eq_id`: in degree `1` every tensor is already symmetric. -/
-def oneParticleVec (ψ : E₂) : SymTensorPower ℂ E₂ 1 :=
-  ⟨((tprod ℂ ![ψ] : ⨂[ℂ]^1 E₂) : HilbertTensorPower ℂ E₂ 1), by
-    rw [mem_symTensorPower_iff, symmetrizerL_coe, symmetrizer_eq_id ℂ E₂ 1 le_rfl,
-      LinearMap.id_coe, id_eq]⟩
-
-/-- The one-particle state `(0, ψ, 0, …)` of the boson Fock space (Reed & Simon II, §X.7). -/
-def oneParticle (ψ : E₂) : BosonFock ℂ E₂ :=
-  lp.single 2 1 (oneParticleVec ψ)
-
 /-- The one-particle embedding is isometric: no normalization factor leaks into the
-`n = 1` sector. -/
-@[simp] theorem norm_oneParticle (ψ : E₂) : ‖oneParticle ψ‖ = ‖ψ‖ := by
-  rw [oneParticle, lp.norm_single (by norm_num : (0 : ℝ≥0∞) < 2)]
-  show ‖((tprod ℂ ![ψ] : ⨂[ℂ]^1 E₂) : HilbertTensorPower ℂ E₂ 1)‖ = ‖ψ‖
-  rw [Completion.norm_coe, PiTensorProduct.norm_tprod]
-  simp
+`n = 1` sector. Instantiates the spec's `BosonFock.norm_oneParticle` on the model. -/
+example (ψ : E₂) : ‖BosonFock.oneParticle ℂ E₂ ψ‖ = ‖ψ‖ :=
+  BosonFock.norm_oneParticle ℂ E₂ ψ
 
 /-- **The sectors are orthogonal**: the vacuum is perpendicular to every one-particle
 state, being supported at a different `lp` index. -/
 theorem inner_vacuum_oneParticle (ψ : E₂) :
-    inner ℂ (BosonFock.vacuum ℂ E₂) (oneParticle ψ) = 0 := by
-  rw [BosonFock.vacuum, oneParticle, lp.inner_single_left,
+    inner ℂ (BosonFock.vacuum ℂ E₂) (BosonFock.oneParticle ℂ E₂ ψ) = 0 := by
+  rw [BosonFock.vacuum, BosonFock.oneParticle, lp.inner_single_left,
     lp.single_apply_ne _ _ _ (by norm_num : (0 : ℕ) ≠ 1), inner_zero_right]
 
 /-- **Two-sector norm**: `‖Ω + ψ‖² = 1 + ‖ψ‖²` — the Pythagorean identity across sectors.
 Non-vacuity of the Hilbert-sum structure: the `lp` norm adds the sector norms in
 quadrature. -/
 theorem norm_vacuum_add_oneParticle_sq (ψ : E₂) :
-    ‖BosonFock.vacuum ℂ E₂ + oneParticle ψ‖ ^ 2 = 1 + ‖ψ‖ ^ 2 := by
+    ‖BosonFock.vacuum ℂ E₂ + BosonFock.oneParticle ℂ E₂ ψ‖ ^ 2 = 1 + ‖ψ‖ ^ 2 := by
   rw [sq, norm_add_sq_eq_norm_sq_add_norm_sq_of_inner_eq_zero _ _ (inner_vacuum_oneParticle ψ),
-    BosonFock.norm_vacuum, norm_oneParticle, sq]
+    BosonFock.norm_vacuum, BosonFock.norm_oneParticle, sq]
   norm_num
-
-/-- One-particle states are finite-particle vectors. -/
-theorem oneParticle_mem_finiteParticle (ψ : E₂) :
-    oneParticle ψ ∈ BosonFock.finiteParticle ℂ E₂ :=
-  le_iSup (fun N => LinearMap.range
-      (lp.singleContinuousLinearMap ℂ (fun n => SymTensorPower ℂ E₂ n) 2 N).toLinearMap) 1
-    ⟨oneParticleVec ψ, rfl⟩
 
 /-- A genuinely two-sector finite-particle vector: `F₀` is more than the sectors
 themselves. -/
-example : BosonFock.vacuum ℂ E₂ + oneParticle (e 0) ∈ BosonFock.finiteParticle ℂ E₂ :=
+example :
+    BosonFock.vacuum ℂ E₂ + BosonFock.oneParticle ℂ E₂ (e 0) ∈
+      BosonFock.finiteParticle ℂ E₂ :=
   Submodule.add_mem _ (BosonFock.vacuum_mem_finiteParticle ℂ E₂)
-    (oneParticle_mem_finiteParticle (e 0))
+    (BosonFock.oneParticle_mem_finiteParticle ℂ E₂ (e 0))
 
 /-- Non-vacuity of the one-particle sector: `e₀` is a unit vector, hence so is its state. -/
-example : ‖oneParticle (e 0)‖ = 1 := by simp
+example : ‖BosonFock.oneParticle ℂ E₂ (e 0)‖ = 1 := by simp
 
 /-- **Expected-false**: a one-particle state is not the vacuum, so the Fock space is
 strictly bigger than its `n = 0` sector. -/
-example : oneParticle (e 0) ≠ BosonFock.vacuum ℂ E₂ := by
+example : BosonFock.oneParticle ℂ E₂ (e 0) ≠ BosonFock.vacuum ℂ E₂ := by
   intro h
   have h0 := inner_vacuum_oneParticle (e 0)
   rw [h, inner_self_eq_norm_sq_to_K, BosonFock.norm_vacuum] at h0
@@ -276,8 +265,8 @@ example : oneParticle (e 0) ≠ BosonFock.vacuum ℂ E₂ := by
 
 /-- The degenerate point: the zero one-particle state is the zero vector, so the previous
 witness is not an artifact of a badly chosen `ψ`. -/
-example : oneParticle 0 = 0 := by
-  rw [← norm_eq_zero, norm_oneParticle, norm_zero]
+example : BosonFock.oneParticle ℂ E₂ 0 = 0 := by
+  rw [← norm_eq_zero, BosonFock.norm_oneParticle, norm_zero]
 
 end Atlas.Witnesses.FockSpace
 
