@@ -4,6 +4,7 @@ import Atlas.Proofs.DeficiencyTheory
 import Atlas.Proofs.CayleyTheory
 import Atlas.Proofs.HilbertTensorMaps
 import Atlas.Proofs.HilbertTensorBasis
+import Atlas.Proofs.PiTensorSemilinear
 
 /-!
 # Atlas.Proofs — proof developments
