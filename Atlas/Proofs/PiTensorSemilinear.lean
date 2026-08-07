@@ -1,3 +1,6 @@
+-- FROZEN-BY-IMPORT (P2.2 spec review, 2026-08-07): this file is imported by
+-- Atlas/Specs/QFT/FockSpace.lean, so its definitions carry frozen spec meaning.
+-- Grind sessions must not edit it; changes require [spec-review] (hook-enforced).
 import Mathlib.Analysis.InnerProductSpace.LinearMap
 import Mathlib.LinearAlgebra.PiTensorProduct
 

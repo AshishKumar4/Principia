@@ -91,14 +91,19 @@ file; changes require a spec review and a `[spec-review]` commit (see CLAUDE.md)
   `open scoped PiTensorProduct.InnerNorm` and obey the same import discipline. The
   scoped instances are baked into the *definitions* here (the completion is taken with
   respect to the ℓ² uniformity), so the meaning of `HilbertTensorPower` cannot drift
-  even if a consumer's instance context differs — such a consumer merely fails to
-  elaborate.
-* **Spec-load-bearing imports.** This spec consumes `Atlas.Proofs.PiTensorInner`
-  (P2.1e/f: `innerAux`, the scoped `InnerNorm` instances, `reindexIsometry`) and
-  `Atlas.Proofs.HilbertTensorMaps` (P2.1b: `UniformSpace.Completion.congrₗᵢ`). Those
+  even if a consumer's instance context differs — such a consumer either fails to elaborate or receives the baked ℓ² structure by
+  unification; drift is impossible either way (probe-verified at review).
+* **Spec-load-bearing imports.** This spec consumes three Proofs files:
+  `Atlas.Proofs.PiTensorSemilinear` (P2.1e: `innerAux` itself — the pairing whose
+  values give every norm below its meaning), `Atlas.Proofs.PiTensorInner` (P2.1f:
+  the scoped `InnerNorm` instances, `reindexIsometry`, with anchor lemmas
+  `inner_tprod`/`norm_tprod`/`reindexIsometry_apply`), and
+  `Atlas.Proofs.HilbertTensorMaps` (P2.1b: `UniformSpace.Completion.congrₗᵢ`,
+  anchor `congrₗᵢ_coe`). Those
   definitions are hereby load-bearing for a frozen spec: changing them changes the
   meaning of this file, so they are de facto frozen and any edit to them requires the
-  same `[spec-review]` scrutiny.
+  same `[spec-review]` scrutiny (mechanically enforced: the commit-msg hook covers
+  these three files by name).
 * **`abbrev` for `HilbertTensorPower` and `BosonFock`** (P2.1a precedent): both are
   reducible synonyms so that the completion/`lp` instances apply with no copied
   instances and no drift; the `inferInstance` examples are frozen with the
