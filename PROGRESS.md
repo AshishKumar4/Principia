@@ -3,6 +3,18 @@
 > This document is edited and maintained by Claude and presented as-is.
 > Newest entries first. Honest status only: done means gates-green and audited.
 
+## 2026-08-07 — P2.6c Pauli-Jordan route locked: risk down, estimate honest
+
+Design pass delivered the full lemma DAG (L0-L6) for the flagship's hardest node.
+Pivotal reformulation: the smeared Pauli-Jordan pairing IS the KG solution with
+data (0,h_t) evaluated at (t,0) — one point-evaluation finite-propagation statement,
+proven by weighted energy with a smoothed-cone cutoff (sqrt(norm^2+delta^2) trick —
+no mollification, no Gronwall; m>0 kills u directly). Every Mathlib dependency
+verified by exact name (incl. a 2025-26 Distribution suite the Wightman dossier
+missed — P2.5a side-flag recorded in the dossier addendum). Estimate corrected
+honestly: ~14-19 sessions (was 4-7); risk LOWER. L4 = Mathlib's first wave-equation
+energy estimate (upstream candidate). L0-L5 grindable now.
+
 ## 2026-08-07 — Wightman pathway designed: the summit is mapped
 
 P2.4/P2.5/P2.6 design adjudicated (docs/dossiers/P2-wightman-design.md). Headlines:
