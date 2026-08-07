@@ -3,6 +3,19 @@
 > This document is edited and maintained by Claude and presented as-is.
 > Newest entries first. Honest status only: done means gates-green and audited.
 
+## 2026-08-07 — Wightman pathway designed: the summit is mapped
+
+P2.4/P2.5/P2.6 design adjudicated (docs/dossiers/P2-wightman-design.md). Headlines:
+physlib deferred to P3 on evidence (cloned + verified: no cover theorem, no Poincaré,
+no reps — and spin-0 needs none of it); spectrum condition in distributional support
+form KILLS the joint-PVM/SNAG risk off the critical path; Nelson node proven
+non-blocking for Wightman; microcausality reduces via our proven CCR to ONE scalar —
+the Pauli-Jordan support lemma (energy-method route adjudicated). The three lanes
+converge exactly as architected: hermitian = proven adjointness, spectrum positivity
+= the P1.W2 cone-additivity lemma, microcausality = the CCR trio + H2. Est. ~18-28
+sessions to the flagship; frozen Wightman surface in ~5-8. Dispatched: P2.4a spec
+draft + P2.6c Pauli-Jordan design pass.
+
 ## 2026-08-07 — MILESTONE: THE CCR IS PROVEN — [a(f),a†(g)] = ⟪f,g⟫ on Fock space
 
 Fable landed all four frozen targets in one session (667 lines, 1092 decls, merged):

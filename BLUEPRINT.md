@@ -139,13 +139,29 @@ space, unbounded operator theory, Stone's theorem (see RESEARCH.md infrastructur
   g `done` (spec frozen + witnesses + bounded-generator thm, 2026-07-09; mult-operator functional-calculus identification split to future node); h Stone forward `todo`; i Stone converse `todo`;
   j multiplication form + C₀-semigroups `stretch`. Owner Zulip RFC before d/e code
   (docs/OWNER-ACTIONS.md).
-- P2.4 `todo` Spec: unitary representations of the (universal cover of the) Poincaré
-  group; add physlib dependency here for Lorentz/SL(2,ℂ) groundwork.
-- P2.5 `todo` Spec: Wightman axioms (fields as operator-valued tempered distributions,
-  covariance, microcausality, spectrum condition, cyclic vacuum). Each axiom a named,
-  separable hypothesis — these are the atlas's core reusable fence-posts.
-- P2.6 `todo` **Witness: the free scalar field satisfies the Wightman axioms**
-  (world-first if landed; validates P2.5 is non-vacuous).
+- P2.4 — Poincaré layer. Design adjudicated 2026-08-07 (docs/dossiers/
+  P2-wightman-design.md): physlib dependency DEFERRED TO P3 (evidence-based: no
+  cover/reps/Poincaré content; carrier friction); minimal restricted-Lorentz +
+  Poincaré on the Phase-1 M4 carrier; covering group NOT load-bearing for spin 0.
+  Sub-nodes: P2.4a `todo` group spec (+ Minkowski-defs extraction to Specs,
+  layering item); P2.4b `todo` PoincareRep spec (+ OneParameterUnitaryGroup anchor
+  = Stone bridge); P2.4W `todo` witnesses (trivial now; regular rep on L²(M4)
+  parallel non-blocking).
+- P2.5 — Wightman axioms. Design adjudicated 2026-08-07 (same dossier): fixed-domain
+  field structure (no LinearPMap composition), six named axiom Props; spectrum
+  condition in DISTRIBUTIONAL SUPPORT FORM (joint PVM/SNAG eliminated from critical
+  path — deferred post-Stone node); microcausality frozen WITH the kernel anchor to
+  P1.2 causal relations. Sub-nodes: P2.5a `todo` utilities (𝓕η, closedForwardCone,
+  SpacelikeSeparated + anchor); P2.5b `todo` the WightmanField freeze.
+- P2.6 — **free scalar field satisfies Wightman (flagship)**. Proof-engine map in
+  dossier: hermitian/microcausality/spectrum consume the PROVEN CCR trio + P1.W2
+  cone lemmas. Sub-nodes: P2.6a `todo` Γ second quantization (grindable NOW; lp
+  family-congruence = upstream candidate); P2.6b `todo` shell measure μₘ +
+  invariance H1 (Jacobian, ~2-4 sessions, mathematical risk w/ fallback) +
+  one-particle rep H3; P2.6c `todo` Pauli-Jordan support H2 (THE hard node; route
+  R1 energy-method adjudicated, fallback R2 Paley-Wiener; own design pass first);
+  P2.6d `todo` assembly (eight axiom verifications). Est. total ~18-28 sessions.
+  Nelson node parallel NON-BLOCKING (not needed for Wightman).
 - P2.7 `todo` **Target: Haag's theorem** (Streater-Wightman Thm 4-16 form).
 - P2.8 `todo` Stretch: Reeh-Schlieder theorem.
 
