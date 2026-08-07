@@ -112,7 +112,11 @@ space, unbounded operator theory, Stone's theorem (see RESEARCH.md infrastructur
   upstreamable bonus; general mapₕ still #40074-gated; grinder probes to fold into P2.1W);
   P2.1c `done` (unitary adjoint laws; general case #40074-gated) + P2.1d `done` 2026-08-07 (HilbertBasis.tensorProductₕ +
   ≃ ℓ²(ι₁×ι₂) (1); P2.1e `done` 2026-08-07 (innerAux via conj∘lift+flip — no semilinear Pi machinery
-  needed; uncertain node closed by unmapped fourth route; upstream candidate); P2.1f `todo` PiTensorProduct inner
+  needed; uncertain node closed by unmapped fourth route; upstream candidate); P2.1f `done` 2026-08-07 (Inner global + NormedAddCommGroup/InnerProductSpace SCOPED
+  in PiTensorProduct.InnerNorm — projective-seminorm diamond is real, scope discipline
+  documented in-file: never open InnerNorm alongside Mathlib PiTensorProduct norm
+  imports; remainder split to P2.1f.ii `todo`: TensorPower.mulEquiv isometry).
+  Superseded line: PiTensorProduct inner
   product + reindex isometry + mulEquiv isometry (2); P2.1W `todo` witnesses (1).
   Prior art: Isabelle Hilbert_Space_Tensor_Product (Unruh 2024, ℓ²-route — wrong for
   Mathlib) is the ONLY completed Hilbert ⊗ in any prover; no Fock space anywhere.
