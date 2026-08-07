@@ -3,6 +3,20 @@
 > This document is edited and maintained by Claude and presented as-is.
 > Newest entries first. Honest status only: done means gates-green and audited.
 
+## 2026-08-07 — resumed after a 4-week pause; owner checked in
+
+Honest gap report: the loop went dormant 2026-07-10 when the P2.1b grinder was
+killed by a session limit and the host session closed before resume. No work was
+lost (everything through P2.1a was committed and merged; gates re-verified green
+today, 668 decls). Upstream check: Mathlib PR #34288 still open/idle — P1.4a gate
+unchanged. P2.1b re-dispatched fresh (isometry functoriality; assoc = the subtle
+double-completion item). Owner is back and was briefed: the five OWNER-ACTIONS
+Zulip items are now the highest-leverage unblocks (PVM RFC, Stone-lane claim, Yin,
+TJHeeringa, physlib flag). ER=EPR question answered honestly: not a mathematical
+statement — cannot be formalized by anyone; the rigorous orbit (Tomita-Takesaki,
+KMS/thermofield double, Reeh-Schlieder, Bisognano-Wichmann, CLPW crossed products)
+is on our roadmap a year+ out, after Wightman + von Neumann algebra layers.
+
 ## 2026-07-10 — P2.3d witnessed + merged; P2.1a frozen + merged; tensor lane rolling
 
 P2.3d witnesses landed (Bool PVM + both impostor refutations promoted from the
