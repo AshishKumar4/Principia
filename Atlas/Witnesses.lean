@@ -5,6 +5,7 @@ import Atlas.Witnesses.SymmetricOperators
 import Atlas.Witnesses.CayleyScalar
 import Atlas.Witnesses.BoolPVM
 import Atlas.Witnesses.HilbertTensorBasic
+import Atlas.Witnesses.HilbertTensorMaps
 
 /-!
 # Atlas.Witnesses — non-vacuity witnesses

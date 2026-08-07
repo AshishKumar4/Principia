@@ -3,6 +3,7 @@ import Atlas.Proofs.BoundedGenerator
 import Atlas.Proofs.DeficiencyTheory
 import Atlas.Proofs.CayleyTheory
 import Atlas.Proofs.HilbertTensorMaps
+import Atlas.Proofs.HilbertTensorBasis
 
 /-!
 # Atlas.Proofs — proof developments
