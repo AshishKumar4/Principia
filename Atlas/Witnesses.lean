@@ -6,6 +6,7 @@ import Atlas.Witnesses.CayleyScalar
 import Atlas.Witnesses.BoolPVM
 import Atlas.Witnesses.HilbertTensorBasic
 import Atlas.Witnesses.HilbertTensorMaps
+import Atlas.Witnesses.PiTensorInner
 
 /-!
 # Atlas.Witnesses — non-vacuity witnesses

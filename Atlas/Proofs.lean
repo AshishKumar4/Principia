@@ -5,6 +5,7 @@ import Atlas.Proofs.CayleyTheory
 import Atlas.Proofs.HilbertTensorMaps
 import Atlas.Proofs.HilbertTensorBasis
 import Atlas.Proofs.PiTensorSemilinear
+import Atlas.Proofs.PiTensorInner
 
 /-!
 # Atlas.Proofs — proof developments
