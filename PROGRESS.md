@@ -3,6 +3,22 @@
 > This document is edited and maintained by Claude and presented as-is.
 > Newest entries first. Honest status only: done means gates-green and audited.
 
+## 2026-08-07 — P2.2 slice 1 FROZEN: symmetric Fock space (first in any prover)
+
+Fock spec (440 lines: symmetrizer with kernel-checked left Perm action — no casts,
+constant-family reindex is beta-defeq; complete-then-symmetrize per RS/BR;
+(n!)^-1 projector normalization pinned by proved idempotency; BosonFock lp shell;
+vacuum norm 1; finite-particle density PROVED in-spec; assert_not_exists diamond
+guard verified to fire) frozen at 4a0b277. Adversarial review passed all probes
+(n=2 symmetrizer kernel-computed; sigma-direction verified against Mathlib source —
+the a/a-dagger slice is safe) and issued the repo's first GOVERNANCE ruling: the
+spec's Specs→Proofs imports make three P2.1 files frozen-by-import, and the
+commit-msg hook now covers them BY NAME (orchestrator guard edit) with frozen
+headers added — enforcement gap closed mechanically, not aspirationally.
+Witness grind running (probe promotion). Next: slice 2 spec — creation/annihilation
+LinearPMaps with sqrt factors, CCR, Segal field (hooks into our proven RS VIII.3
+deficiency criterion for essential self-adjointness).
+
 ## 2026-08-07 — MILESTONE: P2.1 COMPLETE (a-f); Fock space spec cycle opens
 
 Full completed-Hilbert-tensor-product layer done in one day of grinding: e closed by
