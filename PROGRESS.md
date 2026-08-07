@@ -3,6 +3,19 @@
 > This document is edited and maintained by Claude and presented as-is.
 > Newest entries first. Honest status only: done means gates-green and audited.
 
+## 2026-08-07 — P2.1b,c,d all landed and merged; tensor lane at full speed
+
+Same-day triple: P2.1b (congrₕ/commₕ/lidₕ/assocₕ isometry functoriality — assoc
+needed no fallback, via new upstreamable Completion.congrₗᵢ layer +
+TensorProduct.denseRange_map; general mapₕ honestly #40074-gated), P2.1c (unitary
+adjoint laws; two content-free lemmas deleted by deletion-test discipline), P2.1d
+(HilbertBasis.tensorProductₕ via a closed-comap density argument — no Hamel route
+exists for HilbertBasis; E ⊗̂ F ≃ ℓ²(ι₁×ι₂) incl. the infinite-dimensional
+ℓ²(ℕ)⊗̂ℓ²(ℕ) ≃ ℓ²(ℕ×ℕ) witness). Main at 757 decls, gates green. P2.1e dispatched
+(Fable, research-first): the conjugate-multilinear PiTensorProduct pairing — the
+lane's flagged-uncertain node; honest obstruction report is an accepted outcome.
+Remaining to Fock: e → f (Pi inner product) → P2.2 (symmetrizer, a/a†, CCR, Segal).
+
 ## 2026-08-07 — resumed after a 4-week pause; owner checked in
 
 Honest gap report: the loop went dormant 2026-07-10 when the P2.1b grinder was
