@@ -2,7 +2,7 @@
 # Spec-freeze enforcement: commits touching Atlas/Specs/ must be marked [spec-review].
 set -euo pipefail
 
-if git diff --cached --name-only | grep -qE '^Atlas/Specs(/|\.lean$)|^Atlas/Proofs/(PiTensorSemilinear|PiTensorInner|HilbertTensorMaps)\.lean$'; then
+if git diff --cached --name-only | grep -qE '^Atlas/Specs(/|\.lean$)|^Atlas/Proofs/(PiTensorSemilinear|PiTensorInner|HilbertTensorMaps|FockBridge)\.lean$'; then
   if ! grep -q '\[spec-review\]' "$1"; then
     echo "commit-msg: this commit modifies frozen files (Atlas/Specs/** or frozen-by-import P2.1 Proofs files)." >&2
     echo "Spec changes require a spec review and '[spec-review]' in the commit message." >&2
