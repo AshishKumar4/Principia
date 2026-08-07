@@ -120,7 +120,10 @@ space, unbounded operator theory, Stone's theorem (see RESEARCH.md infrastructur
   product + reindex isometry + mulEquiv isometry (2); P2.1W `todo` witnesses (1).
   Prior art: Isabelle Hilbert_Space_Tensor_Product (Unruh 2024, ℓ²-route — wrong for
   Mathlib) is the ONLY completed Hilbert ⊗ in any prover; no Fock space anywhere.
-- P2.2 `todo` Infrastructure: symmetric Fock space (WORLD-FIRST in any prover) —
+- P2.2 — symmetric Fock space (WORLD-FIRST in any prover). Slice 1 `done` 2026-08-07
+  (spec frozen 4a0b277 w/ governance ruling: frozen-by-import P2.1 files now
+  hook-guarded; witnesses landed; instance-bridge API flagged for pre-slice-2-grind).
+  Slice 2 `proving` (a/a†/CCR/Segal spec drafting). Design:
   symmetrizer projector route (NOT the SymmetricPower quotient: no inner product,
   universal property in flux upstream); BosonFock = lp 2 over completed symmetric
   powers; a/a† as LinearPMaps with mutual formal adjointness + CCR on the
