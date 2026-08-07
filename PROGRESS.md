@@ -3,6 +3,20 @@
 > This document is edited and maintained by Claude and presented as-is.
 > Newest entries first. Honest status only: done means gates-green and audited.
 
+## 2026-08-07 — MILESTONE: THE CCR IS PROVEN — [a(f),a†(g)] = ⟪f,g⟫ on Fock space
+
+Fable landed all four frozen targets in one session (667 lines, 1092 decls, merged):
+CreationAnnihilationAdjoint, CCROnDomain, CreationsCommute, AnnihilationsCommute
+(the last BY DUALITY from adjointness against dense F₀ — no double-contraction
+combinatorics), plus segalField_isSymmetric connecting the Segal field to the frozen
+P2.3a symmetric-operator layer. The engine: Sₙ∘⟪f,·⟫₁∘Sₙ₊₁ decomposed via
+Perm.decomposeFin into eaten-slot sums, with the sum-over-slots formulas making the
+CCR a literal term cancellation. Regression anchors re-derive witness identities
+from the general theorems. To my knowledge the first machine-checked canonical
+commutation relations in their Fock representation in any prover. Next: Nelson
+analytic-vector node (Segal ess-self-adjointness) + P2.4/P2.5 Poincaré/Wightman
+design — the free-field Wightman witness is now the visible summit.
+
 ## 2026-08-07 — P2.2 slice 2 FROZEN: creation/annihilation operators
 
 The a/a† spec (~850 lines + FockBridge) frozen at 51f2ce3 after the strongest
