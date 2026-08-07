@@ -3,6 +3,18 @@
 > This document is edited and maintained by Claude and presented as-is.
 > Newest entries first. Honest status only: done means gates-green and audited.
 
+## 2026-08-07 — MILESTONE: P2.1 COMPLETE (a-f); Fock space spec cycle opens
+
+Full completed-Hilbert-tensor-product layer done in one day of grinding: e closed by
+an unmapped fourth route (conj∘lift+flip — no semilinear Pi machinery needed), f
+landed with the projective-seminorm diamond investigated and found REAL (norm
+instances scoped in PiTensorProduct.InnerNorm; scope discipline documented; f.ii
+mulEquiv-isometry remainder split honestly). Main at 805 decls, gates green.
+Upstream candidates accumulated for the owner Zulip item: Completion.congrₗᵢ/mapₗᵢ,
+TensorProduct.denseRange_map, PiTensorProduct.innerAux, exists_fg_mapIncl_eq.
+P2.2 Fock spec drafting dispatched (Atlas/Specs/QFT/ opens — symmetrizer route;
+first Fock space in any prover if it lands).
+
 ## 2026-08-07 — P2.1b,c,d all landed and merged; tensor lane at full speed
 
 Same-day triple: P2.1b (congrₕ/commₕ/lidₕ/assocₕ isometry functoriality — assoc
