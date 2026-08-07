@@ -6,6 +6,7 @@ import Atlas.Proofs.HilbertTensorMaps
 import Atlas.Proofs.HilbertTensorBasis
 import Atlas.Proofs.PiTensorSemilinear
 import Atlas.Proofs.PiTensorInner
+import Atlas.Proofs.FockBridge
 
 /-!
 # Atlas.Proofs — proof developments
