@@ -2,6 +2,7 @@ import Atlas.Proofs.CausalLemmas
 import Atlas.Proofs.BoundedGenerator
 import Atlas.Proofs.DeficiencyTheory
 import Atlas.Proofs.CayleyTheory
+import Atlas.Proofs.HilbertTensorMaps
 
 /-!
 # Atlas.Proofs — proof developments
