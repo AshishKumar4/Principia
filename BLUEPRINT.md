@@ -110,7 +110,7 @@ space, unbounded operator theory, Stone's theorem (see RESEARCH.md infrastructur
   P2.1a/b-shaped material upstream NOW — coordinate before building (owner action).
   Sub-nodes: P2.1a `done` (spec frozen 2026-07-10 + witnesses; notation left-assoc fixed in review); P2.1b `done` 2026-08-07 (congrₕ/commₕ/lidₕ/assocₕ isometry layer + Completion.congrₗᵢ
   upstreamable bonus; general mapₕ still #40074-gated; grinder probes to fold into P2.1W);
-  P2.1c `todo` adjoint_mapₕ (0.5-1); P2.1d `todo` HilbertBasis.tensorProduct +
+  P2.1c `done` (unitary adjoint laws; general case #40074-gated) + P2.1d `done` 2026-08-07 (HilbertBasis.tensorProductₕ +
   ≃ ℓ²(ι₁×ι₂) (1); P2.1e `todo` PiTensorProduct SEMILINEAR lift — the one uncertain
   implementation point, upstream-shaped (1); P2.1f `todo` PiTensorProduct inner
   product + reindex isometry + mulEquiv isometry (2); P2.1W `todo` witnesses (1).
