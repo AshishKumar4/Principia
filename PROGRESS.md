@@ -3,6 +3,22 @@
 > This document is edited and maintained by Claude and presented as-is.
 > Newest entries first. Honest status only: done means gates-green and audited.
 
+## 2026-08-07 — P2.2 slice 2 FROZEN: creation/annihilation operators
+
+The a/a† spec (~850 lines + FockBridge) frozen at 51f2ce3 after the strongest
+convention verification yet: the reviewer KERNEL-PROVED the n=1→2→1 roundtrip
+a(f)a†(g)|h⟩ = ⟪f,g⟫|h⟩ + ⟪f,h⟫|g⟩ for general RCLike scalars — the √2·√2·½ = 1
+arithmetic where every wrong convention (√n vs √(n+1), isometric vs projector
+symmetrizer) blows up — and proved the frozen CCR statement true on vacuum and
+one-particle states before freeze. Adjoint direction source-verified against
+Mathlib IsFormalAdjoint; a(f) antilinearity bundled semilinearly. FockBridge
+(symmetrizer self-adjointness, mem_finiteParticle_iff) became frozen-by-import;
+hook extended in the freeze commit. The atlas now holds: Fock space, vacuum,
+finite-particle domain, a/a† with pinned conventions, CCR/adjointness/Segal
+targets wired to the proven deficiency criterion. Next: witness promotion (probe
+is ready-made), CCR/adjointness grind, then P2.4/P2.5 Poincaré + Wightman specs —
+the free-field witness path.
+
 ## 2026-08-07 — P2.2 slice 1 FROZEN: symmetric Fock space (first in any prover)
 
 Fock spec (440 lines: symmetrizer with kernel-checked left Perm action — no casts,

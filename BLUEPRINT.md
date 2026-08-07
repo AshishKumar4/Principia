@@ -123,7 +123,7 @@ space, unbounded operator theory, Stone's theorem (see RESEARCH.md infrastructur
 - P2.2 — symmetric Fock space (WORLD-FIRST in any prover). Slice 1 `done` 2026-08-07
   (spec frozen 4a0b277 w/ governance ruling: frozen-by-import P2.1 files now
   hook-guarded; witnesses landed; instance-bridge API flagged for pre-slice-2-grind).
-  Slice 2 `proving` (a/a†/CCR/Segal spec drafting). Design:
+  Slice 2 spec FROZEN 2026-08-07 51f2ce3 (a/a† as LinearPMaps with kernel-verified sqrt/CCR roundtrip; FockBridge frozen-by-import, hook-covered). Slice-2 witnesses `proving`; then CCR/adjointness proof grind, then Segal ess-self-adjointness (Nelson node). Design:
   symmetrizer projector route (NOT the SymmetricPower quotient: no inner product,
   universal property in flux upstream); BosonFock = lp 2 over completed symmetric
   powers; a/a† as LinearPMaps with mutual formal adjointness + CCR on the
