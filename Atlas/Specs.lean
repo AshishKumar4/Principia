@@ -6,6 +6,7 @@ import Atlas.Specs.OperatorTheory.Symmetric
 import Atlas.Specs.OperatorTheory.Cayley
 import Atlas.Specs.OperatorTheory.ProjectionValuedMeasure
 import Atlas.Specs.OperatorTheory.HilbertTensor
+import Atlas.Specs.QFT.FockSpace
 
 /-!
 # Atlas.Specs — frozen definitions and target theorem statements
