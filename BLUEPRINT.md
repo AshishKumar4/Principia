@@ -146,10 +146,13 @@ space, unbounded operator theory, Stone's theorem (see RESEARCH.md infrastructur
   P2-wightman-design.md): physlib dependency DEFERRED TO P3 (evidence-based: no
   cover/reps/Poincaré content; carrier friction); minimal restricted-Lorentz +
   Poincaré on the Phase-1 M4 carrier; covering group NOT load-bearing for spin 0.
-  Sub-nodes: P2.4a `todo` group spec (+ Minkowski-defs extraction to Specs,
-  layering item); P2.4b `todo` PoincareRep spec (+ OneParameterUnitaryGroup anchor
-  = Stone bridge); P2.4W `todo` witnesses (trivial now; regular rep on L²(M4)
-  parallel non-blocking).
+  Sub-nodes: P2.4a `spec` FROZEN 2026-08-10 (extraction byte-verified, dual-condition
+  approval; anchor-bearing witness files added to frozen-imports.txt; probes committed
+  audits/probes/P2.4a/); P2.4W `todo` GATE: P2.4b MUST NOT consume the group spec
+  until a nontrivial RestrictedLorentzGroup member is witnessed (reviewer's rot12
+  probe is ~180-line ready material; add a boost too); P2.4b `todo` PoincareRep spec
+  (+ OneParameterUnitaryGroup anchor = Stone bridge), after P2.4W; regular-rep
+  witness on L²(M4) parallel non-blocking.
 - P2.5 — Wightman axioms. Design adjudicated 2026-08-07 (same dossier): fixed-domain
   field structure (no LinearPMap composition), six named axiom Props; spectrum
   condition in DISTRIBUTIONAL SUPPORT FORM (joint PVM/SNAG eliminated from critical
@@ -161,8 +164,11 @@ space, unbounded operator theory, Stone's theorem (see RESEARCH.md infrastructur
   cone lemmas. Sub-nodes: P2.6a `todo` Γ second quantization (grindable NOW; lp
   family-congruence = upstream candidate); P2.6b `todo` shell measure μₘ +
   invariance H1 (Jacobian, ~2-4 sessions, mathematical risk w/ fallback) +
-  one-particle rep H3; P2.6c `todo` Pauli-Jordan support H2 (THE hard node; route
-  R1 energy-method adjudicated, fallback R2 Paley-Wiener; own design pass first);
+  one-particle rep H3; P2.6c — Pauli-Jordan H2: design pass DONE 2026-08-07 — Option-A-sharpened
+  formulation (smeared pairing = KG solution at a point); lemma DAG L0-L6 (~14-19
+  sessions, 3 parallel lanes; L4 = Mathlib's first wave-equation energy estimate,
+  upstream candidate; riskiest PJ.1c/PJ.3a with stated fallbacks). L0-L5 grindable
+  now; L6 spec freeze blocks on P2.5a Fourier conventions. Grind `todo`;
   P2.6d `todo` assembly (eight axiom verifications). Est. total ~18-28 sessions.
   Nelson node parallel NON-BLOCKING (not needed for Wightman).
 - P2.7 `todo` **Target: Haag's theorem** (Streater-Wightman Thm 4-16 form).

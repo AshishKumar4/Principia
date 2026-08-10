@@ -76,3 +76,16 @@ Pauli-Jordan (P2.6c, needs only 𝓕η conventions), P2.4W regular-rep witness,
 Nelson. First dispatches: P2.4a spec + P2.6c design (+ Γ next). Total to P2.6:
 ~18-28 sessions; frozen Wightman surface in ~5-8. Risks: H1/H2 (both have
 statement-preserving fallbacks).
+
+
+## Addendum 2026-08-07 (P2.6c design pass side-flag)
+
+The pin contains a 2025-26 Analysis/Distribution suite the sections above did not
+account for: TemperedDistribution.lean, Support.lean (Distribution.IsVanishingOn,
+dsupport + API), FourierMultiplier.lean (Schwartz and tempered-distribution
+multiplier CLMs), Sobolev.lean, TemperateGrowth.lean (fun_prop algebra). P2.5a's
+spectrum-condition utilities must be designed against this suite (IsVanishingOn/
+dsupport for the vanishing-near-cone hypothesis) rather than hand-rolling. The
+P2.6c lemma DAG (KG finite propagation L0-L6) lives in the design-pass report;
+key convention: Mathlib's e^(-2pi i x.xi) normalization puts Omega(k) =
+sqrt(4pi^2 norm(k)^2 + m^2).

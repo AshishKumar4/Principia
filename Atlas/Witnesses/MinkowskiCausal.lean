@@ -14,8 +14,10 @@ Cauchy surface, and Minkowski space is globally hyperbolic.
 
 ## Contents
 
-* `InFutureTimeCone` / `InFutureCausalCone` — coordinate form of the open future time
-  cone and the (punctured) future causal cone, with closure under addition (convexity).
+The cones `InFutureTimeCone` / `InFutureCausalCone` and their convexity/contrast
+toolkit live in the frozen P2.4a spec `Atlas/Specs/Spacetime/Minkowski.lean`
+(extracted from this file under spec review, 2026-08-07).
+
 * `minkowski_chronoStep_iff`, `minkowski_chrono_iff` — the cone characterization
   `p ≪ q ↔ η(q-p, q-p) < 0 ∧ q-p future-directed` (O'Neill, *Semi-Riemannian
   Geometry*, Ch. 5, pp. 143–146 and Ch. 14; the causal predicates are evaluated at `q`,
@@ -23,6 +25,9 @@ Cauchy surface, and Minkowski space is globally hyperbolic.
   spacelike, past-directed and null displacements are not chronologically related.
 * `minkowski_causal_iff` — the causal analogue `p ⤳ q ↔ q = p ∨ q-p ∈ future causal
   cone`.
+* `isSpacelike_sub_iff_not_causallyPrecedes` — the P2.4a causal anchor: a displacement
+  is spacelike (in the frozen strict sense of `IsSpacelike`) iff neither point causally
+  precedes the other; plus expected-true / expected-false `SpacelikeSeparated` examples.
 * `isCauchySurface_zeroTimeSlice`, `minkowski_isGloballyHyperbolic` — the `{t = 0}`
   slice is closed, achronal and met exactly once by every inextendible future-directed
   timelike curve; hence Minkowski space is globally hyperbolic (O'Neill, Ch. 14,
@@ -53,77 +58,11 @@ open Spacetime
 
 variable {γ : ℝ → M4} {s : Set ℝ} {p q v w : M4}
 
-/-! ### The future cones in coordinates -/
+/-! ### Converse contrast optimization
 
-/-- The open future time cone of Minkowski space, in coordinates: `v` is timelike
-(`(v¹)² + (v²)² + (v³)² < (v⁰)²`) and future-pointing (`v⁰ > 0`). Coordinate form of
-O'Neill's time cone of `∂₀` (*Semi-Riemannian Geometry*, Ch. 5, pp. 143–146); see
-`timelike_futureDirected_iff` for the equivalence with the frozen spec predicates. -/
-def InFutureTimeCone (v : M4) : Prop :=
-  v 1 ^ 2 + v 2 ^ 2 + v 3 ^ 2 < v 0 ^ 2 ∧ 0 < v 0
-
-/-- The future causal cone of Minkowski space (zero vector excluded), in coordinates:
-`v` is causal (`(v¹)² + (v²)² + (v³)² ≤ (v⁰)²`) and future-pointing (`v⁰ > 0`). See
-`futureDirected_iff` for the equivalence with the frozen spec predicate. -/
-def InFutureCausalCone (v : M4) : Prop :=
-  v 1 ^ 2 + v 2 ^ 2 + v 3 ^ 2 ≤ v 0 ^ 2 ∧ 0 < v 0
-
-theorem InFutureTimeCone.inFutureCausalCone (h : InFutureTimeCone v) :
-    InFutureCausalCone v :=
-  ⟨h.1.le, h.2⟩
-
-private theorem cauchy_schwarz₃ (a b c x y z : ℝ) :
-    (a * x + b * y + c * z) ^ 2 ≤ (a ^ 2 + b ^ 2 + c ^ 2) * (x ^ 2 + y ^ 2 + z ^ 2) := by
-  nlinarith [sq_nonneg (a * y - b * x), sq_nonneg (a * z - c * x), sq_nonneg (b * z - c * y)]
-
-/-- The open future time cone is closed under addition (it is a convex cone: O'Neill,
-*Semi-Riemannian Geometry*, Ch. 5, Lemma 5.30 has the underlying time-cone facts). -/
-theorem InFutureTimeCone.add (hv : InFutureTimeCone v) (hw : InFutureTimeCone w) :
-    InFutureTimeCone (v + w) := by
-  obtain ⟨hv1, hv0⟩ := hv
-  obtain ⟨hw1, hw0⟩ := hw
-  have hcs := cauchy_schwarz₃ (v 1) (v 2) (v 3) (w 1) (w 2) (w 3)
-  have hsv : (0:ℝ) ≤ v 1 ^ 2 + v 2 ^ 2 + v 3 ^ 2 := by positivity
-  have hsw : (0:ℝ) ≤ w 1 ^ 2 + w 2 ^ 2 + w 3 ^ 2 := by positivity
-  have hdot : v 1 * w 1 + v 2 * w 2 + v 3 * w 3 < v 0 * w 0 := by
-    nlinarith [mul_pos hv0 hw0]
-  refine ⟨?_, by simp only [PiLp.add_apply]; linarith⟩
-  simp only [PiLp.add_apply]
-  nlinarith
-
-/-- The future causal cone is closed under addition. -/
-theorem InFutureCausalCone.add (hv : InFutureCausalCone v) (hw : InFutureCausalCone w) :
-    InFutureCausalCone (v + w) := by
-  obtain ⟨hv1, hv0⟩ := hv
-  obtain ⟨hw1, hw0⟩ := hw
-  have hcs := cauchy_schwarz₃ (v 1) (v 2) (v 3) (w 1) (w 2) (w 3)
-  have hsv : (0:ℝ) ≤ v 1 ^ 2 + v 2 ^ 2 + v 3 ^ 2 := by positivity
-  have hsw : (0:ℝ) ≤ w 1 ^ 2 + w 2 ^ 2 + w 3 ^ 2 := by positivity
-  have hdot : v 1 * w 1 + v 2 * w 2 + v 3 * w 3 ≤ v 0 * w 0 := by
-    nlinarith [mul_pos hv0 hw0]
-  refine ⟨?_, by simp only [PiLp.add_apply]; linarith⟩
-  simp only [PiLp.add_apply]
-  nlinarith
-
-/-- Key velocity bound: a vector of the open future time cone dominates every spatial
-contrast with coefficient vector of Euclidean norm at most `1` (Cauchy–Schwarz in the
-spatial slice). This is what makes `x ↦ x 0 - (c·x̄)` increase along timelike curves. -/
-theorem InFutureTimeCone.contrast_pos (h : InFutureTimeCone v) {c1 c2 c3 : ℝ}
-    (hc : c1 ^ 2 + c2 ^ 2 + c3 ^ 2 ≤ 1) :
-    0 < v 0 - (c1 * v 1 + c2 * v 2 + c3 * v 3) := by
-  obtain ⟨hsp, h0⟩ := h
-  have hcs := cauchy_schwarz₃ c1 c2 c3 (v 1) (v 2) (v 3)
-  have hsv : (0:ℝ) ≤ v 1 ^ 2 + v 2 ^ 2 + v 3 ^ 2 := by positivity
-  nlinarith
-
-/-- Weak version of `InFutureTimeCone.contrast_pos` for the causal cone. -/
-theorem InFutureCausalCone.contrast_nonneg (h : InFutureCausalCone v) {c1 c2 c3 : ℝ}
-    (hc : c1 ^ 2 + c2 ^ 2 + c3 ^ 2 ≤ 1) :
-    0 ≤ v 0 - (c1 * v 1 + c2 * v 2 + c3 * v 3) := by
-  obtain ⟨hsp, h0⟩ := h
-  have hcs := cauchy_schwarz₃ c1 c2 c3 (v 1) (v 2) (v 3)
-  have hsv : (0:ℝ) ≤ v 1 ^ 2 + v 2 ^ 2 + v 3 ^ 2 := by positivity
-  nlinarith
+The cones and their convexity/contrast toolkit are frozen in the P2.4a spec
+(`Atlas/Specs/Spacetime/Minkowski.lean`); the converse optimizations below are
+witness-proof machinery only. -/
 
 /-- Converse optimization: domination of all unit spatial contrasts, strictly, puts a
 vector in the open future time cone (choose `c` along the spatial part). -/
@@ -494,6 +433,54 @@ example :
   rw [minkowski_causal_iff, futureDirected_iff]
   refine Or.inr ?_
   constructor <;> simp
+
+/-! ### The P2.4a causal anchor: spacelike separation against the causal relation -/
+
+/-- **The P2.4a causal anchor**: a displacement is spacelike exactly when neither point
+causally precedes the other (Streater–Wightman, *PCT, Spin and Statistics, and All
+That*, Ch. 1; O'Neill, *Semi-Riemannian Geometry*, Ch. 5). This ties the frozen strict
+`IsSpacelike` / `SpacelikeSeparated` definitions of the P2.4a spec — which the Wightman
+microcausality axiom (P2.5) consumes — to the frozen P1.2 causality relation on the
+Minkowski witness.
+
+Frozen alongside the P2.4a spec, but stated in the witness layer because its proof
+consumes the P1.W2 cone characterization `minkowski_causal_iff`; the spec-level content
+is the cone trichotomy `isSpacelike_iff_not_inFutureCausalCone`. -/
+theorem isSpacelike_sub_iff_not_causallyPrecedes (x y : M4) :
+    IsSpacelike (x - y) ↔
+      ¬ x ⤳[minkowskiTimeOrientation] y ∧ ¬ y ⤳[minkowskiTimeOrientation] x := by
+  rw [isSpacelike_iff_not_inFutureCausalCone, minkowski_causal_iff, minkowski_causal_iff,
+    futureDirected_iff, futureDirected_iff, neg_sub, sub_ne_zero]
+  constructor
+  · rintro ⟨hne, hxy, hyx⟩
+    exact ⟨fun h => h.elim (fun h' => hne h'.symm) hyx, fun h => h.elim hne hxy⟩
+  · rintro ⟨h1, h2⟩
+    exact ⟨fun h => h2 (Or.inl h), fun h => h2 (Or.inr h), fun h => h1 (Or.inr h)⟩
+
+-- The spatial direction `∂₁` is spacelike from the origin, hence causally unrelated to
+-- it in both directions — the anchor at work.
+example :
+    ¬ ((0 : M4) ⤳[minkowskiTimeOrientation] EuclideanSpace.single 1 1) ∧
+      ¬ (EuclideanSpace.single 1 1 ⤳[minkowskiTimeOrientation] (0 : M4)) := by
+  refine (isSpacelike_sub_iff_not_causallyPrecedes _ _).1 ?_
+  rw [zero_sub]
+  refine IsSpacelike.neg ?_
+  rw [isSpacelike_iff]
+  norm_num [Fin.ext_iff]
+
+-- Spacelike-separated singletons: `∂₁` and the origin.
+example : SpacelikeSeparated {EuclideanSpace.single 1 1} {(0 : M4)} := by
+  rintro x rfl y rfl
+  rw [sub_zero, isSpacelike_iff]
+  norm_num [Fin.ext_iff]
+
+-- Timelike-separated singletons are not spacelike separated.
+example : ¬ SpacelikeSeparated {EuclideanSpace.single 0 1} {(0 : M4)} := by
+  intro h
+  have h' := h _ rfl _ rfl
+  rw [sub_zero, isSpacelike_iff] at h'
+  norm_num [show ((2 : Fin 4) = 0) = False from by decide,
+    show ((3 : Fin 4) = 0) = False from by decide] at h'
 
 /-! ### The zero-time slice is a Cauchy surface
 

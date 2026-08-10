@@ -1,6 +1,8 @@
 import Atlas.Specs.Spacetime.Metric
 import Atlas.Specs.Spacetime.CausalStructure
 import Atlas.Specs.Spacetime.GlobalHyperbolicity
+import Atlas.Specs.Spacetime.Minkowski
+import Atlas.Specs.Spacetime.Poincare
 import Atlas.Specs.OperatorTheory.UnitaryGroup
 import Atlas.Specs.OperatorTheory.Symmetric
 import Atlas.Specs.OperatorTheory.Cayley

@@ -1,5 +1,5 @@
 import Atlas.Specs.Spacetime.Metric
-import Mathlib.Analysis.InnerProductSpace.PiL2
+import Atlas.Specs.Spacetime.Minkowski
 
 /-!
 # P1.W1 — Minkowski space: the non-vacuity witness for P1.1
@@ -9,11 +9,11 @@ Witness (blueprint node P1.W1) that the frozen P1.1 spec
 `ℝ¹'³`, realised as `EuclideanSpace ℝ (Fin 4)` as a manifold over itself, carries a
 `PseudoRiemannianMetric` of Lorentzian signature together with a time orientation.
 
-The metric is the constant mostly-plus form
-`η(v, w) = -(v 0) * (w 0) + ∑_{i ≠ 0} (v i) * (w i) = ⟪v, w⟫ - 2 * (v 0) * (w 0)`,
-built from the Euclidean inner product; the shift by `-2 * (v 0) * (w 0)` flips the sign
-of the time coordinate. The standard basis is `η`-orthogonal with weights `(-1, 1, 1, 1)`,
-which makes both nondegeneracy and the Sylvester signature computation direct.
+The carrier `M4` and the constant mostly-plus form `minkowskiForm` live in the frozen
+P2.4a spec `Atlas/Specs/Spacetime/Minkowski.lean` (extracted from this file under
+spec review, 2026-08-07); this file instantiates the P1.1 metric bundle on them.
+The standard basis is `η`-orthogonal with weights `(-1, 1, 1, 1)`, which makes both
+nondegeneracy and the Sylvester signature computation direct.
 
 ## Contents
 
@@ -21,7 +21,8 @@ which makes both nondegeneracy and the Sylvester signature computation direct.
 * `Spacetime.Minkowski.minkowskiMetric_isLorentzian` — index `1` at every point.
 * `Spacetime.Minkowski.minkowskiTimeOrientation` — the constant future field `∂₀`.
 * A battery of expected-true / expected-false `example`s exercising the causal character
-  predicates on `∂₀`, `∂₁`, `∂₀ + ∂₁` and `0`.
+  predicates on `∂₀`, `∂₁`, `∂₀ + ∂₁` and `0`, including the P2.4a `IsSpacelike`
+  predicate against the P1.1 `PseudoRiemannianMetric.Spacelike` convention.
 
 ## Sources
 
@@ -34,43 +35,6 @@ open Bundle RealInnerProductSpace
 open scoped ContDiff Manifold
 
 namespace Spacetime.Minkowski
-
-/-- Four-dimensional spacetime carrier: `ℝ⁴` with its Euclidean structure, used as a
-manifold over itself. Its tangent space at every point is definitionally `ℝ⁴`. -/
-abbrev M4 : Type := EuclideanSpace ℝ (Fin 4)
-
-/-- The Minkowski bilinear form `η(v, w) = ⟪v, w⟫ - 2 * (v 0) * (w 0)`, as a continuous
-bilinear map. Subtracting twice the time-time product from the Euclidean inner product
-flips the sign of the `0`-th (time) coordinate, giving the mostly-plus form
-`-(v 0) * (w 0) + ∑_{i ≠ 0} (v i) * (w i)`. -/
-noncomputable def minkowskiForm : M4 →L[ℝ] M4 →L[ℝ] ℝ :=
-  innerSL ℝ - (2 : ℝ) • (EuclideanSpace.proj 0).smulRight (EuclideanSpace.proj 0)
-
-theorem minkowskiForm_apply (v w : M4) :
-    minkowskiForm v w = ⟪v, w⟫ - 2 * v 0 * w 0 := by
-  have h : minkowskiForm v w
-      = innerSL ℝ v w - 2 * (EuclideanSpace.proj 0 v * EuclideanSpace.proj 0 w) := rfl
-  rw [h, innerSL_apply_apply]
-  simp only [PiLp.proj_apply]
-  ring
-
-theorem minkowskiForm_symm (v w : M4) : minkowskiForm v w = minkowskiForm w v := by
-  simp only [minkowskiForm_apply, real_inner_comm v w]; ring
-
-/-- Left-separating: if `η(v, ·) = 0` then `v = 0`. Testing against the standard basis
-vectors: `η(v, eᵢ) = v i` for `i ≠ 0` forces the spatial components, and
-`η(v, e₀) = -v 0` forces the time component. -/
-theorem minkowskiForm_separatingLeft (v : M4) (h : ∀ w, minkowskiForm v w = 0) : v = 0 := by
-  have h0 : v 0 = 0 := by
-    have hi := h (EuclideanSpace.single 0 1)
-    simp only [minkowskiForm_apply, EuclideanSpace.inner_single_right, one_mul,
-      conj_trivial, PiLp.single_apply, if_true, mul_one] at hi
-    linarith
-  ext i
-  have hi := h (EuclideanSpace.single i 1)
-  simp only [minkowskiForm_apply, EuclideanSpace.inner_single_right, one_mul,
-    conj_trivial, h0, zero_mul, mul_zero, sub_zero] at hi
-  simpa using hi
 
 set_option backward.isDefEq.respectTransparency false in
 /-- Witness for P1.1 (non-vacuity): the constant Minkowski metric on `ℝ¹'³`.
@@ -239,5 +203,29 @@ example : ¬ minkowskiMetric.Spacelike (0 : M4) (EuclideanSpace.single 0 1) := b
     show minkowskiMetric.val (0 : M4) (EuclideanSpace.single 0 1) (EuclideanSpace.single 0 1) ≤ 0
     rw [minkowskiMetric_val_eq]; simp
   · exact single0_ne_zero h
+
+/-! ### Sanity examples: the strict P2.4a `IsSpacelike` predicate -/
+
+-- A spatial direction `∂₁` is `IsSpacelike`.
+example : IsSpacelike (EuclideanSpace.single 1 1 : M4) := by
+  rw [isSpacelike_iff]; norm_num [Fin.ext_iff]
+
+-- The future time direction `∂₀` is not `IsSpacelike`.
+example : ¬ IsSpacelike (EuclideanSpace.single 0 1 : M4) := by
+  rw [isSpacelike_iff]
+  norm_num [show ((2 : Fin 4) = 0) = False from by decide,
+    show ((3 : Fin 4) = 0) = False from by decide]
+
+-- The null diagonal `∂₀ + ∂₁` is not `IsSpacelike` (strict inequality).
+example : ¬ IsSpacelike (EuclideanSpace.single 0 1 + EuclideanSpace.single 1 1 : M4) := by
+  rw [isSpacelike_iff]
+  norm_num [Fin.ext_iff, show ((2 : Fin 4) = 0) = False from by decide,
+    show ((3 : Fin 4) = 0) = False from by decide]
+
+-- The zero vector is not `IsSpacelike` — the deliberate divergence from the P1.1
+-- convention (`minkowskiMetric.Spacelike (0 : M4) 0` holds above), forced by the
+-- causal anchor `isSpacelike_sub_iff_not_causallyPrecedes`.
+example : ¬ IsSpacelike (0 : M4) := by
+  rw [isSpacelike_iff]; norm_num
 
 end Spacetime.Minkowski
