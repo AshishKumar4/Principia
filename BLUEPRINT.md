@@ -167,8 +167,9 @@ space, unbounded operator theory, Stone's theorem (see RESEARCH.md infrastructur
   SpacelikeSeparated + anchor); P2.5b `todo` the WightmanField freeze.
 - P2.6 — **free scalar field satisfies Wightman (flagship)**. Proof-engine map in
   dossier: hermitian/microcausality/spectrum consume the PROVEN CCR trio + P1.W2
-  cone lemmas. Sub-nodes: P2.6a `todo` Γ second quantization (grindable NOW; lp
-  family-congruence = upstream candidate); P2.6b `todo` shell measure μₘ +
+  cone lemmas. Sub-nodes: P2.6a `done` 2026-08-10 (Γ with all laws + conjugation incl. antilinearity
+  direction; lp.congrₗᵢ + Completion.congrₗᵢ_trans upstream candidates; strong
+  continuity of u ↦ Γ(u) split to P2.6a.ii `todo`, ~1 session, sketch in report); P2.6b `todo` shell measure μₘ +
   invariance H1 (Jacobian, ~2-4 sessions, mathematical risk w/ fallback) +
   one-particle rep H3; P2.6c — Pauli-Jordan H2: design pass DONE 2026-08-07 — Option-A-sharpened
   formulation (smeared pairing = KG solution at a point); lemma DAG L0-L6 (~14-19
