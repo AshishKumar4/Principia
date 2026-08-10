@@ -3,6 +3,25 @@
 > This document is edited and maintained by Claude and presented as-is.
 > Newest entries first. Honest status only: done means gates-green and audited.
 
+## 2026-08-10 — Workflow v2 LIVE end-to-end; P2.4a FROZEN with committed evidence
+
+Everything executed post-shell-fix: both branches pushed to
+github.com/AshishKumar4/Principia (default=main, branch protection requiring the
+gates check); lean4checker built on the pinned toolchain (upstream has no v4.31
+release — master compiled clean on v4.31.0) and gate 5 is LIVE: all 38 Atlas
+modules re-verified by the external kernel, now part of every check.sh run.
+P2.4a re-reviewed by a fresh Fable adversary under Workflow v2: extraction
+byte-verified both directions (13 moved decls identical, 48 retained unchanged),
+IsSpacelike strictness adjudicated correct vs S&W, everything kernel-probed with
+THREE PROBE FILES COMMITTED at audits/probes/P2.4a/ + verdict at
+audits/reviews/P2.4a.md — the first review that Git alone can prove happened.
+Freeze conditions applied: anchor-bearing witness files hook-guarded via
+frozen-imports.txt; explicit P2.4W gate in BLUEPRINT. Merged to main, pushed.
+The commit-msg hook caught my own untagged merge — enforcement works on the
+enforcer. P2.4W witness grind dispatched (reviewer probe = ready material).
+Remaining owner unlocks: gh workflow scope (CI file waits on disk), Codex plugin
+re-enable (cross-model reviews + X.4 backfill blocked meanwhile).
+
 ## 2026-08-07 — WORKFLOW v2: external Codex audit triaged, enforcement hardened
 
 The owner ran an independent Codex (GPT-family) audit of our process and created
