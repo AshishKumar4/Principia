@@ -1,6 +1,7 @@
 import Atlas.Witnesses.Minkowski
 import Atlas.Witnesses.MinkowskiCausal
 import Atlas.Witnesses.Poincare
+import Atlas.Witnesses.PoincareRep
 import Atlas.Witnesses.UnitaryGroups
 import Atlas.Witnesses.SymmetricOperators
 import Atlas.Witnesses.CayleyScalar
