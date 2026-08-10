@@ -1,10 +1,12 @@
 #!/usr/bin/env bash
-# Spec-freeze enforcement: commits touching Atlas/Specs/ must be marked [spec-review].
+# Spec-freeze enforcement: commits touching Atlas/Specs/** or any frozen-by-import
+# file (single source of truth: scripts/frozen-imports.txt) require [spec-review].
 set -euo pipefail
 
-if git diff --cached --name-only | grep -qE '^Atlas/Specs(/|\.lean$)|^Atlas/Proofs/(PiTensorSemilinear|PiTensorInner|HilbertTensorMaps|FockBridge)\.lean$'; then
+frozen_re=$(grep -v '^#' scripts/frozen-imports.txt | grep -v '^$' | paste -sd'|' -)
+if git diff --cached --name-only | grep -qE "^Atlas/Specs(/|\.lean$)|^(${frozen_re})$"; then
   if ! grep -q '\[spec-review\]' "$1"; then
-    echo "commit-msg: this commit modifies frozen files (Atlas/Specs/** or frozen-by-import P2.1 Proofs files)." >&2
+    echo "commit-msg: this commit modifies frozen files (Atlas/Specs/** or scripts/frozen-imports.txt entries)." >&2
     echo "Spec changes require a spec review and '[spec-review]' in the commit message." >&2
     echo "Proof sessions must not edit specs; escalate instead (see CLAUDE.md)." >&2
     exit 1

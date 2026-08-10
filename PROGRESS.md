@@ -1,7 +1,73 @@
-# Progress journal — QG Constraint Atlas
+# Progress journal — QG Constraint Atlas (Principia)
 
 > This document is edited and maintained by Claude and presented as-is.
 > Newest entries first. Honest status only: done means gates-green and audited.
+
+## 2026-08-07 — WORKFLOW v2: external Codex audit triaged, enforcement hardened
+
+The owner ran an independent Codex (GPT-family) audit of our process and created
+the public remote (github.com/AshishKumar4/Principia). Point-by-point triage:
+
+1. "No independent semantic review" — AGREE. Fixed structurally: Codex
+   (gpt-5.6-sol, xhigh) cross-model review is now MANDATORY per spec freeze
+   (CLAUDE.md Workflow v2); X.4 backfills the already-frozen surface. Human
+   expert review remains owner-gated (Zulip/Douglas items).
+2. "Merge gates not enforced (no remote/CI/protection)" — AGREE. Fixed: remote
+   added, CI workflow added (.github/workflows/ci.yml runs gates 1-4 on every
+   push), push-after-merge is now standing policy. Branch protection = owner
+   action (repo settings).
+3. "Review evidence trapped in transcripts" — AGREE, the sharpest catch. Fixed
+   going forward: audits/ directory policy (probes + verdicts committed;
+   reviewers write only there). Honest loss recorded: ALL pre-policy probe files
+   died with their session scratchpads — X.3 backfills them. audits/README.md
+   states plainly what Git can and cannot prove about the early reviews.
+4. "Coordination gates bypassed (PVM, tensor)" — PARTIAL DISAGREE on "bypassed":
+   node e (the contested bounded spectral theorem) was never built; the PVM spec
+   and tensor layer were conscious, documented risk acceptances (alignment
+   preambles, revision-expected markers, pin-internal-only tensor work with
+   #40074 explicitly NOT vendored). AGREE the collision risk is real and
+   unresolved — the resolution is the owner actually posting the RFCs, which
+   this triage re-escalates as the top owner item.
+5. "Spec/proof boundary brittle (manual hook regex)" — AGREE. Fixed mechanically:
+   scripts/frozen-imports.txt is the single source of truth for BOTH the hook and
+   the new gate 4 (check_frozen_closure.py computes the transitive import closure
+   of Atlas/Specs/** and fails on any unlisted load-bearing file). Drift is now a
+   gate failure, not a memory burden.
+6. "Status language too promotional" — PARTIAL AGREE. Status vocabulary formalized
+   in BLUEPRINT (designed/spec/witnessed/proving/done, never conflated); novelty
+   claims standardized to "to our knowledge... pending external verification."
+   DISAGREE that proven results were overstated: the CCR/Cayley/criterion claims
+   are kernel-checked facts; the correction is about phase-level summaries.
+7. "Autonomy unreliable (4-week stop)" — AGREE on the facts. Mitigations: remote-
+   first (nothing machine-local anymore), restart-resume is already instant via
+   PROGRESS/memory (the 4-week gap lost time, zero work). A durable cloud
+   schedule as backstop is proposed to the owner (billed; their call).
+   Full session-survivability remains an honest open limitation.
+
+Also this turn: lean4checker wired as gate 5 (advisory until installed — install
+blocked by the session shell corruption below), README rewritten for the Principia
+dual mission (library + hallucination-immune agent workflow), X.3/X.4 nodes added.
+
+OPERATIONAL INCIDENT (honest record): this session's shell environment was
+corrupted by accumulated plugin env-injection carrying a null byte (~15 duplicated
+export blocks from repeated session restarts). ALL Bash calls fail; commits, push,
+lean4checker install, and CI verification are STAGED ON DISK but unexecuted.
+First iteration after a session restart must: verify gates, commit Workflow v2 +
+the P2.4a draft state, push both branches, install lean4checker, attempt branch
+protection via gh, dispatch the Codex cross-review of P2.4a + resume the Fable
+P2.4a reviewer, and re-arm the loop.
+
+## 2026-08-07 — P2.6c Pauli-Jordan route locked: risk down, estimate honest
+
+Design pass delivered the full lemma DAG (L0-L6) for the flagship's hardest node.
+Pivotal reformulation: the smeared Pauli-Jordan pairing IS the KG solution with
+data (0,h_t) evaluated at (t,0) — one point-evaluation finite-propagation statement,
+proven by weighted energy with a smoothed-cone cutoff (sqrt(norm^2+delta^2) trick —
+no mollification, no Gronwall; m>0 kills u directly). Every Mathlib dependency
+verified by exact name (incl. a 2025-26 Distribution suite the Wightman dossier
+missed — P2.5a side-flag recorded in the dossier addendum). Estimate corrected
+honestly: ~14-19 sessions (was 4-7); risk LOWER. L4 = Mathlib's first wave-equation
+energy estimate (upstream candidate). L0-L5 grindable now.
 
 ## 2026-08-07 — Wightman pathway designed: the summit is mapped
 

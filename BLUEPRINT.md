@@ -3,9 +3,12 @@
 > This document is edited and maintained by Claude and presented as-is.
 
 The dependency DAG of the project. Every work item is a node here; grind sessions claim
-nodes and update statuses. Statuses: `todo`, `spec` (statement frozen, unproven),
-`proving`, `done` (on main, gates green). Decomposing a node adds child nodes; nodes are
-never weakened in place (see CLAUDE.md).
+nodes and update statuses. Statuses (Workflow v2, keep them distinct — never conflate
+in reports): `todo` → `designed` (dossier exists) → `spec` (statement frozen, unproven)
+→ `witnessed` (non-vacuity landed) → `proving` → `done` (proven AS the frozen Props +
+witnessed + merged + gates green). `external` = upstream-owned. Decomposing a node adds
+child nodes; nodes are never weakened in place (see CLAUDE.md). Novelty claims are
+"to our knowledge" pending external verification.
 
 Grounding: `RESEARCH.md` — what already exists (physlib, OSforGFF), which mathematics is
 theorem-level vs open, and the Mathlib gap map this blueprint routes around.
@@ -198,6 +201,13 @@ Hollands-Wald axioms. Consumes Phase 1 (spacetimes) + Phase 2 (algebraic/QFT lay
   theory X drop" is a formal query.
 - X.2 `todo` Upstreaming tracker: infrastructure nodes PRed to Mathlib
   (P2.1/P2.3/P4.1-GNS), physics nodes offered to physlib.
+- X.3 `todo` Audit-artifact backfill (Workflow v2): re-create the key pre-policy
+  review probes (CCR roundtrip, Fock symmetrizer n=2, Cayley scalar model, Bool
+  PVM, Stone generator) as committed files under audits/probes/ — mechanical
+  (Opus), restores Git-reproducible evidence for the early freezes.
+- X.4 `todo` Codex cross-model review backfill of the already-frozen spec surface
+  (all Atlas/Specs/** files predate the Workflow-v2 cross-model gate) — one pass,
+  verdicts to audits/reviews/.
 
 ## Verification gates (all phases)
 

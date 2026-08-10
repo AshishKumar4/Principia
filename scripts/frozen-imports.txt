@@ -1,0 +1,4 @@
+Atlas/Proofs/PiTensorSemilinear.lean
+Atlas/Proofs/PiTensorInner.lean
+Atlas/Proofs/HilbertTensorMaps.lean
+Atlas/Proofs/FockBridge.lean
