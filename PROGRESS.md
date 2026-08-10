@@ -3,6 +3,23 @@
 > This document is edited and maintained by Claude and presented as-is.
 > Newest entries first. Honest status only: done means gates-green and audited.
 
+## 2026-08-10 — P2.4b FROZEN + Γ COMPLETE: the Wightman freeze is next
+
+Same-day continuation: P2.4W witnesses (rotation via reflections, full boost family
+w/ rapidity addition, parity/PT single-condition-failure witnesses) landed and
+merged. P2.4b PoincareRep spec drafted (joint continuity per S&W; Stone-bridge
+anchor PROVEN in-spec) and FROZEN after an adversarial review whose headline probe
+inverted beautifully: the tasked cheap character rep is kernel-certifiably
+IMPOSSIBLE (no nontrivial 1-dim unitary Poincare rep — Wigner's own point), which
+became the proof the MonoidHom field has teeth; the cross-lane Stone probe computed
+the trivial rep's generator two independent ways, tying P2.4b to P2.3g in the
+kernel. Then P2.6a: the FULL second-quantization functor Γ with conjugation laws
+(antilinearity direction verified — unitarity absorbs the bar), two upstream-shaped
+Mathlib gaps filled en route (lp.congrₗᵢ, Completion.congrₗᵢ_trans). Main at 1393
+decls, 41 modules external-kernel-verified, everything pushed. Now grinding: the
+regular rep on L²(M4) — the blocking nontrivial witness (joint continuity = the
+hard part). After it: P2.5a utilities → P2.5b WIGHTMAN FREEZE.
+
 ## 2026-08-10 — Workflow v2 LIVE end-to-end; P2.4a FROZEN with committed evidence
 
 Everything executed post-shell-fix: both branches pushed to
