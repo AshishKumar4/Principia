@@ -58,6 +58,34 @@ only experiment verifies axioms about nature. Never claim otherwise.
   physics content toward physlib.
 - Once per clone, run: `git config core.hooksPath .githooks`
 
+## Workflow v2 (2026-08-07, response to external cross-model audit)
+
+- **Remote is the source of truth**: `origin` = github.com/AshishKumar4/Principia.
+  Push `main` after every merge; CI (`.github/workflows/ci.yml`) runs the gates on
+  every push — enforcement no longer depends on the orchestrator's discipline alone.
+- **Cross-model review is mandatory for every spec freeze**: in addition to the
+  Fable adversarial review, a Codex (GPT-family, `gpt-5.6-sol`, xhigh reasoning)
+  review of the spec surface runs before `[spec-review]` freeze. Two model families
+  must independently fail to break a spec. Codex verdicts are audit artifacts.
+- **Audit artifacts are committed, not ephemeral**: every adversarial review's
+  kernel-probe files land in `audits/probes/<node>/` (reviewers may write ONLY
+  there and never to Specs/Proofs/Witnesses), and each review verdict is summarized
+  in `audits/reviews/<node>.md`. Reviews that leave no committed evidence did not
+  happen, as far as the repo is concerned.
+- **Frozen-import closure is mechanical**: `scripts/frozen-imports.txt` is the
+  single source of truth consumed by BOTH the commit-msg hook and gate 4
+  (`scripts/check_frozen_closure.py`), which computes the transitive Atlas-import
+  closure of `Atlas/Specs/**` and fails on any unlisted load-bearing file.
+- **External kernel re-verification**: gate 5 runs `lean4checker` when installed
+  (install: clone leanprover/lean4checker at the pinned toolchain tag, `lake build`,
+  symlink to ~/.local/bin). Until installed the gate is advisory and says so.
+- **Status vocabulary** (BLUEPRINT statuses are exactly these): `designed` (dossier
+  exists) → `spec` (statement frozen, unproven) → `witnessed` (non-vacuity landed)
+  → `proving` → `done` (proven AS the frozen Props + witnessed + merged + gates
+  green). Never conflate them in reports. Novelty claims are always phrased
+  "to our knowledge, first in any prover" — they rest on dated research sweeps,
+  not external verification, until published.
+
 ## Autonomous operation (owner's standing orders, 2026-07-08)
 
 The owner is away for several months; the orchestrator session runs the project
