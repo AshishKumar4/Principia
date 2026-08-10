@@ -58,6 +58,15 @@ threads and offer co-development. Also: a Mathlib pin bump past #40074 is a
 spec-review-level decision (physlib-interop constraint) — alternative is a tracked
 vendor copy of mapL + norm_mapL_le with a delete-on-bump note.
 
+## Book-in-hand citation verification (review condition D1, 2026-08-10)
+
+With physical copies of Streater-Wightman (Princeton Landmarks ed.), O'Neill, Wald,
+Reed-Simon I/II, Bratteli-Robinson II: pin the S&W section numbers in
+Atlas/Specs/Spacetime/{Poincare,PoincareRep}.lean (web sources CONFLICT on the
+section offsets — do not pin from the web; P2.4a's "§1-1" likely needs a
+docstring-only [spec-review] errata), and clear every in-file "quoted from memory"
+honesty flag across the frozen specs.
+
 ## 6. Watchlist (no action, awareness)
 
 - Mathlib PR #34288 (smooth dependence) — merge unblocks P1.4a.iii/iv.

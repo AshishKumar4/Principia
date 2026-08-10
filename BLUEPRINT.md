@@ -151,7 +151,12 @@ space, unbounded operator theory, Stone's theorem (see RESEARCH.md infrastructur
   audits/probes/P2.4a/); P2.4W `done` 2026-08-10 (rotation via composed reflections, full (cosh,sinh)
   boost family w/ rapidity addition, Poincare elements + MulAction twist, mass-shell
   equivariance, parity/PT single-condition-failure witnesses — gate satisfied);
-  P2.4b `todo` UNLOCKED: PoincareRep spec
+  P2.4b spec `spec` FROZEN 2026-08-10 (joint continuity; proven Stone-bridge anchor;
+  probes at audits/probes/P2.4b/ incl. kernel-certified obstruction: NO nontrivial
+  1-dim rep exists — Wigner; trivial rep = only freeze-time model). GATE (review
+  D2): downstream PROOF-consumption of PoincareRep (P2.6 rep lane) is BLOCKED until
+  the nontrivial regular-rep witness on L²(M4) lands; P2.5b may STATE against the
+  structure. Was: PoincareRep spec
   (+ OneParameterUnitaryGroup anchor = Stone bridge), after P2.4W; regular-rep
   witness on L²(M4) parallel non-blocking.
 - P2.5 — Wightman axioms. Design adjudicated 2026-08-07 (same dossier): fixed-domain

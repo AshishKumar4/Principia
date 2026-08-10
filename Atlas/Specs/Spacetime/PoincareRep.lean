@@ -33,7 +33,10 @@ here.
 
 ## Conventions
 
-* **Strong continuity is frozen in the joint form** (the design dossier's adjudication):
+* **Strong continuity is frozen in the joint form** (adjudicated at this spec's
+  review: the dossier specifies only "monoid hom + strong continuity"; the joint
+  form is Streater-Wightman's, and the per-vector form is equivalent for unitary
+  reps — see below):
   the action map `PoincareGroup × H → H`, `(g, x) ↦ U g x`, is continuous for the
   product of the frozen P2.4a topology on `PoincareGroup` and the norm topology on `H`
   (Streater–Wightman, Ch. 1: the physical states transform under a *continuous* unitary
