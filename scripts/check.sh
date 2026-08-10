@@ -24,11 +24,11 @@ echo "== gate 4/5: frozen-import closure =="
 python3 scripts/check_frozen_closure.py
 
 echo "== gate 5/5: external kernel re-verification (lean4checker, if installed) =="
-if command -v lean4checker >/dev/null 2>&1 || [ -x "$HOME/.local/bin/lean4checker" ]; then
-  lake env "${HOME}/.local/bin/lean4checker" Atlas 2>/dev/null || lake env lean4checker Atlas
-  echo "lean4checker passed."
+if [ -x "$HOME/.local/bin/lean4checker" ]; then
+  lake env "$HOME/.local/bin/lean4checker" Atlas
+  echo "lean4checker passed (external kernel re-verification of all Atlas modules)."
 else
-  echo "SKIPPED (lean4checker not installed — advisory until installed; see CLAUDE.md)."
+  echo "SKIPPED (lean4checker not installed — install per CLAUDE.md Workflow v2)."
 fi
 
 echo "All gates passed."
