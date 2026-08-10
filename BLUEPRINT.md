@@ -146,10 +146,13 @@ space, unbounded operator theory, Stone's theorem (see RESEARCH.md infrastructur
   P2-wightman-design.md): physlib dependency DEFERRED TO P3 (evidence-based: no
   cover/reps/Poincaré content; carrier friction); minimal restricted-Lorentz +
   Poincaré on the Phase-1 M4 carrier; covering group NOT load-bearing for spin 0.
-  Sub-nodes: P2.4a `todo` group spec (+ Minkowski-defs extraction to Specs,
-  layering item); P2.4b `todo` PoincareRep spec (+ OneParameterUnitaryGroup anchor
-  = Stone bridge); P2.4W `todo` witnesses (trivial now; regular rep on L²(M4)
-  parallel non-blocking).
+  Sub-nodes: P2.4a `spec` FROZEN 2026-08-10 (extraction byte-verified, dual-condition
+  approval; anchor-bearing witness files added to frozen-imports.txt; probes committed
+  audits/probes/P2.4a/); P2.4W `todo` GATE: P2.4b MUST NOT consume the group spec
+  until a nontrivial RestrictedLorentzGroup member is witnessed (reviewer's rot12
+  probe is ~180-line ready material; add a boost too); P2.4b `todo` PoincareRep spec
+  (+ OneParameterUnitaryGroup anchor = Stone bridge), after P2.4W; regular-rep
+  witness on L²(M4) parallel non-blocking.
 - P2.5 — Wightman axioms. Design adjudicated 2026-08-07 (same dossier): fixed-domain
   field structure (no LinearPMap composition), six named axiom Props; spectrum
   condition in DISTRIBUTIONAL SUPPORT FORM (joint PVM/SNAG eliminated from critical

@@ -25,8 +25,8 @@ require a spec review and a `[spec-review]` commit (see CLAUDE.md).
 
 ## Provenance ([spec-review] extraction, 2026-08-07)
 
-`M4` and the `minkowskiForm` block are moved verbatim from `Atlas/Witnesses/Minkowski.lean`
-(P1.W1); the cone definitions and their convexity/contrast toolkit are moved verbatim
+`M4` and the `minkowskiForm` block are moved verbatim (code; two docstring cross-references updated) from `Atlas/Witnesses/Minkowski.lean`
+(P1.W1); the cone definitions and their convexity/contrast toolkit are moved verbatim (code; two docstring cross-references updated)
 from `Atlas/Witnesses/MinkowskiCausal.lean` (P1.W2). This is the sanctioned layering fix
 of the P2.4/P2.5/P2.6 design dossier (`docs/dossiers/P2-wightman-design.md`): Phase-2
 specs (P2.4 Poincaré group, P2.5 Wightman axioms) are frozen statements *about* concrete
