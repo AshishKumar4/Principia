@@ -25,6 +25,26 @@ jobs:
           auto-config: false
           build: true
 
+      - name: Install and prove candidate sandbox
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes bubblewrap
+          bwrap --version
+          SANDBOX_PROBE=$(mktemp -d)
+          mkdir -p "$SANDBOX_PROBE/lower" "$SANDBOX_PROBE/upper" "$SANDBOX_PROBE/work"
+          printf host > "$SANDBOX_PROBE/lower/host.txt"
+          bwrap --unshare-all --die-with-parent --new-session --clearenv \
+            --setenv PATH /usr/bin:/bin \
+            --ro-bind /usr /usr --ro-bind /etc /etc --ro-bind /bin /bin \
+            --ro-bind /lib /lib --ro-bind /lib64 /lib64 \
+            --proc /proc --dev /dev --tmpfs /tmp \
+            --overlay-src "$SANDBOX_PROBE/lower" \
+            --overlay "$SANDBOX_PROBE/upper" "$SANDBOX_PROBE/work" "$SANDBOX_PROBE/lower" \
+            -- sh -c 'cat "$1/host.txt"; printf overlay > "$1/new.txt"' sh "$SANDBOX_PROBE/lower"
+          test ! -e "$SANDBOX_PROBE/lower/new.txt"
+          test "$(cat "$SANDBOX_PROBE/upper/new.txt")" = overlay
+          rm -rf "$SANDBOX_PROBE"
+
       - name: Install pinned lean4checker
         run: |
           git clone --filter=blob:none https://github.com/leanprover/lean4checker.git /tmp/lean4checker

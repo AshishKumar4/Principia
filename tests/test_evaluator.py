@@ -159,6 +159,7 @@ class _Reply:
 @dataclass
 class _Call:
     argv: tuple[str, ...]
+    full_argv: tuple[str, ...]
     cwd: Path
     kwargs: dict[str, object]
     timeout: float | None = None
@@ -211,7 +212,7 @@ class _FakeLean:
         # with a literal `--` separator; the inner command is the boundary.
         vector = full[full.index("--") + 1 :] if "--" in full else full
         cwd = Path(str(kwargs["cwd"]))
-        call = _Call(argv=vector, cwd=cwd, kwargs=dict(kwargs))
+        call = _Call(argv=vector, full_argv=full, cwd=cwd, kwargs=dict(kwargs))
         self.calls.append(call)
         if self.spawn_error is not None:
             raise self.spawn_error
@@ -271,7 +272,7 @@ class EvaluatorTestCase(unittest.TestCase):
         popen = mock.patch.object(evaluator.subprocess, "Popen", self.lean)
         popen.start()
         self.addCleanup(popen.stop)
-        which = mock.patch.object(evaluator.shutil, "which", lambda _: "/usr/bin/lake")
+        which = mock.patch.object(evaluator.shutil, "which", lambda name: f"/usr/bin/{name}")
         which.start()
         self.addCleanup(which.stop)
 
@@ -826,6 +827,114 @@ class ArchiveTests(EvaluatorTestCase):
             self._evaluate()
 
         self.assertIn(evaluator.BUNDLE_FILENAME, str(caught.exception))
+
+
+
+
+class SandboxContractTests(EvaluatorTestCase):
+    """The mocked boundary locks in containment; no unsandboxed regression can pass."""
+
+    def test_every_lean_process_is_isolated_and_the_repo_is_read_only(self) -> None:
+        self._evaluate()
+
+        self.assertEqual(3, len(self.lean.calls))
+        uppers: list[str] = []
+        for call in self.lean.calls:
+            full = call.full_argv
+            self.assertEqual("bwrap", Path(str(full[0])).name)
+            self.assertIn("--unshare-all", full)
+            self.assertNotIn("--share-net", full)
+            self.assertIn("--clearenv", full)
+            self.assertIn("--new-session", full)
+            self.assertEqual({"PATH": os.defpath}, call.kwargs["env"])
+            self.assertEqual(self.repo, call.cwd)
+            pairs = list(zip(full, full[1:]))
+            self.assertIn(("--chdir", str(self.repo)), pairs)
+            ro_triples = list(zip(full, full[1:], full[2:]))
+            self.assertIn(("--ro-bind", str(self.repo), str(self.repo)), ro_triples)
+            overlay = full.index("--overlay")
+            upper, work, destination = map(str, full[overlay + 1 : overlay + 4])
+            self.assertEqual(str(self.repo / ".lake"), destination)
+            self.assertNotEqual(upper, work)
+            uppers.append(upper)
+        self.assertEqual(3, len(set(uppers)))
+        self.assertIn(uppers[0], self.lean.calls[1].full_argv)
+        self.assertIn(uppers[0], self.lean.calls[2].full_argv)
+        self.assertIn(uppers[1], self.lean.calls[2].full_argv)
+
+    def test_bwrap_setup_failure_is_infrastructure_error_not_candidate_failure(self) -> None:
+        self.lean.compile = _Reply(exit_code=1, stderr=b"bwrap: namespace setup failed\n")
+
+        result = self._evaluate()[0]
+
+        self.assertIs(EvaluationStatus.ERROR, self._status(result))
+        self.assertIn("sandbox failed", result.summary)
+        self.assertIn("namespace setup failed", result.summary)
+
+
+class RealSandboxIsolationTests(unittest.TestCase):
+    """One real bwrap process proves the evaluator's mount contract, not a mock."""
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        bwrap = evaluator.shutil.which(evaluator._BWRAP)
+        if bwrap is None:
+            raise unittest.SkipTest("bubblewrap is not installed")
+        vector = [bwrap, "--unshare-all", "--die-with-parent"]
+        for path in evaluator._runner._system_read_only():
+            vector += ["--ro-bind", str(path), str(path)]
+        vector += ["--proc", "/proc", "--dev", "/dev", "--", "/bin/true"]
+        probe = subprocess.run(
+            vector,
+            check=False,
+            capture_output=True,
+        )
+        if probe.returncode != 0:
+            raise unittest.SkipTest(
+                "bubblewrap namespaces unavailable: "
+                + probe.stderr.decode("utf-8", "replace").strip()
+            )
+        cls.bwrap = bwrap
+
+    def test_repo_is_read_only_and_lake_writes_land_only_in_overlay(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            repo = root / "repo"
+            lake = repo / ".lake"
+            scratch = root / "scratch"
+            lake.mkdir(parents=True)
+            scratch.mkdir()
+            (repo / "canonical.txt").write_text("unchanged\n", encoding="utf-8")
+            (lake / "host.txt").write_text("host\n", encoding="utf-8")
+            sandbox = evaluator._Sandbox(
+                bwrap=self.bwrap,
+                repo_root=repo,
+                lake_bin=Path("/usr/bin"),
+                scratch=scratch,
+                elan_home=None,
+            )
+
+            outcome = evaluator._run_process(
+                "isolation.probe",
+                (
+                    "/bin/sh",
+                    "-c",
+                    "printf test > canonical.txt 2>/dev/null || printf 'repo-ro\\n'; "
+                    "printf overlay > .lake/new.txt; "
+                    "printf 'home=%s\\n' \"$HOME\"; cat .lake/host.txt",
+                ),
+                sandbox,
+                10.0,
+            )
+
+            self.assertTrue(outcome.ok, outcome.text)
+            self.assertIn("repo-ro", outcome.text)
+            self.assertIn("home=/sandbox/home", outcome.text)
+            self.assertIn("host", outcome.text)
+            self.assertEqual("unchanged\n", (repo / "canonical.txt").read_text())
+            self.assertFalse((lake / "new.txt").exists())
+            self.assertEqual(1, len(sandbox.uppers))
+            self.assertEqual("overlay", (sandbox.uppers[0] / "new.txt").read_text())
 
 
 if __name__ == "__main__":
