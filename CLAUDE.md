@@ -104,16 +104,20 @@ only experiment verifies axioms about nature. Never claim otherwise.
 
 ## Workflow v3 (2026-08-21, monorepo + enforcement completion)
 
-- **Nine gates** (`scripts/check.sh`, mirrored exactly by CI which calls the same
-  script): 1 `lake build`; 2 axiom audit; 3 forbidden-token scan; 4 frozen-spec +
-  witness dependency integrity; 5 lean4checker (mandatory); 6 Atlas orphan-source
-  detector (`scripts/check_no_orphans.py` — every `Atlas/**/*.lean` must be reachable
-  from `Atlas.lean`); 7 citation-debt manifest (`scripts/check_citation_flags.py` +
-  `scripts/citation-debt.txt` — unresolved "quoted from memory"/"not re-verified"
-  flags are tracked line-hashes, added or cleared only in reviewed changes); 8 witness
-  audit (`scripts/WitnessAudit.lean` — classical-trio check plus concrete-construction
-  reporting over `Atlas.Witnesses.*`); 9 committed probe recompilation
-  (`scripts/check_probes.py` — every `audits/probes/**/*.lean` must still compile).
+- **Ten gates** (`scripts/check.sh`, mirrored exactly by CI which calls the same
+  script): 1 `lake build` of Atlas plus every committed CandidateLab module; 2
+  Atlas axiom audit; 3 forbidden-token scan over Atlas and CandidateLab; 4
+  frozen-spec + witness dependency integrity; 5 lean4checker (mandatory); 6 Atlas
+  orphan-source detector (`scripts/check_no_orphans.py` — every
+  `Atlas/**/*.lean` must be reachable from `Atlas.lean`); 7 citation-debt manifest
+  (`scripts/check_citation_flags.py` + `scripts/citation-debt.txt` — unresolved
+  "quoted from memory"/"not (re-)verified against a copy" flags are tracked
+  line-hashes, added or cleared only in reviewed changes); 8 witness audit
+  (`scripts/WitnessAudit.lean` — classical-trio check plus
+  concrete-construction reporting over `Atlas.Witnesses.*`); 9 committed probe
+  recompilation (`scripts/check_probes.py` — every `audits/probes/**/*.lean` must
+  still compile); 10 sandboxed formal evaluation of every committed candidate
+  (compile, generated checker, and classical-trio audit through `principia`).
 - **Platform tests are a gate**: `python3 -m unittest discover -s tests` runs in CI
   and in the pre-push hook alongside `scripts/check.sh`.
 - **Spec-review evidence is linked server-side**: CI runs

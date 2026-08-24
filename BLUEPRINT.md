@@ -162,19 +162,30 @@ space, unbounded operator theory, Stone's theorem (see RESEARCH.md infrastructur
   field structure (no LinearPMap composition), six named axiom Props; spectrum
   condition in DISTRIBUTIONAL SUPPORT FORM (joint PVM/SNAG eliminated from critical
   path — deferred post-Stone node); microcausality frozen WITH the kernel anchor to
-  P1.2 causal relations. Sub-nodes: P2.5a `todo` utilities (𝓕η, closedForwardCone,
-  SpacelikeSeparated + anchor); P2.5b `todo` the WightmanField freeze.
+  P1.2 causal relations. Sub-nodes: P2.5a `designed` — DRAFT landed 2026-08-23
+  (Atlas/Specs/QFT/WightmanUtilities.lean: 𝓕η as Schwartz-Fourier ∘ time-flip CLE
+  with the η-pairing integral anchor, closedForwardCone over the frozen P2.4a cone
+  with add/smul/closed lemmas, IsVanishingNearClosedForwardCone against Mathlib's
+  Distribution suite, integrability lemma; witnesses + 4 kernel probes; Fable
+  adversarial review in audits/reviews/P2.5a.md; FREEZE blocked on the Codex
+  cross-model pass — owner unlock); P2.5b `todo` the WightmanField freeze.
 - P2.6 — **free scalar field satisfies Wightman (flagship)**. Proof-engine map in
   dossier: hermitian/microcausality/spectrum consume the PROVEN CCR trio + P1.W2
-  cone lemmas. Sub-nodes: P2.6a `done` 2026-08-10 (Γ with all laws + conjugation incl. antilinearity
-  direction; lp.congrₗᵢ + Completion.congrₗᵢ_trans upstream candidates; strong
-  continuity of u ↦ Γ(u) split to P2.6a.ii `todo`, ~1 session, sketch in report); P2.6b `todo` shell measure μₘ +
+  cone lemmas. Sub-nodes: P2.6a `done` 2026-08-23 (Γ with all laws + conjugation incl. antilinearity
+  direction; lp.congrₗᵢ + Completion.congrₗᵢ_trans upstream candidates; P2.6a.ii
+  strong continuity PROVEN 2026-08-23: tendsto_secondQuantization over an arbitrary
+  filter + parametric continuous_secondQuantization for P2.6d, via new telescoping
+  and sector-estimate lemmas — upstream candidates); P2.6b `todo` shell measure μₘ +
   invariance H1 (Jacobian, ~2-4 sessions, mathematical risk w/ fallback) +
   one-particle rep H3; P2.6c — Pauli-Jordan H2: design pass DONE 2026-08-07 — Option-A-sharpened
   formulation (smeared pairing = KG solution at a point); lemma DAG L0-L6 (~14-19
   sessions, 3 parallel lanes; L4 = Mathlib's first wave-equation energy estimate,
   upstream candidate; riskiest PJ.1c/PJ.3a with stated fallbacks). L0-L5 grindable
-  now; L6 spec freeze blocks on P2.5a Fourier conventions. Grind `todo`;
+  now; L6 spec freeze blocks on P2.5a Fourier conventions. Grind `proving` — L0
+  landed 2026-08-23 (Atlas/Proofs/KleinGordon.lean: dispersion Ω per the pinned
+  2π convention with two-sided bounds and smoothness, mass-shell map with
+  η(p,p) = -m² against the frozen form and InFutureTimeCone membership feeding
+  P2.6b's sector computation, energy form with vanishing-iff-zero);
   P2.6d `todo` assembly (eight axiom verifications). Est. total ~18-28 sessions.
   Nelson node parallel NON-BLOCKING (not needed for Wightman).
 - P2.7 `todo` **Target: Haag's theorem** (Streater-Wightman Thm 4-16 form).
@@ -269,20 +280,28 @@ after P1.7.
   theory X drop" is a formal query.
 - X.2 `todo` Upstreaming tracker: infrastructure nodes PRed to Mathlib
   (P2.1/P2.3/P4.1-GNS), physics nodes offered to physlib.
-- X.3 `todo` Audit-artifact backfill (Workflow v2): re-create the key pre-policy
-  review probes (CCR roundtrip, Fock symmetrizer n=2, Cayley scalar model, Bool
-  PVM, Stone generator) as committed files under audits/probes/ — mechanical
-  (Opus), restores Git-reproducible evidence for the early freezes.
-- X.4 `todo` Codex cross-model review backfill of the already-frozen spec surface
+- X.3 `done` 2026-08-23 Audit-artifact backfill (Workflow v2): the five lost
+  pre-policy review probes re-created as committed files — audits/probes/
+  P2.2-slice1 (Fock symmetrizer), P2.2-slice2 (CCR roundtrip + 2·½=1 pin),
+  P2.3c (Cayley scalar), P2.3d (Bool PVM), P2.3g (Stone generator) — recompiled
+  by gate 9 on every run; Git-reproducible evidence for the early freezes restored.
+- X.4 `todo` Codex cross-model review backfill of the early frozen specs
   (all Atlas/Specs/** files predate the Workflow-v2 cross-model gate) — one pass,
-  verdicts to audits/reviews/.
-
+  verdicts to audits/reviews/. OWNER UNLOCK: no GPT-family agent in the current
+  harness; the same pass unblocks the P2.5a freeze.
 - X.5 `designed` Incompatibility engine (upgrades X.1; design in
   docs/dossiers/horizon-roadmap.md): hypothesis Prop-classes, candidates extending
   exactly what they assume, `#atlas_check` applicability command, independence
   witnesses beside non-vacuity witnesses, pre-grind candidate gates (randomized
   testing, proof-producing refutation, finite-model search) with committed probe
-  artifacts.
+  artifacts. First artifacts landed 2026-08-23: `#atlas_check` hypothesis-inventory
+  command (Atlas/Meta/AtlasCheck.lean, syntactic-honest by declared scope) and the
+  first independence witnesses (CandidateLab/Bell/Independence.lean — locality and
+  measurement independence each individually load-bearing for the CH bound, both
+  countermodels reaching the algebraic maximum against the frozen functional);
+  ledger INCOMPATIBILITIES.md seeded (7 entries, each with certificate + primary
+  sources). Prop-class registry deferred until Phase-3 no-gos give it real
+  consumers (deletion test).
 - X.6 — platform vertical slice (not a theorem node; no DAG status applies; landed
   on phase-2, 2026-08-23): `principia/` stdlib-only layer (artifact schemas,
   evidence/candidate registries, bwrap-sandboxed evaluator and agent runner,

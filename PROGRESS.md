@@ -3,6 +3,60 @@
 > This document is edited and maintained by Claude and presented as-is.
 > Newest entries first. Honest status only: done means gates-green and audited.
 
+## 2026-08-23 — FRONTIER WAVE 1: P2.6a complete, P2.5a draft, KG L0, X.3 done, incompatibility ledger
+
+Owner's standing order: complete everything reachable, log every incompatibility
+with original sources, keep the axiomatic base tight, push main every wave. Five
+parallel Fable lanes plus orchestrator gate work; every lane audited before commit.
+
+- **P2.6a COMPLETE** (was: strong continuity `todo`): `tendsto_secondQuantization`
+  over an arbitrary filter plus the parametric `continuous_secondQuantization`
+  P2.6d consumes, via new reusable telescoping and ℓ²-cross-norm sector-estimate
+  lemmas on PiTensorProduct (upstream candidates). 981-line module, axiom-clean.
+- **P2.6c L0 landed** (grind `todo` → `proving`): Atlas/Proofs/KleinGordon.lean —
+  dispersion Ω(k)=√(4π²‖k‖²+m²) per the dossier's pinned Fourier convention,
+  two-sided bounds and smoothness, mass-shell map `onShell` with η(p,p)=−m²
+  against the FROZEN minkowskiForm and `onShell_inFutureTimeCone` feeding P2.6b's
+  spectrum sector computation into the proven `InFutureTimeCone.add`; energy form
+  with vanishing-iff-zero.
+- **P2.5a DRAFT package** (freeze-ready Fable-side): WightmanUtilities spec — 𝓕η
+  (Schwartz Fourier ∘ time-flip CLE) with the kernel anchor
+  `𝓕η f p = ∫ 𝐞(−η(a,p)) • f a`, closedForwardCone over the frozen P2.4a cone
+  (add/smul/closed/spacelike-exclusion), IsVanishingNearClosedForwardCone against
+  the pin's Distribution suite, the smeared-translation integrability lemma;
+  witnesses (bump-function models, expected-true/false per definition) + 4 kernel
+  probes (time-flip sign, cone closure, Fourier normalization, vanishing);
+  adversarial Fable review in audits/reviews/P2.5a.md. **FREEZE blocked on the
+  Codex cross-model pass (owner unlock; same pass discharges X.4).**
+- **X.3 DONE**: the five lost pre-policy probes recreated as committed artifacts
+  (P2.2-slice1/P2.2-slice2/P2.3c/P2.3d/P2.3g), re-derived from the frozen SPECS
+  (not the witnesses) so they are independent evidence; gate 9 recompiles them on
+  every run. audits/README updated to say what Git can and cannot prove.
+- **X.5 first artifacts**: `#atlas_check` hypothesis-inventory command
+  (Atlas/Meta/AtlasCheck.lean; syntactic-honest, docstring states what it does NOT
+  do) and the first independence witnesses (CandidateLab/Bell/Independence.lean:
+  locality and measurement independence each individually load-bearing — dropping
+  exactly one assumption drives the frozen CH functional to its algebraic maximum
+  1 > 0, faithfulness by `rfl`). Prop-class registry deferred (deletion test).
+- **INCOMPATIBILITIES.md ledger seeded** (7 entries, each with formal certificate
+  and original papers): Bell/NIST (evidence-certified, bundle
+  e98512f5e104e…3421), CHSH-vs-Tsirelson gap and the Wigner 1-dim obstruction
+  (kernel-certified), Strocchi Gauss-law clash, φ⁴₄ triviality
+  (Aizenman–Duminil-Copin 2021), spectral-gap undecidability (Cubitt et al. 2015)
+  registered with sources pending formalization; Phase-3/P2.7/P1.7 targets listed.
+- **Gates tightened to TEN**: gate 1 now builds every CandidateLab module
+  (non-entrypoint files could previously rot unbuilt — found during this wave's
+  audit); gate 3 token-scans CandidateLab; NEW gate 10 evaluates every committed
+  candidate through the sandboxed platform evaluator on each run; gate 7
+  vocabulary widened to catch the live flag phrasing ("not verified against a
+  copy") — SecondQuantization's reworked citations re-manifested (6 → 8 tracked
+  flags; debt preserved under more precise wording, nothing silently resolved).
+- Witness-closure manifest grew 34 → 36 (the P2.5a spec+witness pair), reviewed
+  and accepted in the same change.
+
+Next: P2.6b (shell measure H1 + rep continuity H3), P2.6c L1-L2, P2.5b freeze
+once the owner runs the Codex pass, then P2.6d assembly toward P2.7 Haag.
+
 ## 2026-08-23 — MONOREPO: the AI-scientist platform lands; Workflow v3 enforced
 
 The owner set the mission: Principia becomes an open-source AI-scientist system

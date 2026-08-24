@@ -73,7 +73,7 @@ the dated honest journal, `docs/dossiers/` for design-decision records, and
 git config core.hooksPath .githooks   # once per clone
 lake exe cache get                    # fetch Mathlib oleans (Lean v4.31.0)
 lake build
-scripts/check.sh                      # full verification gate (9 gates)
+scripts/check.sh                      # full verification gate (10 gates)
 python3 -m unittest discover -s tests # platform behavior tests (stdlib only)
 
 # evaluate a candidate theory against Lean and pinned evidence
