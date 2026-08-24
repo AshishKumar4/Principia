@@ -8,6 +8,7 @@ Atlas/Proofs/HilbertTensorBasis.lean
 Atlas/Proofs/HilbertTensorMaps.lean
 Atlas/Proofs/PiTensorInner.lean
 Atlas/Proofs/PiTensorSemilinear.lean
+Atlas/Proofs/PoincareTopology.lean
 Atlas/Specs/OperatorTheory/Cayley.lean
 Atlas/Specs/OperatorTheory/HilbertTensor.lean
 Atlas/Specs/OperatorTheory/ProjectionValuedMeasure.lean

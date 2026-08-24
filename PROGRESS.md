@@ -3,6 +3,69 @@
 > This document is edited and maintained by Claude and presented as-is.
 > Newest entries first. Honest status only: done means gates-green and audited.
 
+## 2026-08-24 — FRONTIER WAVE 2: P2.5a frozen; P2.6b H1/H3 complete; Pauli–Jordan L0–L3
+
+Two sequential parallel subwaves, independent Fable reviews, and two read-only
+GPT-5.6-sol Codex sessions. Every validated finding was repaired and re-reviewed.
+
+- **P2.5a FROZEN after a real cross-model loop.** The first Fable pass approved
+  the draft. Independent Codex review then found four defects: the promised
+  inverse Poincaré pullback on Schwartz space was missing; the sign probe used
+  periodic character arguments `±1` that both map to one; Reed–Simon was
+  misattributed as the source of Mathlib's `2π` normalization; and the Bochner
+  helper omitted `CompleteSpace`. All four were fixed. The repaired sign probe
+  uses character values at `±1/4` and ties the chosen phase to
+  `U(t)=exp(+itH)` and the forward cone. A mixed translation/rotation probe
+  rejects both forward pullback and reversed semidirect order. Fresh independent
+  Codex and Fable re-reviews both returned `FREEZE-READY` (confidence 0.99).
+  Full artifacts: `audits/reviews/P2.5a*`.
+- **P2.6b H1 PROVEN at measure level.** `MassShellMeasure.lean` defines
+  `d³p/(2ω_p)` as the pushforward of a weighted spatial measure and states the
+  Fourier-coordinate form with the required `(2π)³` Jacobian. The initial design
+  report incorrectly mixed physical and Fourier coordinates; implementation
+  corrected `shellMap` to physical momentum. `MassShellInvariance.lean` proves
+  the exact Fin-3 derivative/determinant identity
+  `|det DF(p)|=ω(Fp)/ω(p)`. `MassShellMeasurePreserving.lean` repeats the
+  substitution in ENNReal and proves genuine `MeasurePreserving`; it does not
+  infer measure equality from a potentially nonintegrable Bochner identity.
+- **P2.6b H3 PROVEN in full.** `LpPullback.lean` supplies the minimal invertible
+  Lp pullback primitive. `ShellOneParticle.lean` constructs phase translations
+  and proves their strong continuity by dominated convergence.
+  `ShellPoincareRepresentation.lean` combines the H1 pullback and phase, proves
+  the exact Wigner formula, semidirect multiplication, inverse/unitarity, local
+  finiteness/regularity, and full joint strong continuity through Mathlib's
+  `Continuous.compMeasurePreservingLp`, then packages
+  `shellPoincareRep m hm : PoincareRep (ShellOneParticle m)`.
+- **P2.6c L0–L3 landed.** `KGPropagator.lean` now proves the sine propagator,
+  all time/spatial/mixed second derivatives, initial data, and the pointwise
+  Klein–Gordon equation with Mathlib's `2π` convention.
+  `KGConeCutoff.lean` proves the smooth cone cutoff and
+  `‖∇χ‖ ≤ -∂ₜχ`. `KGIntegrationByParts.lean` derives the compact-support
+  divergence theorem from Mathlib's box theorem and transports it exactly to M3,
+  then proves weighted integration by parts. Four new P2.6b/c probes pin the
+  physical/Fourier Jacobian, positive sheet, propagator sign/initial data, and
+  cone geometry.
+- **Review/fix evidence mattered.** The H1 implementation agent's final
+  cosmetic tactic edit broke elaboration and introduced downstream `sorry`
+  warnings; the orchestrator rebuild caught and repaired it before commit. The
+  first cone probe checked `0≤0` outside the transition region; review moved it
+  to `0<χ<1`. P2.6b review removed a false support rationale, a duplicate
+  Mathlib symmetry lemma, unused automorphism/continuity layers and imports, a
+  duplicate spatial projection, and a dead integrability hypothesis. Generic
+  Poincaré topology/volume facts moved out of the witness into
+  `Atlas.Proofs.PoincareTopology`; both witness and shell representation consume
+  that single source. Full artifacts: `audits/reviews/P2.6b*` and
+  `audits/reviews/P2.6c-L0-L3*`.
+- **Verification:** all ten gates passed on the integrated tree: 2,205 Atlas
+  declarations audited, 58 modules independently kernel-checked, 56-source
+  Atlas closure, 37-file witness closure, 20 probes recompiled, every committed
+  candidate formally audited; 328 platform tests passed.
+
+
+Next critical path: P2.6c L4 local-energy monotonicity and finite speed, then L5
+four-dimensional slicing, L6 Pauli–Jordan assembly, P2.5b WightmanField freeze,
+and P2.6d free-field assembly.
+
 ## 2026-08-23 — FRONTIER WAVE 1: P2.6a complete, P2.5a draft, KG L0, X.3 done, incompatibility ledger
 
 Owner's standing order: complete everything reachable, log every incompatibility

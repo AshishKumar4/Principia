@@ -169,28 +169,29 @@ space, unbounded operator theory, Stone's theorem (see RESEARCH.md infrastructur
   initial Fable approval, independent Codex found 4 defects (missing Poincaré
   action, periodic sign probe, wrong Reed–Simon attribution, incomplete Bochner
   contract), all repaired; independent Codex and renewed Fable re-reviews both
-  `FREEZE-READY` at confidence 0.99 (`audits/reviews/P2.5a*`). P2.5a becomes
-  `done` after this freeze commit merges and gates pass. P2.5b `todo`: freeze the
-  WightmanField structure and six named axiom Props.
-- P2.6 — **free scalar field satisfies Wightman (flagship)**. Proof-engine map in
-  dossier: hermitian/microcausality/spectrum consume the PROVEN CCR trio + P1.W2
-  cone lemmas. Sub-nodes: P2.6a `done` 2026-08-23 (Γ with all laws + conjugation incl. antilinearity
-  direction; lp.congrₗᵢ + Completion.congrₗᵢ_trans upstream candidates; P2.6a.ii
-  strong continuity PROVEN 2026-08-23: tendsto_secondQuantization over an arbitrary
-  filter + parametric continuous_secondQuantization for P2.6d, via new telescoping
-  and sector-estimate lemmas — upstream candidates); P2.6b `todo` shell measure μₘ +
-  invariance H1 (Jacobian, ~2-4 sessions, mathematical risk w/ fallback) +
-  one-particle rep H3; P2.6c — Pauli-Jordan H2: design pass DONE 2026-08-07 — Option-A-sharpened
-  formulation (smeared pairing = KG solution at a point); lemma DAG L0-L6 (~14-19
-  sessions, 3 parallel lanes; L4 = Mathlib's first wave-equation energy estimate,
-  upstream candidate; riskiest PJ.1c/PJ.3a with stated fallbacks). L0-L5 grindable
-  now; L6 spec freeze blocks on P2.5a Fourier conventions. Grind `proving` — L0
-  landed 2026-08-23 (Atlas/Proofs/KleinGordon.lean: dispersion Ω per the pinned
-  2π convention with two-sided bounds and smoothness, mass-shell map with
-  η(p,p) = -m² against the frozen form and InFutureTimeCone membership feeding
-  P2.6b's sector computation, energy form with vanishing-iff-zero);
-  P2.6d `todo` assembly (eight axiom verifications). Est. total ~18-28 sessions.
-  Nelson node parallel NON-BLOCKING (not needed for Wightman).
+  `FREEZE-READY` at confidence 0.99 (`audits/reviews/P2.5a*`). P2.5a `done`
+  2026-08-24: frozen, witnessed, independently reviewed, and gates-green.
+  P2.5b `todo`: freeze the WightmanField structure and six named axiom Props.
+- P2.6 — **free scalar field satisfies Wightman (flagship)**. The proof engines
+  consume the proven CCR trio, P1.W2 cone lemmas, and frozen P2.5a utilities.
+  - P2.6a `done` 2026-08-23: second quantization Γ, functor/conjugation laws,
+    and strong continuity (`tendsto_secondQuantization`,
+    `continuous_secondQuantization`).
+  - P2.6b `done` 2026-08-24: physical shell measure `d³p/(2ω_p)` with explicit
+    `(2π)³` Fourier-coordinate conversion; H1 from a Fin-3 Lorentz determinant
+    and ENNReal measure change of variables; measure-level
+    `lorentz_massShellMeasure_preserving`; exact Wigner one-particle
+    `PoincareRep` on `L²(massShellMeasure m)` with semidirect laws, unitarity,
+    Stone translation pin, and full joint strong continuity H3. Independently
+    reviewed, merged, and gates-green (`audits/reviews/P2.6b*`).
+  - P2.6c `proving`: Pauli–Jordan route. L0 symbols/energy, L1 propagator
+    through the pointwise Klein–Gordon equation, L2 smooth cone cutoff including
+    `‖∇χ‖ ≤ -∂ₜχ`, and L3 compact-support divergence/weighted integration by
+    parts landed by 2026-08-24. Independently reviewed
+    (`audits/reviews/P2.6c-L0-L3*`). Next: L4 local-energy monotonicity and
+    finite speed, L5 four-dimensional slicing, L6 assembly.
+  - P2.6d `todo`: free-field assembly (eight Wightman axiom verifications).
+  Nelson analytic vectors remain parallel and non-blocking.
 - P2.7 `todo` **Target: Haag's theorem** (Streater-Wightman Thm 4-16 form).
 - P2.8 `todo` Stretch: Reeh-Schlieder theorem.
 

@@ -89,3 +89,106 @@ dsupport for the vanishing-near-cone hypothesis) rather than hand-rolling. The
 P2.6c lemma DAG (KG finite propagation L0-L6) lives in the design-pass report;
 key convention: Mathlib's e^(-2pi i x.xi) normalization puts Omega(k) =
 sqrt(4pi^2 norm(k)^2 + m^2).
+
+## Recovered P2.6c finite-propagation DAG (2026-08-24)
+
+The full 2026-08-07 design report was recovered from subagent transcript
+`adacb72bc388fdeda`. It verified the named Mathlib v4.31 APIs below against the
+vendored source.
+
+### Pin inventory
+
+- Distribution tools: `Function.HasTemperateGrowth`, Schwartz
+  `smulLeftCLM`/`compCLMOfAntilipschitz`, tempered distributions,
+  `fourierMultiplierCLM`, `Distribution.IsVanishingOn`, and `dsupport`.
+- Parameter integrals:
+  `hasDerivAt_integral_of_dominated_loc_of_deriv_le`,
+  `hasFDerivAt_integral_of_dominated_of_fderiv_le`, and
+  `MeasureTheory.continuous_of_dominated`.
+- Cone cutoff: `Real.smoothTransition` with `contDiff`, `monotone`,
+  `one_of_one_le`, `zero_of_nonpos`, and `Monotone.deriv_nonneg`.
+- Divergence theorem: boxes only. The missing compact-support corollary
+  `integral_div_eq_zero` is an upstream candidate; transfer between Pi and
+  EuclideanSpace uses `PiLp.volume_preserving_ofLp`.
+- Paley–Wiener, stationary phase, and partial-Fourier splitting are absent.
+
+### Adjudicated route
+
+Use the sharpened smeared statement. The Pauli–Jordan pairing at a fixed slice is
+the Klein–Gordon solution with initial data `(0, phi)` evaluated at `(t,0)`:
+
+`u^phi(t,0) = integral k, sin(t*Omega(k))/Omega(k) * Fourier(phi)(k)`.
+
+The target finite-speed theorem is therefore:
+
+`phi = 0 on closedBall x0 R -> |t| <= R -> u^phi(t,x0)=0`.
+
+This removes the cosine branch, arbitrary Cauchy data, distribution-support
+machinery, Gronwall, and mollification from the critical path.
+
+### Lemma nodes
+
+1. **L0 symbols — landed 2026-08-23.** `KleinGordon.lean` fixes
+   `Omega(k)=sqrt(4*pi^2*||k||^2+m^2)`, bounds/smoothness, the physical
+   mass-shell map, and positive KG energy.
+2. **L1 propagator — landed through PJ.1e, 2026-08-24.**
+   `KGPropagator.lean` proves the integral/dominators, joint continuity, both
+   orders of mixed derivatives, the full first/second spatial and time fields,
+   initial data, and the pointwise Klein–Gordon equation. Remaining L1 work is
+   only API consolidation/upstreaming, not a missing consumer theorem.
+3. **L2 cutoff — landed 2026-08-24.** `KGConeCutoff.lean` constructs
+   `psi_delta=sqrt(||x-x0||^2+delta^2)` and the smoothTransition cutoff; proves
+   support/interior bounds, `dt chi <= 0`, and the load-bearing
+   `||grad_x chi|| <= -dt chi`.
+4. **L3 integration by parts — landed 2026-08-24.**
+   `KGIntegrationByParts.lean` proves the compact-support divergence theorem on
+   the Pi carrier, its exact M3 volume-preserving adapter, and the weighted IBP
+   identity in general/cutoff-supported/field-supported forms.
+5. **L4 local energy.** Differentiate
+   `E(t)=integral chi(t,x)*(|dt u|^2+|grad u|^2+m^2|u|^2)`. L3 and L2 give
+   `E'<=0`; zero initial local energy and `m>0` give finite speed.
+6. **L5 four-dimensional slicing.** Construct the affine Schwartz slice
+   `h -> h_t`, partial-Fourier bounds, Fubini splitting, and shell-difference
+   sine formula.
+7. **L6 assembly/spec.** Smeared Pauli–Jordan support statement, then adapter
+   to the shell measure. This depends on frozen P2.5a conventions and P2.6b.
+
+Sources: Reed–Simon II §§IX.1, X.7 (section-level); Evans,
+*Partial Differential Equations*, 2nd ed., §2.4.3 (local energy and finite
+propagation, section-level); Wald, *General Relativity*, §10.1
+(initial-value/energy method, section-level).
+
+## P2.6b shell-measure H1 DAG (2026-08-24)
+
+The direct change-of-variables route is complete. No coarea or
+delta-distribution fallback was needed. Important correction to the original
+research report: `shellMap` acts on **physical** momentum `p`, not Fourier
+frequency `k`. In frequency coordinates the identity-map case is `k ↦ 2πk`,
+so the original frequency-coordinate Jacobian formula was false.
+
+1. **N0/N1 — landed.** `MassShellMeasure.lean` defines
+   `massShellParam m p=(sqrt(||p||²+m²),p)` and
+   `map massShellParam (d³p/(2energy(p)))`; its Fourier-coordinate theorem
+   carries the required `(2π)³` factor.
+2. **N2/N3 — landed.** `MassShellInvariance.lean` computes the shell-map
+   derivative and extracts both row/column Lorentz identities from frozen form
+   preservation.
+3. **N4/N5 — landed.** An explicit Fin-3 determinant expansion proves
+   `|det D F_Lambda(p)|=energy(F_Lambda(p))/energy(p)`; the induced shell map
+   is a smooth bijection with inverse from `Lambda⁻¹`.
+4. **N6 — landed at measure level.** The real weighted-integral theorem is
+   supplemented by `MassShellMeasurePreserving.lean`, which repeats the
+   substitution in ENNReal and uses `Measure.ext_of_lintegral`; no invalid
+   inference from a nonintegrable Bochner integral occurs.
+5. **N7/H3 — landed.** `ShellOneParticle.lean` constructs translations and
+   proves their strong continuity. `ShellPoincareRepresentation.lean`
+   combines the H1 pullback and phase into the exact Wigner formula, proves
+   semidirect representation laws/unitarity, proves full joint strong
+   continuity through Mathlib's `Continuous.compMeasurePreservingLp`, and
+   packages `shellPoincareRep m hm : PoincareRep (ShellOneParticle m)`.
+
+Primary source: Wigner, *Annals of Mathematics* 40 (1939), §6, eq. (59a)
+(the `d^3p/|p0|` inner product and Jacobian-invariance footnote; verified
+first-hand). The repository uses the conventional additional factor `1/2`.
+Context: Streater–Wightman Chs. 1 and 3; Weinberg QFT I §2.5; Reed–Simon II
+§X.7 (all section-level unless a display is named above).
