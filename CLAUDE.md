@@ -1,16 +1,28 @@
-# QG Constraint Atlas — project rules
+# Principia — project rules
 
 > This document is edited and maintained by Claude and presented as-is.
 > Binding for every agent and session working in this repository.
 
 ## What this project is
 
-A machine-checked constraint atlas for quantum gravity: formalize, in Lean 4 + Mathlib,
-the theorems that fence in any unification of quantum theory and general relativity
-(singularity theorems, Haag's theorem, Weinberg-Witten, Coleman-Mandula, QFT on curved
-spacetime), with every physical assumption as an explicit, named hypothesis. Read
-`RESEARCH.md` (state of the field, what exists, what is open) and `BLUEPRINT.md` (phased
-plan and DAG) before starting any work.
+Principia is a monorepo building an open-source AI-scientist system for physics. It has
+four canonical parts, and nothing else is a source of truth:
+
+- **Formal atlas** (`Atlas/`): machine-checked physics in Lean 4 + Mathlib — the
+  constraint theorems that fence in any unification of quantum theory and general
+  relativity (singularity theorems, Haag, Weinberg-Witten, Coleman-Mandula, Wightman
+  QFT, QFT on curved spacetime), with every physical assumption an explicit, named
+  hypothesis. This is the agents' physics library.
+- **Evidence ledger** (`evidence/`): immutable, hash-pinned experimental records with
+  primary-source provenance, uncertainty models, and statistical gates.
+- **Candidate registry** (`candidates/`, `CandidateLab/`): agent-proposed theory
+  manifests bound to Lean modules, evaluated against the atlas and the evidence gates.
+- **Platform** (`principia/`): the stdlib-only Python orchestration layer — artifact
+  schemas, evidence/candidate verification, sandboxed agent execution, evaluation, and
+  the discovery loop.
+
+Read `RESEARCH.md` (state of the field), `BLUEPRINT.md` (phased plan and DAG), and
+`docs/` before starting any work.
 
 We are NOT attempting to prove a theory of everything. Lean verifies derivations;
 only experiment verifies axioms about nature. Never claim otherwise.
@@ -72,13 +84,17 @@ only experiment verifies axioms about nature. Never claim otherwise.
   there and never to Specs/Proofs/Witnesses), and each review verdict is summarized
   in `audits/reviews/<node>.md`. Reviews that leave no committed evidence did not
   happen, as far as the repo is concerned.
-- **Frozen-import closure is mechanical**: `scripts/frozen-imports.txt` is the
-  single source of truth consumed by BOTH the commit-msg hook and gate 4
-  (`scripts/check_frozen_closure.py`), which computes the transitive Atlas-import
-  closure of `Atlas/Specs/**` and fails on any unlisted load-bearing file.
-- **External kernel re-verification**: gate 5 runs `lean4checker` when installed
-  (install: clone leanprover/lean4checker at the pinned toolchain tag, `lake build`,
-  symlink to ~/.local/bin). Until installed the gate is advisory and says so.
+- **Dependency integrity is mechanical**: gate 4 (`scripts/check_frozen_closure.py`)
+  enforces three manifests — the transitive Atlas-import closure of `Atlas/Specs/**`
+  may leave Specs only through `scripts/frozen-imports.txt` (also consumed by the
+  commit-msg hook); the full witness-reachable closure must equal
+  `scripts/witness-closure.txt` exactly; and frozen entries must stay reachable
+  (staleness fails the gate).
+- **External kernel re-verification is mandatory**: gate 5 runs `lean4checker` and
+  FAILS when it is missing. Install: clone leanprover/lean4checker at commit
+  `91a7f0e8e9dffe927089f5a6edcfeeb8a0e07709` (builds clean on the v4.31.0 toolchain),
+  `lake build`, symlink the binary to `~/.local/bin/lean4checker`. CI installs the
+  same pinned commit.
 - **Status vocabulary** (BLUEPRINT statuses are exactly these): `designed` (dossier
   exists) → `spec` (statement frozen, unproven) → `witnessed` (non-vacuity landed)
   → `proving` → `done` (proven AS the frozen Props + witnessed + merged + gates
@@ -86,13 +102,51 @@ only experiment verifies axioms about nature. Never claim otherwise.
   "to our knowledge, first in any prover" — they rest on dated research sweeps,
   not external verification, until published.
 
+## Workflow v3 (2026-08-21, monorepo + enforcement completion)
+
+- **Nine gates** (`scripts/check.sh`, mirrored exactly by CI which calls the same
+  script): 1 `lake build`; 2 axiom audit; 3 forbidden-token scan; 4 frozen-spec +
+  witness dependency integrity; 5 lean4checker (mandatory); 6 Atlas orphan-source
+  detector (`scripts/check_no_orphans.py` — every `Atlas/**/*.lean` must be reachable
+  from `Atlas.lean`); 7 citation-debt manifest (`scripts/check_citation_flags.py` +
+  `scripts/citation-debt.txt` — unresolved "quoted from memory"/"not re-verified"
+  flags are tracked line-hashes, added or cleared only in reviewed changes); 8 witness
+  audit (`scripts/WitnessAudit.lean` — classical-trio check plus concrete-construction
+  reporting over `Atlas.Witnesses.*`); 9 committed probe recompilation
+  (`scripts/check_probes.py` — every `audits/probes/**/*.lean` must still compile).
+- **Platform tests are a gate**: `python3 -m unittest discover -s tests` runs in CI
+  and in the pre-push hook alongside `scripts/check.sh`.
+- **Spec-review evidence is linked server-side**: CI runs
+  `scripts/check_spec_review_evidence.py` over the pushed range — changes to the
+  frozen surface require a `[spec-review]` commit AND a touched
+  `audits/reviews/<node>.md` in the same range.
+- **Hooks**: `pre-commit` (token scan), `commit-msg` (spec-review tag), and
+  `pre-push` (full gates + tests over the outgoing tree). Hooks remain client-side
+  convenience; CI + branch protection are the enforcement. `.github/CODEOWNERS` and
+  `.github/branch-protection.json` are the committed protection policy; the live
+  GitHub setting must match the JSON (owner action when it drifts).
+- **Platform rules**: Lean is the semantic source of truth — JSON manifests carry
+  identity/provenance/config and reference Lean symbols, never restate theorem
+  content. `principia/` is Python >= 3.11 standard library only. Evidence records are
+  immutable and hash-pinned; corrections create new versions, never edits in place.
+  Candidate theories enter as structures/hypotheses with concrete witnesses — never
+  Lean `axiom`s — and are evaluated by kernel + evidence gates, not by reviewer
+  opinion. An agent whose candidate is under evaluation may never modify the atlas,
+  the gates, or the evidence; repairs to canonical files go through a separate
+  reviewed lane and trigger re-evaluation of affected candidates.
+- **Rejection semantics**: a candidate is rejected only by kernel contradiction,
+  formal countermodel, or reproducible statistical mismatch with pinned evidence
+  under its documented assumptions. Empirically indistinguishable candidates are
+  archived as survivors, never deleted for unfamiliarity.
+
 ## Autonomous operation (owner's standing orders, 2026-07-08)
 
 The owner is away for several months; the orchestrator session runs the project
 autonomously through the whole blueprint. Rules:
 
-- **Guard files** — `scripts/**`, `.githooks/**`, `CLAUDE.md`, `lakefile.toml`,
-  `lean-toolchain` — may be modified only by the orchestrator, never by subagents.
+- **Guard files** — `scripts/**`, `.githooks/**`, `.github/**`, `CLAUDE.md`,
+  `lakefile.toml`, `lean-toolchain` — may be modified only by the orchestrator, never
+  by subagents.
   Any subagent diff touching a guard file is rejected wholesale, no matter how good
   the rest of the work is.
 - **Model policy**: Fable 5 subagents for hard/planning/sensitive work (spec drafting,

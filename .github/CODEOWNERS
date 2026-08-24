@@ -1,0 +1,9 @@
+# Canonical ownership; GitHub enforces this when branch protection requires code-owner review.
+* @AshishKumar4
+
+/scripts/ @AshishKumar4
+/.githooks/ @AshishKumar4
+/.github/ @AshishKumar4
+/CLAUDE.md @AshishKumar4
+/lakefile.toml @AshishKumar4
+/lean-toolchain @AshishKumar4

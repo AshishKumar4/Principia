@@ -1,0 +1,59 @@
+name: CI
+
+on:
+  push:
+    branches: [main, "phase-*"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  gates:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          fetch-depth: 0
+
+      - name: Install Lean and build Mathlib cache
+        uses: leanprover/lean-action@38fbc41a8c28c4cbaec22d7f7de508ec2e7c0dd9 # v1
+        with:
+          auto-config: false
+          build: true
+
+      - name: Install pinned lean4checker
+        run: |
+          git clone --filter=blob:none https://github.com/leanprover/lean4checker.git /tmp/lean4checker
+          git -C /tmp/lean4checker checkout 91a7f0e8e9dffe927089f5a6edcfeeb8a0e07709
+          ~/.elan/bin/lake --dir /tmp/lean4checker build
+          mkdir -p ~/.local/bin
+          ln -s /tmp/lean4checker/.lake/build/bin/lean4checker ~/.local/bin/lean4checker
+
+      - name: Run all Lean and governance gates
+        run: scripts/check.sh
+
+      - name: Run platform behavior tests
+        run: python3 -m unittest discover -s tests -v
+
+      - name: Link frozen changes to review evidence
+        if: github.event_name == 'push' || github.event_name == 'pull_request'
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          PUSH_BASE: ${{ github.event.before }}
+          PR_BASE: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.sha }}
+        run: |
+          if [ "$EVENT_NAME" = "pull_request" ]; then
+            BASE="$PR_BASE"
+          else
+            BASE="$PUSH_BASE"
+          fi
+          if [ "$BASE" = "0000000000000000000000000000000000000000" ]; then
+            echo "Initial push: no prior range to inspect"
+          else
+            python3 scripts/check_spec_review_evidence.py --base "$BASE" --head "$HEAD_SHA"
+          fi
