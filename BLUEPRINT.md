@@ -205,6 +205,62 @@ Hollands-Wald axioms. Consumes Phase 1 (spacetimes) + Phase 2 (algebraic/QFT lay
 - P4.3 `todo` **Target: a formal Hawking-effect derivation** (Fredenhagen-Haag style)
   — stretch goal, gated on P4.1/P4.2 experience.
 
+## Phase 5 — string-theoretic theorems `[designed]`
+
+Owner-approved 2026-08-08; design grounding: docs/dossiers/horizon-roadmap.md.
+Everything here is real mathematics with named sources; the conjectural layers of
+string theory enter only as hypothesis nodes.
+
+- P5.1 `todo` Virasoro representation layer on our Fock assets (coordinate with the
+  Lean Virasoro/Sugawara development, arXiv:2510.21741; do not duplicate).
+- P5.2 `designed` **Target: no-ghost theorem** (Goddard-Thorn 1972; Brower 1972) —
+  flagship; positivity on the physical quotient at c = 24.
+- P5.3 `todo` Kac determinant formula (Feigin-Fuchs 1983) → critical dimension
+  D = 26 extraction.
+- P5.4 `todo` Green-Schwarz anomaly-polynomial identity (Phys. Lett. B149, 117) —
+  finite Lie-algebra character computation.
+- P5.5 `todo` Partition-function T-duality identity on Mathlib modular forms.
+- P5.6 `todo` HLS supersymmetric Coleman-Mandula extension (after P3.3; adds Lie
+  superalgebras).
+- P5.H `todo` Hypothesis nodes only, never proof targets: S-duality, M-theory
+  existence, AdS/CFT (GKPW), mirror symmetry.
+
+## Phase 6 — QFT completion horizon `[designed]`
+
+Dependency ladder and walls: docs/dossiers/horizon-roadmap.md. Sequenced after
+P2.7; each lane is its own multi-node program when opened.
+
+- P6.1 `todo` OS→Wightman reconstruction; composition target with OSforGFF
+  (arXiv:2603.15770) for a fully formal Lorentzian free field from the Euclidean side.
+- P6.2 `todo` Structural battery: Reeh-Schlieder, PCT, spin-statistics.
+- P6.3 `todo` P(φ)₂ constructive interacting Wightman theory (Glimm-Jaffe-Spencer
+  1974 route): Gaussian measures on 𝒮′, hypercontractivity, Nelson estimates.
+- P6.4 `todo` Haag-Kastler nets; DHR sectors; abstract Doplicher-Roberts duality.
+  Gated on a von Neumann algebra layer in Lean.
+- P6.5 `todo` Microlocal analysis lane (wavefront sets, distribution extension) →
+  Epstein-Glaser renormalization → pAQFT/BV; largest infrastructure item on the map.
+- P6.6 `todo` KMS/Tomita-Takesaki thermal layer (alliance: SpectralThm needs our
+  P2.3 Stone lane).
+- P6.W WALL (recorded, not scheduled): 4D nonperturbative existence — Clay-status
+  open mathematics; SM only as perturbative AQFT with BRST-quotient observables.
+
+## Phase 7 — GR completion horizon `[designed]`
+
+Track decomposition and sources: docs/dossiers/horizon-roadmap.md. Extends Phase 1
+after P1.7.
+
+- P7.1 `todo` FLRW cosmology + Hawking 1966 cosmological singularity theorem —
+  cheapest post-P1.7 target; witness battery from de Sitter/Milne.
+- P7.2 `todo` Hawking-Penrose 1970 (generic condition is the formalization-hostile
+  piece).
+- P7.3 `todo` Black-hole mechanics: area theorem + horizon topology (Hawking 1972),
+  zeroth/first laws; rigidity scoped to the analytic case only.
+- P7.4 `todo` Statement-freezes as named hypotheses (proofs deferred to dedicated
+  infrastructure programs): Choquet-Bruhat local EVFE, ADM positive mass,
+  GW peeling/memory.
+- P7.W WALL (recorded): cosmic censorship, Kerr stability, non-analytic rigidity,
+  BKL — open mathematics, not roadmap items.
+
 ## Cross-cutting — the atlas layer
 
 - X.1 `todo` Hypothesis registry: every named physical assumption (NEC, microcausality,
@@ -220,6 +276,21 @@ Hollands-Wald axioms. Consumes Phase 1 (spacetimes) + Phase 2 (algebraic/QFT lay
 - X.4 `todo` Codex cross-model review backfill of the already-frozen spec surface
   (all Atlas/Specs/** files predate the Workflow-v2 cross-model gate) — one pass,
   verdicts to audits/reviews/.
+
+- X.5 `designed` Incompatibility engine (upgrades X.1; design in
+  docs/dossiers/horizon-roadmap.md): hypothesis Prop-classes, candidates extending
+  exactly what they assume, `#atlas_check` applicability command, independence
+  witnesses beside non-vacuity witnesses, pre-grind candidate gates (randomized
+  testing, proof-producing refutation, finite-model search) with committed probe
+  artifacts.
+- X.6 — platform vertical slice (not a theorem node; no DAG status applies; landed
+  on phase-2, 2026-08-23): `principia/` stdlib-only layer (artifact schemas,
+  evidence/candidate registries, bwrap-sandboxed evaluator and agent runner,
+  discovery loop, CLI; 325 behavior tests) + Bell pilot — local realism as a Lean
+  candidate over Mathlib's CHSH, NIST loophole-free records (Shalm et al., PRL 115,
+  250402) with independently recomputed martingale p-values; empirically refuted
+  end-to-end with committed evidence. Next evidence slices: one GR observable, one
+  collider likelihood.
 
 ## Verification gates (all phases)
 
