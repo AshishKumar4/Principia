@@ -5,9 +5,10 @@ import Atlas.Specs.QFT.CreationAnnihilation
 
 Blueprint node P2.6a: the lift of a one-particle unitary `u : E ≃ₗᵢ[𝕜] F` to the boson
 Fock space, `Γ(u) : BosonFock 𝕜 E ≃ₗᵢ[𝕜] BosonFock 𝕜 F`, with its functor laws, vacuum
-and finite-particle preservation, and the conjugation laws
+and finite-particle preservation, the conjugation laws
 `Γ(u) a†(g) Γ(u)⁻¹ = a†(u g)` and `Γ(u) a(g) Γ(u)⁻¹ = a(u g)` on the finite-particle
-domain — the engine the free-field covariance node (P2.6d) consumes.
+domain, and (node P2.6a.ii) strong continuity in the one-particle unitary — the engine
+the free-field covariance node (P2.6d) consumes.
 
 ## Proof architecture (four layers, mirroring `Atlas/Proofs/CCRTheory.lean`)
 
@@ -38,6 +39,19 @@ domain — the engine the free-field covariance node (P2.6d) consumes.
    the boson sectors. Functor laws, vacuum/one-particle images, finite-particle
    preservation, and the conjugation laws assemble componentwise (`lp.ext`).
 
+## Strong continuity (P2.6a.ii)
+
+`Γ` is continuous for the strong topologies (`QFT.tendsto_secondQuantization`, with the
+parametric form `QFT.continuous_secondQuantization`): if `u j → u₀` pointwise on `E`,
+then `Γ(u j) x → Γ(u₀) x` for every `x`. The quantitative core is a slotwise, sharp
+telescoping estimate on elementary tensors
+(`PiTensorProduct.norm_congrIsometry_tprod_sub_le`, from the identity
+`PiTensorProduct.tprod_sub_tprod_eq_sum_update`); it is promoted through the four layers
+above by the `ε/3` principle `Isometry.tendsto_of_dense`, used twice — at the dense
+algebraic image of a completed power, and at the frozen dense finite-particle subspace.
+Isometry of every `Γ(u j)` is the uniform bound the principle needs, so no
+Banach–Steinhaus argument and no completeness or separability of `E` enters.
+
 Import discipline (spec module docstring, "Scope discipline"): this file opens the
 scoped `PiTensorProduct.InnerNorm` instances and replicates the spec's
 `assert_not_exists` guard.
@@ -46,16 +60,23 @@ scoped `PiTensorProduct.InnerNorm` instances and replicates the spec's
 
 * M. Reed, B. Simon, *Methods of Modern Mathematical Physics. I: Functional Analysis*,
   revised and enlarged edition (1980), §II.4, Example 2 (Fock spaces): the ambient
-  construction. The second-quantization functor `Γ` of a one-particle operator appears
-  in the self-adjointness material (§VIII.10, Example 2 — section number quoted from
-  memory, not re-verified against a copy; the operative facts are proved per-lemma).
+  construction. The tensor-product layer that carries the second-quantization functor
+  `Γ` of a one-particle operator is §VIII.10, *Tensor products* (p. 298) — the section
+  title and page are checked against the published table of contents of the revised
+  edition, but the example/display numbers inside it are not verified against a copy,
+  so every citation to it here is section-level and the operative facts are proved
+  per-lemma.
 * M. Reed, B. Simon, *Methods of Modern Mathematical Physics. II: Fourier Analysis,
   Self-Adjointness* (1975), §X.7 (the free quantum field): the covariance computation
-  that consumes `Γ(u) a†(g) Γ(u)⁻¹ = a†(u g)`. Section-level citation.
+  that consumes `Γ(u) a†(g) Γ(u)⁻¹ = a†(u g)`, and the setting in which the strong
+  continuity of `g ↦ Γ(U g)` is used — the free-field representation of the Poincaré
+  group is built there by second-quantizing the one-particle representation.
+  Section-level citation.
 * O. Bratteli, D. W. Robinson, *Operator Algebras and Quantum Statistical Mechanics 2*,
   2nd edition (1997), §5.2: the unitary `Γ(U)` on the boson Fock space determined by
   `Γ(U) a†(f) Γ(U)⁻¹ = a†(U f)` and `Γ(U) Ω = Ω` (the Fock-implementation of a
-  one-particle unitary). Section-level citation.
+  one-particle unitary), and the extend-by-density discipline for operators built as
+  averages of unitaries that the `ε/3` step reuses. Section-level citation.
 -/
 
 assert_not_exists PiTensorProduct.projectiveSeminorm
@@ -87,6 +108,47 @@ theorem congrₗᵢ_trans (f : X ≃ₗᵢ[𝕜] Y) (g : Y ≃ₗᵢ[𝕜] Z) :
   | ih a => simp
 
 end UniformSpace.Completion
+
+/-! ### Metric supplement: the `ε/3` principle for strong convergence
+
+A family of isometries that converges pointwise on a dense set converges pointwise
+everywhere: the uniform bound is built into the isometry hypothesis, so the classical
+`ε/3` estimate closes the gap. Stated for plain metric maps — linearity is never used —
+and consumed twice below: once to pass from an algebraic tensor power to its completion,
+once to pass from the finite-particle subspace to the whole Fock space. Absent from the
+pinned Mathlib; stated in upstream shape. -/
+
+section ThreeEpsilon
+
+open Filter Topology
+
+variable {ι X Y : Type*} [PseudoMetricSpace X] [PseudoMetricSpace Y] {l : Filter ι}
+  {T : ι → X → Y} {T₀ : X → Y}
+
+/-- **The `ε/3` principle for strong convergence.** If every `T j` and `T₀` is an
+isometry and `T j z → T₀ z` for every `z` in a dense set, then `T j x → T₀ x` for every
+`x`: the triangle inequality gives
+`dist (T j x) (T₀ x) ≤ dist x z + dist (T j z) (T₀ z) + dist z x`, and the two outer
+terms are `< ε/3` for `z` dense-close to `x`. Pure metric content, stated here because
+it is the "bounded by unitarity, extend by density" step of the strong-continuity
+argument below; the extend-by-density discipline is the one Bratteli & Robinson II, 2nd
+ed. 1997, §5.2 use to build `Γ(U)` (section-level citation, display numbers not verified
+against a copy). -/
+theorem Isometry.tendsto_of_dense (hT : ∀ j, Isometry (T j)) (hT₀ : Isometry T₀)
+    {s : Set X} (hs : Dense s) (h : ∀ z ∈ s, Tendsto (fun j => T j z) l (𝓝 (T₀ z)))
+    (x : X) : Tendsto (fun j => T j x) l (𝓝 (T₀ x)) := by
+  refine Metric.tendsto_nhds.2 fun ε hε => ?_
+  obtain ⟨z, hzs, hz⟩ := Metric.mem_closure_iff.1 (hs x) (ε / 3) (by positivity)
+  filter_upwards [Metric.tendsto_nhds.1 (h z hzs) (ε / 3) (by positivity)] with j hj
+  calc dist (T j x) (T₀ x)
+      ≤ dist (T j x) (T j z) + dist (T j z) (T₀ z) + dist (T₀ z) (T₀ x) :=
+        dist_triangle4 _ _ _ _
+    _ < ε / 3 + ε / 3 + ε / 3 := by
+        rw [(hT j).dist_eq, hT₀.dist_eq, dist_comm z x]
+        exact add_lt_add (add_lt_add hz hj) hz
+    _ = ε := by ring
+
+end ThreeEpsilon
 
 /-! ### The isometric congruence of finite tensor products
 
@@ -168,6 +230,103 @@ theorem congrIsometry_symm (f : Π i, E i ≃ₗᵢ[𝕜] F i) :
     exact congrArg (c • ·) (congrArg (fun v : Π i, F i => tprod 𝕜 v)
       (funext fun i => ((f i).apply_symm_apply (y i)).symm))
   | add u v hu hv => rw [map_add, map_add, ← hu, ← hv]
+
+end PiTensorProduct
+
+/-! ### The slotwise telescoping estimate
+
+The quantitative input to strong continuity (blueprint node P2.6a.ii). Replacing the
+slot family `f` by `g` one slot at a time writes `⊗f (⨂ₜ x) - ⊗g (⨂ₜ x)` as a sum of `n`
+elementary tensors, consecutive ones differing in exactly one slot; the ℓ² cross norm of
+P2.1f then factorizes each term, and isometry of the untouched slots restores the
+original norms. Summing the `n` slots is the classical `n · sup` bound; what is proved
+here is its sharp slotwise form. Upstream-shaped over the P2.1e/f layer. -/
+
+namespace PiTensorProduct
+
+open scoped TensorProduct PiTensorProduct.InnerNorm
+
+variable {𝕜 : Type*} [RCLike 𝕜] {n : ℕ}
+variable {E : Fin n → Type*} [∀ i, NormedAddCommGroup (E i)]
+  [∀ i, InnerProductSpace 𝕜 (E i)]
+variable {F : Fin n → Type*} [∀ i, NormedAddCommGroup (F i)]
+  [∀ i, InnerProductSpace 𝕜 (F i)]
+
+/-- **The telescoping identity for pure tensors**: cutting the slots at `k` interpolates
+between `⨂ₜ a` and `⨂ₜ b` through the hybrid families `i ↦ if i < k then b i else a i`
+(`k = 0` gives `a`, `k = n` gives `b`), and consecutive hybrids differ in exactly slot
+`k`, where multilinearity produces the factor `a k - b k`. -/
+theorem tprod_sub_tprod_eq_sum_update (a b : Π i, E i) :
+    tprod 𝕜 a - tprod 𝕜 b =
+      ∑ k : Fin n, tprod 𝕜
+        (Function.update (fun i : Fin n => if (i : ℕ) < (k : ℕ) then b i else a i) k
+          (a k - b k)) := by
+  classical
+  set G : ℕ → (⨂[𝕜] i, E i) :=
+    fun m => tprod 𝕜 fun i : Fin n => if (i : ℕ) < m then b i else a i with hG
+  have hstep : ∀ k : Fin n,
+      tprod 𝕜 (Function.update (fun i : Fin n => if (i : ℕ) < (k : ℕ) then b i else a i) k
+        (a k - b k)) = G (k : ℕ) - G ((k : ℕ) + 1) := by
+    intro k
+    have ha : Function.update (fun i : Fin n => if (i : ℕ) < (k : ℕ) then b i else a i) k
+          (a k) =
+        fun i : Fin n => if (i : ℕ) < (k : ℕ) then b i else a i := by
+      refine funext fun i => ?_
+      rcases eq_or_ne i k with rfl | hi
+      · simp
+      · rw [Function.update_of_ne hi]
+    have hb : Function.update (fun i : Fin n => if (i : ℕ) < (k : ℕ) then b i else a i) k
+          (b k) =
+        fun i : Fin n => if (i : ℕ) < (k : ℕ) + 1 then b i else a i := by
+      refine funext fun i => ?_
+      rcases eq_or_ne i k with rfl | hi
+      · simp
+      · have hik : (i : ℕ) ≠ (k : ℕ) := fun hval => hi (Fin.val_injective hval)
+        rw [Function.update_of_ne hi]
+        by_cases hlt : (i : ℕ) < (k : ℕ)
+        · simp [hlt, Nat.lt_succ_of_lt hlt]
+        · simp [hlt, show ¬(i : ℕ) < (k : ℕ) + 1 by omega]
+    simp only [hG]
+    rw [MultilinearMap.map_update_sub, ha, hb]
+  have h0 : G 0 = tprod 𝕜 a := by
+    simp only [hG]
+    exact congrArg _ (funext fun i => if_neg (Nat.not_lt_zero _))
+  have hn : G n = tprod 𝕜 b := by
+    simp only [hG]
+    exact congrArg _ (funext fun i => if_pos i.isLt)
+  calc tprod 𝕜 a - tprod 𝕜 b = G 0 - G n := by rw [h0, hn]
+    _ = ∑ m ∈ Finset.range n, (G m - G (m + 1)) := (Finset.sum_range_sub' G n).symm
+    _ = ∑ k : Fin n, (G (k : ℕ) - G ((k : ℕ) + 1)) := Finset.sum_range _
+    _ = _ := Finset.sum_congr rfl fun k _ => (hstep k).symm
+
+/-- The ℓ² cross norm of an elementary tensor with one slot replaced: the replaced slot
+contributes its own norm, the others their unchanged norms. -/
+theorem norm_tprod_update (c : Π i, E i) (k : Fin n) (d : E k) :
+    ‖tprod 𝕜 (Function.update c k d)‖ = ‖d‖ * ∏ i ∈ Finset.univ.erase k, ‖c i‖ := by
+  classical
+  rw [norm_tprod, ← Finset.mul_prod_erase Finset.univ
+      (fun i => ‖Function.update c k d i‖) (Finset.mem_univ k), Function.update_self]
+  refine congrArg (‖d‖ * ·) (Finset.prod_congr rfl fun i hi => ?_)
+  rw [Function.update_of_ne (Finset.mem_erase.1 hi).1]
+
+/-- **The slotwise telescoping estimate**: on an elementary tensor, the gap between two
+slotwise congruences is controlled by the one-slot gaps,
+`‖⊗f (⨂ₜ x) - ⊗g (⨂ₜ x)‖ ≤ ∑ₖ ‖f k (x k) - g k (x k)‖ ∏_{i ≠ k} ‖x i‖`. This is the
+`n`-sector estimate driving strong continuity of `Γ` (Reed & Simon I, rev. ed. 1980,
+§VIII.10, the tensor-product layer; section-level citation, display numbers not
+verified against a copy). -/
+theorem norm_congrIsometry_tprod_sub_le (f g : Π i, E i ≃ₗᵢ[𝕜] F i) (x : Π i, E i) :
+    ‖congrIsometry f (tprod 𝕜 x) - congrIsometry g (tprod 𝕜 x)‖ ≤
+      ∑ k : Fin n, ‖f k (x k) - g k (x k)‖ * ∏ i ∈ Finset.univ.erase k, ‖x i‖ := by
+  classical
+  rw [congrIsometry_tprod, congrIsometry_tprod,
+    tprod_sub_tprod_eq_sum_update (fun i => f i (x i)) (fun i => g i (x i))]
+  refine (norm_sum_le _ _).trans (Finset.sum_le_sum fun k _ => le_of_eq ?_)
+  rw [norm_tprod_update]
+  refine congrArg (‖f k (x k) - g k (x k)‖ * ·) (Finset.prod_congr rfl fun i _ => ?_)
+  by_cases hlt : (i : ℕ) < (k : ℕ)
+  · simpa only [hlt, if_true] using (g i).norm_map (x i)
+  · simpa only [hlt, if_false] using (f i).norm_map (x i)
 
 end PiTensorProduct
 
@@ -490,6 +649,19 @@ theorem secondQuantization_apply (u : E ≃ₗᵢ[𝕜] F) (x : BosonFock 𝕜 E
     secondQuantization u x k = symTensorPowerCongr u k (x k) :=
   rfl
 
+/-- Component pin: `Γ(u)` on a single-sector vector, `Γ(u) (single n ψ) =
+single n (Γₙ(u) ψ)`. The `lp`-level shadow of `secondQuantization_apply`, and the
+finite-particle building block of strong continuity. -/
+@[simp]
+theorem secondQuantization_single (u : E ≃ₗᵢ[𝕜] F) (n : ℕ) (ψ : SymTensorPower 𝕜 E n) :
+    secondQuantization u (lp.single 2 n ψ) =
+      lp.single 2 n (symTensorPowerCongr u n ψ) := by
+  refine lp.ext (funext fun m => ?_)
+  rw [secondQuantization_apply, lp.single_apply, lp.single_apply]
+  rcases eq_or_ne m n with rfl | hm
+  · rw [Pi.single_eq_same, Pi.single_eq_same]
+  · rw [Pi.single_eq_of_ne hm, Pi.single_eq_of_ne hm, map_zero]
+
 /-- **Γ is unital**: `Γ(1) = 1`. -/
 theorem secondQuantization_refl :
     secondQuantization (LinearIsometryEquiv.refl 𝕜 E) =
@@ -637,11 +809,137 @@ theorem secondQuantization_conj_annihilationPMap (u : E ≃ₗᵢ[𝕜] F) (g : 
   exact congrArg (annihilationPMap 𝕜 F (u g))
     (Subtype.ext ((secondQuantization u).apply_symm_apply (y : BosonFock 𝕜 F)))
 
+/-! ### Strong continuity of Γ (P2.6a.ii)
+
+`Γ` is continuous from the strong topology on one-particle unitaries to the strong
+topology on Fock-space unitaries: if `u j → u₀` pointwise on `E`, then
+`Γ(u j) x → Γ(u₀) x` for every `x` in `BosonFock 𝕜 E`. Second quantization therefore
+turns a strongly continuous one-particle representation into a strongly continuous Fock
+representation — the fact the free-field covariance node (P2.6d) needs to know that
+`g ↦ Γ(U g)` is a continuous unitary representation (Reed & Simon II, 1975, §X.7, the
+free quantum field; Reed & Simon I, rev. ed. 1980, §VIII.10, the tensor-product layer;
+Bratteli & Robinson II, 2nd ed. 1997, §5.2, the Fock implementation `Γ(U)` — all three
+cited at section level, display numbers not verified against a copy).
+
+The proof runs through the four layers of the construction:
+
+1. **elementary tensors** — the slotwise telescoping estimate
+   `PiTensorProduct.norm_congrIsometry_tprod_sub_le` bounds the sector gap by
+   `∑ₖ ‖u j xₖ - u₀ xₖ‖ ∏_{i ≠ k} ‖xᵢ‖`, and each of the `n` summands tends to `0`;
+2. **algebraic power** — pointwise limits survive `+` and `•`
+   (`PiTensorProduct.induction_on`);
+3. **completion and sector** — `Γₙ` is isometric, so the `ε/3` principle
+   `Isometry.tendsto_of_dense` extends the limit from the dense algebraic image, and a
+   sector limit is an ambient limit (`tendsto_subtype_rng`);
+4. **Fock space** — the same `ε/3` principle over the frozen dense finite-particle
+   subspace, where `Γ` acts one sector at a time (`secondQuantization_single`).
+
+Stated for an arbitrary filter, so `l = atTop` is the sequential form `Γ(uₙ) x → Γ(u) x`
+and `l = 𝓝 g₀` is the parametric form (`continuous_secondQuantization`). -/
+
+section StrongContinuity
+
+open Filter Topology
+
+variable {ι : Type*} {l : Filter ι} {u : ι → (E ≃ₗᵢ[𝕜] F)} {u₀ : E ≃ₗᵢ[𝕜] F}
+
+/-- Strong convergence of the tensor-power congruence on elementary tensors: the
+telescoping estimate is a finite sum of one-slot gaps, each tending to `0`. -/
+theorem tendsto_congrIsometry_tprod (hu : ∀ y : E, Tendsto (fun j => u j y) l (𝓝 (u₀ y)))
+    (n : ℕ) (x : Fin n → E) :
+    Tendsto (fun j => congrIsometry (fun _ : Fin n => u j) (tprod 𝕜 x)) l
+      (𝓝 (congrIsometry (fun _ : Fin n => u₀) (tprod 𝕜 x))) := by
+  classical
+  rw [tendsto_iff_norm_sub_tendsto_zero]
+  refine squeeze_zero' (Eventually.of_forall fun j => norm_nonneg _)
+    (Eventually.of_forall fun j =>
+      norm_congrIsometry_tprod_sub_le (fun _ => u j) (fun _ => u₀) x) ?_
+  have h : Tendsto
+      (fun j => ∑ k : Fin n, ‖u j (x k) - u₀ (x k)‖ * ∏ i ∈ Finset.univ.erase k, ‖x i‖) l
+      (𝓝 (∑ _k : Fin n, (0 : ℝ))) :=
+    tendsto_finsetSum _ fun k _ => by
+      simpa using (tendsto_iff_norm_sub_tendsto_zero.1 (hu (x k))).mul_const
+        (∏ i ∈ Finset.univ.erase k, ‖x i‖)
+  simpa using h
+
+/-- Strong convergence on the algebraic tensor power: the pure-tensor case plus
+stability of pointwise limits under the vector-space operations. -/
+theorem tendsto_congrIsometry (hu : ∀ y : E, Tendsto (fun j => u j y) l (𝓝 (u₀ y))) (n : ℕ)
+    (z : ⨂[𝕜]^n E) :
+    Tendsto (fun j => congrIsometry (fun _ : Fin n => u j) z) l
+      (𝓝 (congrIsometry (fun _ : Fin n => u₀) z)) := by
+  induction z using PiTensorProduct.induction_on with
+  | smul_tprod c y =>
+    simpa only [map_smul] using (tendsto_congrIsometry_tprod hu n y).const_smul c
+  | add z₁ z₂ h₁ h₂ => simpa only [map_add] using h₁.add h₂
+
+/-- Strong convergence on the completed tensor power: the `ε/3` principle over the dense
+algebraic image, legitimate because every `tensorPowerCongr (u j) n` is isometric. -/
+theorem tendsto_tensorPowerCongr (hu : ∀ y : E, Tendsto (fun j => u j y) l (𝓝 (u₀ y)))
+    (n : ℕ) (ψ : HilbertTensorPower 𝕜 E n) :
+    Tendsto (fun j => tensorPowerCongr (u j) n ψ) l (𝓝 (tensorPowerCongr u₀ n ψ)) := by
+  refine Isometry.tendsto_of_dense (T := fun j => ⇑(tensorPowerCongr (u j) n))
+    (fun j => (tensorPowerCongr (u j) n).isometry) (tensorPowerCongr u₀ n).isometry
+    Completion.denseRange_coe ?_ ψ
+  rintro z ⟨w, rfl⟩
+  simp only [tensorPowerCongr_coe]
+  exact ((Completion.continuous_coe _).tendsto _).comp (tendsto_congrIsometry hu n w)
+
+/-- Strong convergence on the boson sector: a limit in the sector is a limit of the
+ambient completed powers. -/
+theorem tendsto_symTensorPowerCongr (hu : ∀ y : E, Tendsto (fun j => u j y) l (𝓝 (u₀ y)))
+    (n : ℕ) (ψ : SymTensorPower 𝕜 E n) :
+    Tendsto (fun j => symTensorPowerCongr (u j) n ψ) l (𝓝 (symTensorPowerCongr u₀ n ψ)) :=
+  tendsto_subtype_rng.2 (by
+    simpa only [symTensorPowerCongr_coe] using
+      tendsto_tensorPowerCongr hu n (ψ : HilbertTensorPower 𝕜 E n))
+
+/-- **Γ is strongly continuous** (blueprint node P2.6a.ii): if the one-particle
+unitaries `u j` converge strongly to `u₀`, then `Γ(u j) x → Γ(u₀) x` for every Fock
+vector `x`. The `ε/3` principle over the frozen dense finite-particle subspace, on which
+`Γ` acts sector by sector (Reed & Simon II, 1975, §X.7; Bratteli & Robinson II, 2nd ed.
+1997, §5.2 — section-level citations, display numbers not verified against a copy). -/
+theorem tendsto_secondQuantization (hu : ∀ y : E, Tendsto (fun j => u j y) l (𝓝 (u₀ y)))
+    (x : BosonFock 𝕜 E) :
+    Tendsto (fun j => secondQuantization (u j) x) l (𝓝 (secondQuantization u₀ x)) := by
+  refine Isometry.tendsto_of_dense (T := fun j => ⇑(secondQuantization (u j)))
+    (fun j => (secondQuantization (u j)).isometry) (secondQuantization u₀).isometry
+    (BosonFock.dense_finiteParticle 𝕜 E) (fun z hz => ?_) x
+  refine Submodule.iSup_induction
+    (motive := fun w => Tendsto (fun j => secondQuantization (u j) w) l
+      (𝓝 (secondQuantization u₀ w)))
+    (fun N => LinearMap.range
+      (lp.singleContinuousLinearMap 𝕜 (fun m => SymTensorPower 𝕜 E m) 2 N).toLinearMap)
+    hz ?_ ?_ ?_
+  · rintro N y ⟨v, rfl⟩
+    have hc : Continuous fun w : SymTensorPower 𝕜 F N => (lp.single 2 N w : BosonFock 𝕜 F) :=
+      (lp.singleContinuousLinearMap 𝕜 (fun m => SymTensorPower 𝕜 F m) 2 N).continuous
+    simp only [ContinuousLinearMap.coe_coe, lp.singleContinuousLinearMap_apply,
+      secondQuantization_single]
+    exact (hc.tendsto _).comp (tendsto_symTensorPowerCongr hu N v)
+  · simpa only [map_zero] using tendsto_const_nhds
+  · exact fun y₁ y₂ h₁ h₂ => by simpa only [map_add] using h₁.add h₂
+
+/-- **Γ of a strongly continuous family is strongly continuous** — the parametric form
+of `tendsto_secondQuantization` at `l = 𝓝 g₀`, and the shape the free-field covariance
+node consumes: `g ↦ Γ(v g)` is a strongly continuous unitary representation whenever
+`g ↦ v g` is (Reed & Simon II, 1975, §X.7 — section-level citation, display numbers not
+verified against a copy). -/
+theorem continuous_secondQuantization {X : Type*} [TopologicalSpace X]
+    {v : X → (E ≃ₗᵢ[𝕜] F)} (hv : ∀ y : E, Continuous fun g => v g y) (x : BosonFock 𝕜 E) :
+    Continuous fun g => secondQuantization (v g) x := by
+  refine continuous_iff_continuousAt.2 fun g₀ => ?_
+  exact tendsto_secondQuantization (u := v) (u₀ := v g₀) (fun y => (hv y).continuousAt) x
+
+end StrongContinuity
+
 /-! ### Regression anchors
 
 The general laws reproduce the expected concrete actions on the anchor vectors of the
 frozen slice-2 spec: `Γ(u) a†(g) Ω = |u g⟩` combines vacuum preservation, the creation
-intertwining, and the frozen `creationPMap_vacuum`. -/
+intertwining, and the frozen `creationPMap_vacuum`. The strong-continuity anchors pin
+the two instantiations the blueprint asks for — the sequential form and the sharpness of
+the `n = 1` sector estimate. -/
 
 /-- `Γ(u) a†(g) Ω = a†(u g) Ω = |u g⟩`: the intertwining law at the vacuum reproduces
 the one-particle image of `u`. -/
@@ -661,5 +959,24 @@ example (u : E ≃ₗᵢ[𝕜] E) (g g' : E) :
             BosonFock.oneParticle_mem_finiteParticle 𝕜 E g'⟩) =
       inner 𝕜 g g' • BosonFock.vacuum 𝕜 E := by
   rw [annihilationPMap_oneParticle, map_smul, secondQuantization_vacuum]
+
+/-- The sequential form of `tendsto_secondQuantization` — the blueprint statement of
+P2.6a.ii verbatim: `uₙ → u` strongly implies `Γ(uₙ) x → Γ(u) x` for every Fock vector.
+Pins that the general-filter statement specializes at `atTop`. -/
+example (u : ℕ → (E ≃ₗᵢ[𝕜] F)) (u₀ : E ≃ₗᵢ[𝕜] F)
+    (hu : ∀ y : E, Filter.Tendsto (fun m => u m y) Filter.atTop (nhds (u₀ y)))
+    (x : BosonFock 𝕜 E) :
+    Filter.Tendsto (fun m => secondQuantization (u m) x) Filter.atTop
+      (nhds (secondQuantization u₀ x)) :=
+  tendsto_secondQuantization hu x
+
+/-- Sharpness of the sector estimate at `n = 1`: the telescoping bound degenerates to
+the one-particle gap `‖f y - g y‖`, with no spurious factor. Expected-true guard that
+the `n`-slot estimate is not vacuous. -/
+example (f g : E ≃ₗᵢ[𝕜] F) (y : E) :
+    ‖congrIsometry (fun _ : Fin 1 => f) (tprod 𝕜 fun _ => y) -
+        congrIsometry (fun _ : Fin 1 => g) (tprod 𝕜 fun _ => y)‖ ≤ ‖f y - g y‖ := by
+  simpa using PiTensorProduct.norm_congrIsometry_tprod_sub_le
+    (fun _ : Fin 1 => f) (fun _ : Fin 1 => g) fun _ => y
 
 end QFT

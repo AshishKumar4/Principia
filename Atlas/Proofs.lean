@@ -9,6 +9,7 @@ import Atlas.Proofs.PiTensorInner
 import Atlas.Proofs.FockBridge
 import Atlas.Proofs.CCRTheory
 import Atlas.Proofs.SecondQuantization
+import Atlas.Proofs.KleinGordon
 
 /-!
 # Atlas.Proofs — proof developments
