@@ -40,6 +40,17 @@ jobs:
           ninja -C /tmp/bubblewrap-0.11.1/build
           sudo install -m 0755 /tmp/bubblewrap-0.11.1/build/bwrap /usr/local/bin/bwrap
           bwrap --version | grep -F 0.11.1
+          # Noble's AppArmor restriction strips capabilities from user
+          # namespaces created by unpackaged binaries; grant the pinned bwrap
+          # the same unconfined-userns profile Ubuntu ships for its own.
+          sudo tee /etc/apparmor.d/bwrap-local > /dev/null <<'PROFILE'
+          abi <abi/4.0>,
+          include <tunables/global>
+          profile bwrap-local /usr/local/bin/bwrap flags=(unconfined) {
+            userns,
+          }
+          PROFILE
+          sudo apparmor_parser --replace /etc/apparmor.d/bwrap-local
           SANDBOX_PROBE=$(mktemp -d)
           mkdir -p "$SANDBOX_PROBE/lower" "$SANDBOX_PROBE/upper" "$SANDBOX_PROBE/work"
           printf host > "$SANDBOX_PROBE/lower/host.txt"
