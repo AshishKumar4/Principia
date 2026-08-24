@@ -11,7 +11,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 MANIFEST = ROOT / "scripts/citation-debt.txt"
 FLAG_RE = re.compile(
-    r"quoted from memory|not re-verified against (?:a|the) copy",
+    r"quoted from memory|not (?:re-)?verified against (?:a|the) copy",
     re.IGNORECASE,
 )
 
