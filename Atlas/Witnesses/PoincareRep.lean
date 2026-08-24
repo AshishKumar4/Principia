@@ -1,4 +1,5 @@
 import Atlas.Specs.Spacetime.PoincareRep
+import Atlas.Proofs.PoincareTopology
 import Atlas.Witnesses.UnitaryGroups
 import Mathlib.Analysis.InnerProductSpace.Adjoint
 import Mathlib.Analysis.Normed.Lp.MeasurableSpace
@@ -24,17 +25,15 @@ character-form representation exists).
   line identified with the P2.3g witness `trivialGroup H` and its Stone generator
   computed to be `0` two independent ways (transport along that identification, and
   directly through the frozen `generator_apply_of_hasDerivAt` computation rule).
-* **`Witnesses.regularRep`** — **the nontrivial witness**: the regular representation
-  of `P↑₊` on `L²(M4)`, `(U(g)ψ)(x) = ψ(g⁻¹ • x)`. Unitarity is the change-of-variables
-  fact that the affine Poincaré action preserves Lebesgue volume (`det Λ = 1` for the
-  homogeneous part, translation invariance for the rest); the operator is Mathlib's
-  `MeasureTheory.Lp.compMeasurePreserving`, upgraded to a linear isometry *equivalence*
-  by the group law, and to a unitary via `Unitary.linearIsometryEquiv`. Joint strong
-  continuity — the frozen `continuous_apply₂'` field — is
-  `Continuous.compMeasurePreservingLp` fed with continuity of `g ↦ (g⁻¹ • ·)` into
-  `C(M4, M4)`, which in turn needs continuity of inversion on the frozen P2.4a topology
-  (proved here via `Ring.inverse` on the operator ring: `ContinuousInv` instances for
-  `RestrictedLorentzGroup` and `PoincareGroup`, and `ContinuousSMul PoincareGroup M4`).
+* **`Witnesses.regularRep`** — **the nontrivial witness**: the regular
+  representation of `P↑₊` on `L²(M4)`, `(U(g)ψ)(x) = ψ(g⁻¹ • x)`.
+  `Atlas.Proofs.PoincareTopology` supplies the reusable topology and
+  volume-preservation facts. The operator is Mathlib's
+  `MeasureTheory.Lp.compMeasurePreserving`, upgraded to a linear isometry
+  equivalence by the group law and to a unitary via
+  `Unitary.linearIsometryEquiv`. Joint strong continuity is
+  `Continuous.compMeasurePreservingLp` applied to the continuous inverse affine
+  action.
 * `Witnesses.regularRep_translation_ne_one` — **expected false / nontriviality**: the
   translation by `e₁` acts nontrivially (it moves the indicator of a small ball to the
   indicator of a disjoint ball of positive volume); hence
@@ -47,10 +46,10 @@ character-form representation exists).
 
 ## Attribution
 
-`trivialRep` and its translation-line/generator lemmas promote the committed reviewer
-probe `audits/probes/P2.4b/stone_bridge_probe.lean` (Workflow v2 audit artifact) into
-the witness layer verbatim-up-to-naming. The regular representation and the topology,
-measure-preservation, and nontriviality material are new.
+`trivialRep` and its translation-line/generator lemmas promote the committed
+reviewer probe `audits/probes/P2.4b/stone_bridge_probe.lean` into the witness
+layer. Generic Poincaré topology and volume facts live in
+`Atlas.Proofs.PoincareTopology`; this file contains only the witness models.
 
 ## Sources
 
@@ -72,149 +71,6 @@ namespace Spacetime.Minkowski
 
 noncomputable section
 
-/-! ### Topology of the frozen P2.4a groups
-
-The frozen spec induces the topology of `RestrictedLorentzGroup` from the operator norm
-and gives `PoincareGroup` the product topology, but states no continuity lemmas. The
-regular representation needs exactly: continuity of the coercions/projections, of
-inversion (via `Ring.inverse` on the complete normed ring `M4 →L[ℝ] M4`), and joint
-continuity of the affine action. -/
-
-namespace RestrictedLorentzGroup
-
-theorem continuous_coe :
-    Continuous fun Λ : RestrictedLorentzGroup => ((Λ : M4 ≃L[ℝ] M4) : M4 →L[ℝ] M4) :=
-  continuous_induced_dom
-
-/-- The unit of the operator ring underlying a continuous linear automorphism of `M4`. -/
-private def clmUnit (e : M4 ≃L[ℝ] M4) : (M4 →L[ℝ] M4)ˣ where
-  val := e
-  inv := e.symm
-  val_inv := by ext x; simp
-  inv_val := by ext x; simp
-
-private theorem ring_inverse_clm (e : M4 ≃L[ℝ] M4) :
-    Ring.inverse ((e : M4 →L[ℝ] M4)) = ((e.symm : M4 ≃L[ℝ] M4) : M4 →L[ℝ] M4) :=
-  Ring.inverse_unit (clmUnit e)
-
-/-- Inversion is continuous on the frozen operator-norm topology of `L↑₊`: on units of
-the complete normed ring `M4 →L[ℝ] M4` inversion is `Ring.inverse`, which is continuous
-at every unit (`NormedRing.inverse_continuousAt`). -/
-instance : ContinuousInv RestrictedLorentzGroup where
-  continuous_inv := by
-    rw [continuous_induced_rng]
-    have key : (fun Λ : RestrictedLorentzGroup =>
-        (((Λ⁻¹ : RestrictedLorentzGroup) : M4 ≃L[ℝ] M4) : M4 →L[ℝ] M4))
-        = fun Λ : RestrictedLorentzGroup =>
-          Ring.inverse (((Λ : M4 ≃L[ℝ] M4) : M4 →L[ℝ] M4)) := by
-      funext Λ
-      rw [show ((Λ⁻¹ : RestrictedLorentzGroup) : M4 ≃L[ℝ] M4)
-          = (Λ : M4 ≃L[ℝ] M4).symm from rfl, ← ring_inverse_clm]
-    show Continuous fun Λ : RestrictedLorentzGroup =>
-      (((Λ⁻¹ : RestrictedLorentzGroup) : M4 ≃L[ℝ] M4) : M4 →L[ℝ] M4)
-    rw [key]
-    refine continuous_iff_continuousAt.2 fun Λ₀ => ?_
-    have h0 : ContinuousAt Ring.inverse (((Λ₀ : M4 ≃L[ℝ] M4) : M4 →L[ℝ] M4)) :=
-      NormedRing.inverse_continuousAt (clmUnit (Λ₀ : M4 ≃L[ℝ] M4))
-    exact ContinuousAt.comp
-      (f := fun Λ : RestrictedLorentzGroup => ((Λ : M4 ≃L[ℝ] M4) : M4 →L[ℝ] M4))
-      (x := Λ₀) h0 continuous_coe.continuousAt
-
-end RestrictedLorentzGroup
-
-namespace PoincareGroup
-
-theorem continuous_components :
-    Continuous fun g : PoincareGroup => (g.translation, g.lorentz) :=
-  continuous_induced_dom
-
-theorem continuous_translation : Continuous translation :=
-  continuous_fst.comp continuous_components
-
-theorem continuous_lorentz : Continuous lorentz :=
-  continuous_snd.comp continuous_components
-
-/-- The affine action `(g, x) ↦ g • x = Λ x + a` is jointly continuous: operator
-application is a bounded bilinear map, and the components of `g` depend continuously
-on `g`. -/
-instance : ContinuousSMul PoincareGroup M4 where
-  continuous_smul := by
-    have h : (fun q : PoincareGroup × M4 => q.1 • q.2)
-        = fun q : PoincareGroup × M4 =>
-          ((q.1.lorentz : M4 ≃L[ℝ] M4) : M4 →L[ℝ] M4) q.2 + q.1.translation := rfl
-    rw [h]
-    exact (isBoundedBilinearMap_apply.continuous.comp
-      (((RestrictedLorentzGroup.continuous_coe.comp continuous_lorentz).comp
-        continuous_fst).prodMk continuous_snd)).add
-      (continuous_translation.comp continuous_fst)
-
-/-- Inversion `(a, Λ)⁻¹ = (-Λ⁻¹ a, Λ⁻¹)` is continuous on the frozen product
-topology. -/
-instance : ContinuousInv PoincareGroup where
-  continuous_inv := by
-    rw [continuous_induced_rng]
-    show Continuous fun g : PoincareGroup => (g⁻¹.translation, g⁻¹.lorentz)
-    refine Continuous.prodMk ?_ ?_
-    · show Continuous fun g : PoincareGroup =>
-        -((g.lorentz⁻¹ : RestrictedLorentzGroup) : M4 ≃L[ℝ] M4) g.translation
-      exact (isBoundedBilinearMap_apply.continuous.comp
-        ((RestrictedLorentzGroup.continuous_coe.comp
-          (continuous_inv.comp continuous_lorentz)).prodMk
-          continuous_translation)).neg
-    · exact continuous_inv.comp continuous_lorentz
-
-/-! ### The Poincaré action preserves Lebesgue volume -/
-
-/-- A restricted Lorentz transformation preserves the volume of Minkowski space: it is
-linear of determinant `1` (frozen membership condition), and a linear map of unit
-determinant preserves any additive Haar measure. -/
-theorem volume_preserving_lorentz (Λ : RestrictedLorentzGroup) :
-    MeasurePreserving ((Λ : M4 ≃L[ℝ] M4)) (volume : Measure M4) volume := by
-  refine ⟨(Λ : M4 ≃L[ℝ] M4).continuous.measurable, ?_⟩
-  have h : ⇑(Λ : M4 ≃L[ℝ] M4)
-      = ⇑(((Λ : M4 ≃L[ℝ] M4).toLinearEquiv : M4 →ₗ[ℝ] M4)) := rfl
-  rw [h, Measure.map_linearMap_addHaar_eq_smul_addHaar volume
-    (by rw [RestrictedLorentzGroup.det_eq_one Λ]; norm_num),
-    RestrictedLorentzGroup.det_eq_one Λ]
-  norm_num
-
-/-- The affine Poincaré action preserves the volume of Minkowski space:
-`x ↦ Λ x + a` composes the unit-determinant linear part with a translation. -/
-theorem volume_preserving_smul (g : PoincareGroup) :
-    MeasurePreserving (g • · : M4 → M4) (volume : Measure M4) volume := by
-  have h : (g • · : M4 → M4)
-      = (fun x : M4 => x + g.translation) ∘ ⇑(g.lorentz : M4 ≃L[ℝ] M4) := rfl
-  rw [h]
-  exact (measurePreserving_add_right volume g.translation).comp
-    (volume_preserving_lorentz g.lorentz)
-
-/-- The affine action of `g` as a continuous self-map of `M4` (the shape consumed by
-`Continuous.compMeasurePreservingLp`). -/
-def smulCM (g : PoincareGroup) : C(M4, M4) :=
-  ⟨fun x => g • x, continuous_const_smul g⟩
-
-theorem continuous_smulCM : Continuous smulCM :=
-  ContinuousMap.continuous_of_continuous_uncurry smulCM continuous_smul
-
-/-- The inverse of a pure translation acts by subtraction. -/
-theorem translation_inv_smul (b x : M4) :
-    (⟨b, 1⟩ : PoincareGroup)⁻¹ • x = x - b := by
-  rw [smul_def, inv_translation, inv_lorentz]
-  show (((1 : RestrictedLorentzGroup)⁻¹ : RestrictedLorentzGroup) : M4 ≃L[ℝ] M4) x
-    + -(((1 : RestrictedLorentzGroup)⁻¹ : RestrictedLorentzGroup) : M4 ≃L[ℝ] M4) b
-    = x - b
-  rw [inv_one, OneMemClass.coe_one]
-  show x + -b = x - b
-  rw [sub_eq_add_neg]
-
-theorem translation_preimage_ball (b : M4) (r : ℝ) :
-    (fun x : M4 => (⟨b, 1⟩ : PoincareGroup)⁻¹ • x) ⁻¹' Metric.ball 0 r
-      = Metric.ball b r := by
-  ext x
-  simp only [Set.mem_preimage, Metric.mem_ball, translation_inv_smul]
-  rw [dist_zero_right, dist_eq_norm]
-
-end PoincareGroup
 
 namespace Witnesses
 

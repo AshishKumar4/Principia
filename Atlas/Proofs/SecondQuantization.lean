@@ -108,47 +108,39 @@ theorem congrₗᵢ_trans (f : X ≃ₗᵢ[𝕜] Y) (g : Y ≃ₗᵢ[𝕜] Z) :
   | ih a => simp
 
 end UniformSpace.Completion
-
-/-! ### Metric supplement: the `ε/3` principle for strong convergence
-
-A family of isometries that converges pointwise on a dense set converges pointwise
-everywhere: the uniform bound is built into the isometry hypothesis, so the classical
-`ε/3` estimate closes the gap. Stated for plain metric maps — linearity is never used —
-and consumed twice below: once to pass from an algebraic tensor power to its completion,
-once to pass from the finite-particle subspace to the whole Fock space. Absent from the
-pinned Mathlib; stated in upstream shape. -/
+/-! ### Metric supplement: strong convergence from a dense set -/
 
 section ThreeEpsilon
 
 open Filter Topology
 
-variable {ι X Y : Type*} [PseudoMetricSpace X] [PseudoMetricSpace Y] {l : Filter ι}
-  {T : ι → X → Y} {T₀ : X → Y}
+variable {ι X Y : Type*} [PseudoMetricSpace X] [PseudoMetricSpace Y]
+  {l : Filter ι} {T : ι → X → Y} {T₀ : X → Y}
 
-/-- **The `ε/3` principle for strong convergence.** If every `T j` and `T₀` is an
-isometry and `T j z → T₀ z` for every `z` in a dense set, then `T j x → T₀ x` for every
-`x`: the triangle inequality gives
-`dist (T j x) (T₀ x) ≤ dist x z + dist (T j z) (T₀ z) + dist z x`, and the two outer
-terms are `< ε/3` for `z` dense-close to `x`. Pure metric content, stated here because
-it is the "bounded by unitarity, extend by density" step of the strong-continuity
-argument below; the extend-by-density discipline is the one Bratteli & Robinson II, 2nd
-ed. 1997, §5.2 use to build `Γ(U)` (section-level citation, display numbers not verified
-against a copy). -/
-theorem Isometry.tendsto_of_dense (hT : ∀ j, Isometry (T j)) (hT₀ : Isometry T₀)
-    {s : Set X} (hs : Dense s) (h : ∀ z ∈ s, Tendsto (fun j => T j z) l (𝓝 (T₀ z)))
-    (x : X) : Tendsto (fun j => T j x) l (𝓝 (T₀ x)) := by
+/-- If every `T j` and `T₀` is an isometry and the family converges on a
+dense set, it converges at every point. -/
+theorem Isometry.tendsto_of_dense (hT : ∀ j, Isometry (T j))
+    (hT₀ : Isometry T₀) {s : Set X} (hs : Dense s)
+    (h : ∀ z ∈ s, Tendsto (fun j => T j z) l (𝓝 (T₀ z))) (x : X) :
+    Tendsto (fun j => T j x) l (𝓝 (T₀ x)) := by
   refine Metric.tendsto_nhds.2 fun ε hε => ?_
-  obtain ⟨z, hzs, hz⟩ := Metric.mem_closure_iff.1 (hs x) (ε / 3) (by positivity)
-  filter_upwards [Metric.tendsto_nhds.1 (h z hzs) (ε / 3) (by positivity)] with j hj
-  calc dist (T j x) (T₀ x)
-      ≤ dist (T j x) (T j z) + dist (T j z) (T₀ z) + dist (T₀ z) (T₀ x) :=
-        dist_triangle4 _ _ _ _
+  obtain ⟨z, hzs, hz⟩ :=
+    Metric.mem_closure_iff.1 (hs x) (ε / 3) (by positivity)
+  filter_upwards [
+    Metric.tendsto_nhds.1 (h z hzs) (ε / 3) (by positivity)] with j hj
+  calc
+    dist (T j x) (T₀ x)
+        ≤ dist (T j x) (T j z) + dist (T j z) (T₀ z) +
+          dist (T₀ z) (T₀ x) :=
+      dist_triangle4 _ _ _ _
     _ < ε / 3 + ε / 3 + ε / 3 := by
-        rw [(hT j).dist_eq, hT₀.dist_eq, dist_comm z x]
-        exact add_lt_add (add_lt_add hz hj) hz
+      rw [(hT j).dist_eq, hT₀.dist_eq, dist_comm z x]
+      exact add_lt_add (add_lt_add hz hj) hz
     _ = ε := by ring
 
 end ThreeEpsilon
+
+
 
 /-! ### The isometric congruence of finite tensor products
 
