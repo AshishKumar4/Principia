@@ -11,6 +11,7 @@ import Atlas.Witnesses.HilbertTensorMaps
 import Atlas.Witnesses.PiTensorInner
 import Atlas.Witnesses.FockSpace
 import Atlas.Witnesses.CreationAnnihilation
+import Atlas.Witnesses.WightmanUtilities
 
 /-!
 # Atlas.Witnesses — non-vacuity witnesses

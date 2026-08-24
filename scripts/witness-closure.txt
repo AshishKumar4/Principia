@@ -15,6 +15,7 @@ Atlas/Specs/OperatorTheory/Symmetric.lean
 Atlas/Specs/OperatorTheory/UnitaryGroup.lean
 Atlas/Specs/QFT/CreationAnnihilation.lean
 Atlas/Specs/QFT/FockSpace.lean
+Atlas/Specs/QFT/WightmanUtilities.lean
 Atlas/Specs/Spacetime/CausalStructure.lean
 Atlas/Specs/Spacetime/GlobalHyperbolicity.lean
 Atlas/Specs/Spacetime/Metric.lean
@@ -34,3 +35,4 @@ Atlas/Witnesses/Poincare.lean
 Atlas/Witnesses/PoincareRep.lean
 Atlas/Witnesses/SymmetricOperators.lean
 Atlas/Witnesses/UnitaryGroups.lean
+Atlas/Witnesses/WightmanUtilities.lean

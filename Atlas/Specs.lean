@@ -11,6 +11,7 @@ import Atlas.Specs.OperatorTheory.ProjectionValuedMeasure
 import Atlas.Specs.OperatorTheory.HilbertTensor
 import Atlas.Specs.QFT.FockSpace
 import Atlas.Specs.QFT.CreationAnnihilation
+import Atlas.Specs.QFT.WightmanUtilities
 
 /-!
 # Atlas.Specs — frozen definitions and target theorem statements
