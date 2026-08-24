@@ -1,0 +1,36 @@
+# Exact Atlas import closure reachable from Atlas/Witnesses/**/*.lean.
+# Any change is a reviewed semantic-boundary event.
+Atlas/Proofs/CausalLemmas.lean
+Atlas/Proofs/CayleyTheory.lean
+Atlas/Proofs/DeficiencyTheory.lean
+Atlas/Proofs/FockBridge.lean
+Atlas/Proofs/HilbertTensorBasis.lean
+Atlas/Proofs/HilbertTensorMaps.lean
+Atlas/Proofs/PiTensorInner.lean
+Atlas/Proofs/PiTensorSemilinear.lean
+Atlas/Specs/OperatorTheory/Cayley.lean
+Atlas/Specs/OperatorTheory/HilbertTensor.lean
+Atlas/Specs/OperatorTheory/ProjectionValuedMeasure.lean
+Atlas/Specs/OperatorTheory/Symmetric.lean
+Atlas/Specs/OperatorTheory/UnitaryGroup.lean
+Atlas/Specs/QFT/CreationAnnihilation.lean
+Atlas/Specs/QFT/FockSpace.lean
+Atlas/Specs/Spacetime/CausalStructure.lean
+Atlas/Specs/Spacetime/GlobalHyperbolicity.lean
+Atlas/Specs/Spacetime/Metric.lean
+Atlas/Specs/Spacetime/Minkowski.lean
+Atlas/Specs/Spacetime/Poincare.lean
+Atlas/Specs/Spacetime/PoincareRep.lean
+Atlas/Witnesses/BoolPVM.lean
+Atlas/Witnesses/CayleyScalar.lean
+Atlas/Witnesses/CreationAnnihilation.lean
+Atlas/Witnesses/FockSpace.lean
+Atlas/Witnesses/HilbertTensorBasic.lean
+Atlas/Witnesses/HilbertTensorMaps.lean
+Atlas/Witnesses/Minkowski.lean
+Atlas/Witnesses/MinkowskiCausal.lean
+Atlas/Witnesses/PiTensorInner.lean
+Atlas/Witnesses/Poincare.lean
+Atlas/Witnesses/PoincareRep.lean
+Atlas/Witnesses/SymmetricOperators.lean
+Atlas/Witnesses/UnitaryGroups.lean

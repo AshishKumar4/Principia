@@ -1,2 +1,8 @@
 /.lake/
 /.claude/scheduled_tasks.lock
+/.principia/
+/.venv/
+__pycache__/
+*.py[cod]
+/dist/
+/*.egg-info/

@@ -4,13 +4,13 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 export PATH="$HOME/.elan/bin:$PATH"
 
-echo "== gate 1/5: kernel verification (lake build) =="
+echo "== gate 1/9: kernel verification (lake build) =="
 lake build
 
-echo "== gate 2/5: axiom audit =="
+echo "== gate 2/9: axiom audit =="
 lake env lean scripts/AxiomAudit.lean
 
-echo "== gate 3/5: forbidden-token scan =="
+echo "== gate 3/9: forbidden-token scan =="
 # Authoritative soundness lives in gates 1-2; this catches tokens the audit can miss
 # (axiom/unsafe declarations that are merely present, native_decide) plus sorry, early.
 if grep -rnE --include='*.lean' \
@@ -20,15 +20,28 @@ if grep -rnE --include='*.lean' \
   exit 1
 fi
 
-echo "== gate 4/5: frozen-import closure =="
+echo "== gate 4/9: frozen-spec and witness dependency integrity =="
 python3 scripts/check_frozen_closure.py
 
-echo "== gate 5/5: external kernel re-verification (lean4checker, if installed) =="
-if [ -x "$HOME/.local/bin/lean4checker" ]; then
-  lake env "$HOME/.local/bin/lean4checker" Atlas
-  echo "lean4checker passed (external kernel re-verification of all Atlas modules)."
-else
-  echo "SKIPPED (lean4checker not installed — install per CLAUDE.md Workflow v2)."
+echo "== gate 5/9: external kernel re-verification (lean4checker) =="
+if [ ! -x "$HOME/.local/bin/lean4checker" ]; then
+  echo "FAILED: lean4checker is required at ~/.local/bin/lean4checker." >&2
+  echo "Install the pinned checker version documented in CLAUDE.md." >&2
+  exit 1
 fi
+lake env "$HOME/.local/bin/lean4checker" Atlas
+echo "lean4checker passed (external kernel re-verification of all Atlas modules)."
 
+
+echo "== gate 6/9: Atlas orphan-source detector =="
+python3 scripts/check_no_orphans.py
+
+echo "== gate 7/9: citation-debt manifest =="
+python3 scripts/check_citation_flags.py
+
+echo "== gate 8/9: witness-surface audit =="
+lake env lean scripts/WitnessAudit.lean
+
+echo "== gate 9/9: committed probe recompilation =="
+python3 scripts/check_probes.py
 echo "All gates passed."

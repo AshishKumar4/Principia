@@ -1,0 +1,8 @@
+# Hashes of exact lines carrying unresolved citation-honesty flags.
+# Entries may be removed only when the source is verified and the flag is resolved.
+Atlas/Proofs/SecondQuantization.lean:d776fea2a2e70278
+Atlas/Specs/OperatorTheory/ProjectionValuedMeasure.lean:abd4cb3de2c038fe
+Atlas/Specs/OperatorTheory/Symmetric.lean:5d817582e97bec6d
+Atlas/Specs/QFT/CreationAnnihilation.lean:5f04157c43e1d848
+Atlas/Specs/QFT/FockSpace.lean:1e2f639212d66fc2
+Atlas/Specs/QFT/FockSpace.lean:7dec380f1b9d81e4

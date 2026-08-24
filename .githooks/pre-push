@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+# Re-run the authoritative gates over the complete outgoing tree before every push.
+set -euo pipefail
+
+has_update=0
+while read -r _local_ref local_sha _remote_ref _remote_sha; do
+  if [ "$local_sha" != "0000000000000000000000000000000000000000" ]; then
+    has_update=1
+  fi
+done
+
+[ "$has_update" -eq 0 ] && exit 0
+
+root=$(git rev-parse --show-toplevel)
+"$root/scripts/check.sh"
+if [ -d "$root/tests" ]; then
+  python3 -m unittest discover -s "$root/tests" -v
+fi
