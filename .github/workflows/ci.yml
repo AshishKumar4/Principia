@@ -27,9 +27,19 @@ jobs:
 
       - name: Install and prove candidate sandbox
         run: |
+          # Ubuntu noble ships bubblewrap 0.9.0, which predates the overlay
+          # options the evaluator sandbox requires; build the pinned release.
           sudo apt-get update
-          sudo apt-get install --yes bubblewrap
-          bwrap --version
+          sudo apt-get install --yes libcap-dev meson ninja-build
+          curl -fsSL -o /tmp/bubblewrap.tar.xz \
+            https://github.com/containers/bubblewrap/releases/download/v0.11.1/bubblewrap-0.11.1.tar.xz
+          echo "c1b7455a1283b1295879a46d5f001dfd088c0bb0f238abb5e128b3583a246f71  /tmp/bubblewrap.tar.xz" | sha256sum --check
+          tar -xJf /tmp/bubblewrap.tar.xz -C /tmp
+          meson setup /tmp/bubblewrap-0.11.1/build /tmp/bubblewrap-0.11.1 \
+            -Dman=disabled -Dselinux=disabled -Dtests=false
+          ninja -C /tmp/bubblewrap-0.11.1/build
+          sudo install -m 0755 /tmp/bubblewrap-0.11.1/build/bwrap /usr/local/bin/bwrap
+          bwrap --version | grep -F 0.11.1
           SANDBOX_PROBE=$(mktemp -d)
           mkdir -p "$SANDBOX_PROBE/lower" "$SANDBOX_PROBE/upper" "$SANDBOX_PROBE/work"
           printf host > "$SANDBOX_PROBE/lower/host.txt"
