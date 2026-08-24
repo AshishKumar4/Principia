@@ -162,13 +162,16 @@ space, unbounded operator theory, Stone's theorem (see RESEARCH.md infrastructur
   field structure (no LinearPMap composition), six named axiom Props; spectrum
   condition in DISTRIBUTIONAL SUPPORT FORM (joint PVM/SNAG eliminated from critical
   path — deferred post-Stone node); microcausality frozen WITH the kernel anchor to
-  P1.2 causal relations. Sub-nodes: P2.5a `designed` — DRAFT landed 2026-08-23
-  (Atlas/Specs/QFT/WightmanUtilities.lean: 𝓕η as Schwartz-Fourier ∘ time-flip CLE
-  with the η-pairing integral anchor, closedForwardCone over the frozen P2.4a cone
-  with add/smul/closed lemmas, IsVanishingNearClosedForwardCone against Mathlib's
-  Distribution suite, integrability lemma; witnesses + 4 kernel probes; Fable
-  adversarial review in audits/reviews/P2.5a.md; FREEZE blocked on the Codex
-  cross-model pass — owner unlock); P2.5b `todo` the WightmanField freeze.
+  P1.2 causal relations. Sub-nodes: P2.5a `witnessed` — spec FROZEN 2026-08-24
+  (𝓕η with the η-pairing integral and `U(t)=exp(+itH)` sign anchor;
+  closedForwardCone; distribution-support bridge; Bochner integrability; inverse
+  Poincaré pullback on Schwartz space; witnesses + 5 kernel probes). Review cycle:
+  initial Fable approval, independent Codex found 4 defects (missing Poincaré
+  action, periodic sign probe, wrong Reed–Simon attribution, incomplete Bochner
+  contract), all repaired; independent Codex and renewed Fable re-reviews both
+  `FREEZE-READY` at confidence 0.99 (`audits/reviews/P2.5a*`). P2.5a becomes
+  `done` after this freeze commit merges and gates pass. P2.5b `todo`: freeze the
+  WightmanField structure and six named axiom Props.
 - P2.6 — **free scalar field satisfies Wightman (flagship)**. Proof-engine map in
   dossier: hermitian/microcausality/spectrum consume the PROVEN CCR trio + P1.W2
   cone lemmas. Sub-nodes: P2.6a `done` 2026-08-23 (Γ with all laws + conjugation incl. antilinearity
@@ -286,9 +289,10 @@ after P1.7.
   P2.3c (Cayley scalar), P2.3d (Bool PVM), P2.3g (Stone generator) — recompiled
   by gate 9 on every run; Git-reproducible evidence for the early freezes restored.
 - X.4 `todo` Codex cross-model review backfill of the early frozen specs
-  (all Atlas/Specs/** files predate the Workflow-v2 cross-model gate) — one pass,
-  verdicts to audits/reviews/. OWNER UNLOCK: no GPT-family agent in the current
-  harness; the same pass unblocks the P2.5a freeze.
+  (all pre-Workflow-v2 Atlas specs except P2.5a) — one pass, verdicts to
+  audits/reviews/. P2.5a independently demonstrated this process on 2026-08-24:
+  Codex found four defects that the original Fable pass missed, then approved the
+  repaired surface on re-review.
 - X.5 `designed` Incompatibility engine (upgrades X.1; design in
   docs/dossiers/horizon-roadmap.md): hypothesis Prop-classes, candidates extending
   exactly what they assume, `#atlas_check` applicability command, independence

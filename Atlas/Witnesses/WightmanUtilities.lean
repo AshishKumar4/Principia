@@ -5,9 +5,11 @@ import Mathlib.Analysis.Calculus.BumpFunction.InnerProduct
 # P2.5a witnesses — the Minkowski Fourier transform, the closed forward cone, and the
 spectrum-condition support hypothesis are non-vacuous
 
-Non-vacuity witnesses for the DRAFT spec `Atlas/Specs/QFT/WightmanUtilities.lean`
-(blueprint node P2.5a): a concrete Schwartz test function on `M4`, concrete cone points,
-and expected-true / expected-false `example`s for every definition of that file.
+Non-vacuity witnesses for the frozen spec `Atlas/Specs/QFT/WightmanUtilities.lean`
+(blueprint node P2.5a): a concrete Schwartz test function on `M4`, concrete cone
+points, and expected-true / expected-false `example`s for every definition,
+including its Poincaré action on Schwartz space, exercised on the pure translation
+`translateTimeUnit`.
 
 ## The concrete test functions
 
@@ -322,7 +324,102 @@ example : ¬ IsVanishingNearClosedForwardCone (TemperedDistribution.delta (0 : M
   rw [Distribution.dsupport_delta] at hd
   exact Set.disjoint_singleton_right.1 hd zero_mem_closedForwardCone
 
-/-! ### The smeared-translation integrability lemma -/
+/-! ### The Poincaré action on Schwartz space -/
+
+/-- Pure translation by the future unit time vector `∂₀`: the nontrivial-translation
+witness element `(∂₀, 1)` of `P↑₊`. -/
+noncomputable def translateTimeUnit : PoincareGroup :=
+  ⟨timeUnit, (1 : RestrictedLorentzGroup)⟩
+
+theorem translateTimeUnit_inv :
+    translateTimeUnit⁻¹ = ⟨-timeUnit, (1 : RestrictedLorentzGroup)⟩ :=
+  PoincareGroup.ext (by simp [translateTimeUnit]; rfl) (by simp [translateTimeUnit])
+
+theorem inv_smul_translateTimeUnit (x : M4) :
+    translateTimeUnit⁻¹ • x = x - timeUnit := by
+  rw [translateTimeUnit_inv, PoincareGroup.smul_def, Subgroup.coe_one]
+  show x + -timeUnit = x - timeUnit
+  rw [sub_eq_add_neg]
+
+theorem inv_smul_translateTimeUnit_two :
+    translateTimeUnit⁻¹ • ((2 : ℝ) • timeUnit) = timeUnit := by
+  rw [inv_smul_translateTimeUnit]
+  have h : (2 : ℝ) • (timeUnit : M4) - timeUnit = timeUnit := by module
+  rw [h]
+
+/-- The bump vanishes two units past its centre, where the translated argument lands. -/
+theorem testFn_two_timeUnit : testFn ((2 : ℝ) • timeUnit) = 0 := by
+  rw [testFn_apply, bumpFuture.zero_of_le_dist ?_]
+  · norm_num
+  · show (1 : ℝ) ≤ _
+    rw [dist_eq_norm]
+    have h : (2 : ℝ) • (timeUnit : M4) - timeUnit = timeUnit := by module
+    rw [h]
+    simp
+
+/-- The bump also vanishes three units out — the point where acting twice has moved it. -/
+theorem testFn_three_timeUnit : testFn ((3 : ℝ) • timeUnit) = 0 := by
+  rw [testFn_apply, bumpFuture.zero_of_le_dist ?_]
+  · norm_num
+  · show (1 : ℝ) ≤ _
+    rw [dist_eq_norm]
+    have h : (3 : ℝ) • (timeUnit : M4) - timeUnit = (2 : ℝ) • timeUnit := by module
+    rw [h, norm_smul]
+    simp
+
+-- Expected-true: the identity acts trivially.
+example : PoincareGroup.schwartzActionCLM 1 testFn = testFn := by
+  rw [PoincareGroup.schwartzActionCLM_one]
+  rfl
+
+-- Expected-false: a nontrivial translation moves the bump off its centre.
+example : PoincareGroup.schwartzActionCLM translateTimeUnit testFn ≠ testFn := by
+  intro h
+  have hval := DFunLike.congr_fun h ((2 : ℝ) • timeUnit)
+  rw [PoincareGroup.schwartzActionCLM_apply_apply, inv_smul_translateTimeUnit_two,
+    testFn_timeUnit, testFn_two_timeUnit] at hval
+  exact one_ne_zero hval
+
+-- Expected-true: the Schwartz-level equivalence round-trips through the inverted
+-- group element.
+example (g : PoincareGroup) (f : 𝓢(M4, ℂ)) :
+    PoincareGroup.schwartzActionCLE g⁻¹ (PoincareGroup.schwartzActionCLE g f) = f := by
+  rw [PoincareGroup.schwartzActionCLE_apply, PoincareGroup.schwartzActionCLE_apply]
+  exact PoincareGroup.schwartzActionCLM_apply_comp_inv g f
+
+-- Expected-true: the concrete round-trip at the witness translation evaluates back to
+-- the untouched bump.
+example : PoincareGroup.schwartzActionCLE translateTimeUnit⁻¹
+    (PoincareGroup.schwartzActionCLE translateTimeUnit testFn) timeUnit = 1 := by
+  rw [PoincareGroup.schwartzActionCLE_apply, PoincareGroup.schwartzActionCLE_apply,
+    PoincareGroup.schwartzActionCLM_apply_comp_inv, testFn_timeUnit]
+
+-- Expected-true: translations compose in the covariant order — acting twice shifts the
+-- argument twice, so the bump reappears one unit before `3∂₀`.
+theorem schwartzAction_translateTimeUnit_sq :
+    PoincareGroup.schwartzActionCLM (translateTimeUnit * translateTimeUnit) testFn
+      ((3 : ℝ) • timeUnit) = 1 := by
+  rw [PoincareGroup.schwartzActionCLM_mul, ContinuousLinearMap.coe_comp,
+    Function.comp_apply, PoincareGroup.schwartzActionCLM_apply_apply,
+    inv_smul_translateTimeUnit]
+  have h : (3 : ℝ) • (timeUnit : M4) - timeUnit = (2 : ℝ) • timeUnit := by module
+  rw [h, PoincareGroup.schwartzActionCLM_apply_apply, inv_smul_translateTimeUnit_two,
+    testFn_timeUnit]
+
+-- Expected-false: the double translation is not the identity — the untouched bump
+-- vanishes at the very point where the doubly-translated one peaks.
+example : PoincareGroup.schwartzActionCLM (translateTimeUnit * translateTimeUnit) testFn
+    ≠ testFn := by
+  intro h
+  have hval := DFunLike.congr_fun h ((3 : ℝ) • timeUnit)
+  rw [schwartzAction_translateTimeUnit_sq, testFn_three_timeUnit] at hval
+  exact one_ne_zero hval
+
+-- Expected-true: the monoid-hom packaging engages Mathlib's generic `map_mul`.
+example (g₁ g₂ : PoincareGroup) :
+    PoincareGroup.schwartzActionHom (g₁ * g₂)
+      = PoincareGroup.schwartzActionHom g₁ * PoincareGroup.schwartzActionHom g₂ :=
+  map_mul _ g₁ g₂
 
 -- Expected-true: instantiated at a bounded continuous integrand, `∫ a, f a • Ψ a` is a
 -- definite Bochner integral.

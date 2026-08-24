@@ -1,3 +1,4 @@
+import Atlas.Specs.Spacetime.Poincare
 import Atlas.Specs.Spacetime.Minkowski
 import Mathlib.Analysis.Distribution.Support
 
@@ -5,10 +6,9 @@ import Mathlib.Analysis.Distribution.Support
 # P2.5a — Wightman utilities: the Minkowski Fourier transform, the closed forward cone,
 and the spectrum-condition support hypothesis
 
-**DRAFT spec (blueprint node P2.5a).** This file is written to the frozen-spec standard,
-but it is *not* frozen: the freeze is blocked on the owner's cross-model review
-(Workflow v2, CLAUDE.md — two model families must independently fail to break a spec
-surface). Until that review lands, treat every statement here as a review target.
+**Frozen spec (blueprint node P2.5a, 2026-08-24).** Fable and independent Codex
+adversarial reviews approved this surface after a four-defect review/fix/re-review
+loop. Changes require `[spec-review]` and new evidence under `audits/reviews/P2.5a*`.
 
 ## Contents
 
@@ -42,7 +42,15 @@ surface). Until that review lands, treat every statement here as a review target
   distributional form.
 * `Spacetime.Minkowski.integrable_smul_of_bounded` — the integrability lemma that makes
   the smeared translation `∫ f(a) • U(a)Ψ da` of the spectrum condition a definite
-  Bochner integral.
+  Bochner integral in the complete codomain `H` (complete as it is for the frozen
+  `PoincareRep`).
+* `Spacetime.Minkowski.PoincareGroup.schwartzActionCLM` /
+  `schwartzActionCLE` / `schwartzActionHom` — the **Poincaré action on Schwartz space**:
+  the pullback by the inverse affine action, `(g ▷ f)(x) = f (g⁻¹ • x)` for
+  `g ∈ P↑₊`, with its pointwise formula, group laws, and monoid-hom packaging into the
+  endomorphism monoid of `𝓢(M4, ℂ)`. This is the action deferred to P2.5a by the frozen
+  P2.4a spec (`Atlas/Specs/Spacetime/Poincare.lean`) and consumed by the P2.5b covariance
+  axiom.
 
 ## What this file deliberately does not define
 
@@ -68,12 +76,22 @@ surface). Until that review lands, treat every statement here as a review target
 * **Which reflection.** `T` flips the *time* coordinate, not the spatial ones. This is
   forced, not chosen: `⟪v, T w⟫ = η(v, w)`, whereas the space reflection `-T` gives
   `-η(v, w)`. See `audits/probes/P2.5a/time_flip_sign_probe.lean`.
-* **Fourier normalization.** Mathlib's `𝓕` on `𝓢(V, E)` is
-  `𝓕 g ξ = ∫ v, 𝐞 (-⟪v, ξ⟫) • g v` with `𝐞 t = exp (2 π i t)`, so
-  `𝓕η f p = ∫ a, 𝐞 (-η(a, p)) • f a`. The `2π` sits in the exponent, so the Fourier
-  variable `p` is the physical four-momentum divided by `2π`: a mass-`m` shell reads
-  `4 π² (−η(p, p)) = m²`, i.e. `Ω(k) = √(4 π² ‖k‖² + m²)` in the P2.6c convention.
-  This rescaling is invisible to the spectrum condition, because
+* **Which pullback.** The Poincaré action on `𝓢(M4, ℂ)` pulls back by the INVERSE
+  affine action: `(g ▷ f)(x) = f (g⁻¹ • x)` — never by `g • x`. The inverse convention
+  is what makes `g ↦ ▷g` multiplicative for the frozen semidirect multiplication
+  (`PoincareGroup.schwartzActionCLM_mul`), the Schwartz-space counterpart of the frozen
+  `PoincareRep` bundling; the forward pullback is an antihomomorphism and a different
+  operator. See `audits/probes/P2.5a/poincare_schwartz_action_probe.lean`.
+* **Fourier normalization.** Mathlib supplies the forward-transform normalization: its
+  `𝓕` on `𝓢(V, E)` is `𝓕 g ξ = ∫ v, 𝐞 (-⟪v, ξ⟫) • g v` with `𝐞 t = exp (2 π i t)`, so
+  `𝓕η f p = ∫ a, 𝐞 (-η(a, p)) • f a`, and the `2π` is Mathlib's, not a textbook's.
+  Reed & Simon II §IX.1 states the symmetric `(2π)^(-n/2) exp(-i λ·x)` convention;
+  relative to it, `𝓕η` is a rescaled *inverse* transform, not their stated forward
+  normalization. The sign matches Wightman (2000), pp. 210–211, whose reconstruction
+  formula uses the kernel `exp(+i p·ξ)` with support in the forward cone. The `2π`
+  makes the Fourier variable `p` the physical four-momentum divided by `2π`: a mass-`m`
+  shell reads `4 π² (−η(p, p)) = m²`, i.e. `Ω(k) = √(4 π² ‖k‖² + m²)` in the P2.6c
+  convention. This rescaling is invisible to the spectrum condition, because
   `closedForwardCone` is invariant under positive scaling
   (`closedForwardCone.smul_mem`). See
   `audits/probes/P2.5a/fourier_normalization_probe.lean`.
@@ -92,16 +110,26 @@ surface). Until that review lands, treat every statement here as a review target
 * Streater & Wightman, *PCT, Spin and Statistics, and All That* (1964; Princeton
   Landmarks in Mathematics and Physics ed. 2000), Ch. 3 — the Wightman axioms, and in
   particular the spectrum condition in the form "the Fourier transform of the smearing
-  function vanishes near `V̄₊`" together with the cones `V̄±` of Ch. 1. Cited at chapter
-  level on purpose: the numbering of the axioms inside that chapter differs between the
-  editions and the secondary presentations available online, so no display number is
-  asserted here.
+  function vanishes near `V̄₊`" together with the cones `V̄±` of Ch. 1; §1-1 — the
+  affine action `(a, Λ) • x = Λx + a` whose pullback
+  `PoincareGroup.schwartzActionCLM` is. Cited at chapter/section level on purpose: the
+  numbering inside those chapters differs between the editions and the secondary
+  presentations available online, so no display number is asserted here.
 * Reed & Simon, *Methods of Modern Mathematical Physics II: Fourier Analysis,
-  Self-Adjointness* (1975), §IX.1 — the Schwartz space `𝓢`, the Fourier transform as a
-  bijection of `𝓢` onto itself, and the `e^{i p x}` versus `e^{2 π i p x}`
-  normalization bookkeeping; §IX.2 — tempered distributions, their support, and the
-  pairing of a Schwartz function with a tempered distribution. Cited at section level;
-  no display number is asserted here.
+  Self-Adjointness* (1975), §IX.1 — the Schwartz space `𝓢` and the Fourier transform as
+  a bijection of `𝓢` onto itself; §IX.2 — tempered distributions, their support, and the
+  pairing of a Schwartz function with a tempered distribution. Its stated normalization
+  is the symmetric `(2π)^(-n/2) exp(-i λ·x)` one; the `2π` normalization used here is
+  Mathlib's and is not attributed to Reed–Simon. Cited at section level; no display
+  number is asserted here.
+* A. S. Wightman, "The spin-statistics connection: Some pedagogical remarks in response
+  to Neuenschwander's question", *Mathematical Physics and Quantum Field Theory*,
+  Electron. J. Differential Equations, Conf. 04 (2000), pp. 207–213 — pp. 210–211: the
+  reconstruction formula `F_n = ∫ exp(i Σ p_j·ξ_j) G_n` with `G_n` supported in the
+  forward cone `V₊`, the sign orientation `fourierMinkowski_apply_eq_integral` pins.
+* Weinberg, *The Quantum Theory of Fields*, Vol. I (1995), §2.3 — Poincaré group
+  conventions and the transformation law underlying the pullback action on test
+  functions (section level; no display number asserted here).
 * O'Neill, *Semi-Riemannian Geometry with Applications to Relativity* (1983), Ch. 5,
   pp. 143–146 — the time cones of a Lorentz vector space, which the frozen P2.4a cone
   toolkit reused here formalizes.
@@ -259,13 +287,16 @@ theorem fourierMinkowskiCLE_symm_apply (f : 𝓢(M4, ℂ)) :
     fourierMinkowskiCLE.symm f = 𝓕⁻ (timeReflectionSchwartzCLM f) := rfl
 
 /-- **The convention anchor.** `𝓕η f p = ∫ a, 𝐞 (-η(a, p)) • f a`, with
-`𝐞 t = exp (2 π i t)` Mathlib's `Real.fourierChar`: the exponent is the Minkowski
-pairing, and the `2π` sits inside the character. Mostly-plus `η` makes this the physics
-kernel `exp (2 π i (a⁰p⁰ - a⃗ · p⃗))`, i.e. the Fourier variable `p` is the physical
-four-momentum divided by `2π`.
+`𝐞 t = exp (2 π i t)` Mathlib's `Real.fourierChar`: the `2π` forward-transform
+normalization is Mathlib's, and the exponent is the Minkowski pairing. Mostly-plus `η`
+makes this the physics kernel `exp (2 π i (a⁰p⁰ - a⃗ · p⃗))`, i.e. the Fourier variable
+`p` is the physical four-momentum divided by `2π`. The sign matches Wightman (2000),
+pp. 210–211, whose reconstruction formula uses `exp(+i p·ξ)` with support in the
+forward cone.
 
-Reed & Simon, *Methods of Modern Mathematical Physics II*, §IX.1 (the `e^{2 π i p x}`
-normalization of the Fourier transform on `𝓢`). -/
+Reed & Simon, *Methods of Modern Mathematical Physics II*, §IX.1 states the symmetric
+`(2π)^(-n/2) exp(-i λ·x)` normalization instead; relative to it this transform is a
+rescaled inverse transform, not their stated forward normalization. -/
 theorem fourierMinkowski_apply_eq_integral (f : 𝓢(M4, ℂ)) (p : M4) :
     𝓕η f p = ∫ a : M4, Real.fourierChar (-(minkowskiForm a p)) • f a := by
   rw [fourierMinkowski_apply_apply, SchwartzMap.fourier_coe, Real.fourier_eq]
@@ -433,19 +464,141 @@ theorem FourierVanishesNearClosedForwardCone.isVanishingNear {f : 𝓢(M4, ℂ)}
 
 /-- The integrability lemma behind the smeared translations of the spectrum condition:
 for `f : 𝓢(M4, ℂ)` and a bounded continuous vector-valued map `Ψ`, `a ↦ f a • Ψ a` is
-Bochner integrable, so `∫ a, f a • Ψ a` is a definite vector. The spectrum condition
-applies this with `Ψ a = U a ψ` for a strongly continuous unitary representation `U`,
-where `‖U a ψ‖ = ‖ψ‖` supplies the bound.
+Bochner integrable, and because the codomain `H` is complete, `∫ a, f a • Ψ a` is a
+definite vector of `H` (Mathlib defines the Bochner integral as junk `0` on
+noncomplete codomains, so completeness is what backs the definite-integral promise).
+The spectrum condition applies this with `Ψ a = U a ψ` for a strongly continuous unitary
+representation `U`, where `‖U a ψ‖ = ‖ψ‖` supplies the bound; the frozen `PoincareRep`
+carries exactly this completeness instance.
 
 Reed & Simon, *Methods of Modern Mathematical Physics II*, §IX.1 (Schwartz functions are
 integrable); Streater & Wightman, *PCT, Spin and Statistics, and All That* (Princeton
 Landmarks ed. 2000), Ch. 3 (the smeared translations of the spectrum condition). -/
 theorem integrable_smul_of_bounded {H : Type*} [NormedAddCommGroup H] [NormedSpace ℂ H]
-    (f : 𝓢(M4, ℂ)) {Ψ : M4 → H} (hΨ : Continuous Ψ) {C : ℝ} (hC : ∀ a, ‖Ψ a‖ ≤ C) :
+    [CompleteSpace H] (f : 𝓢(M4, ℂ)) {Ψ : M4 → H} (hΨ : Continuous Ψ) {C : ℝ}
+    (hC : ∀ a, ‖Ψ a‖ ≤ C) :
     Integrable (fun a : M4 => f a • Ψ a) volume := by
   refine Integrable.mono' (f.integrable.norm.const_mul C)
     (f.continuous.smul hΨ).aestronglyMeasurable (Filter.Eventually.of_forall fun a => ?_)
   rw [norm_smul, mul_comm]
   exact mul_le_mul_of_nonneg_right (hC a) (norm_nonneg _)
+
+
+/-! ### The Poincaré action on Schwartz space
+
+The action on test functions deferred to this node by the frozen P2.4a spec: the
+restricted Poincaré group acts on `𝓢(M4, ℂ)` by pullback along the inverse affine
+action, `(g ▷ f)(x) = f (g⁻¹ • x)`. For `g = (a, Λ)` the point reads `Λ⁻¹ (x - a)`, so
+Mathlib's Schwartz-space composition operators supply continuity and temperateness:
+translation by `a` (`SchwartzMap.compSubConstCLM`) followed by composition with the
+linear automorphism `Λ⁻¹` (`SchwartzMap.compCLMOfContinuousLinearEquiv`). No
+temperate-growth estimate is reproved here.
+-/
+
+/-- The inverse affine action spelled out: `g⁻¹ • x = Λ⁻¹ (x - a)` for `g = (a, Λ)`.
+This is the display form of the pullback argument in
+`PoincareGroup.schwartzActionCLM_apply_apply`. -/
+theorem PoincareGroup.inv_smul_def (g : PoincareGroup) (x : M4) :
+    g⁻¹ • x = ((g.lorentz⁻¹ : RestrictedLorentzGroup) : M4 ≃L[ℝ] M4)
+      (x - g.translation) := by
+  rw [smul_def, inv_lorentz, inv_translation, map_sub, sub_eq_add_neg]
+/-- **The Poincaré action on Schwartz space**: the pullback `(g ▷ f)(x) = f (g⁻¹ • x)`
+for `g = (a, Λ) ∈ P↑₊`, i.e. `f ↦ f ∘ Λ⁻¹ ∘ (· - a)`, built from Mathlib's
+`SchwartzMap.compSubConstCLM` and `SchwartzMap.compCLMOfContinuousLinearEquiv`.
+
+Streater & Wightman, *PCT, Spin and Statistics, and All That* (Princeton Landmarks ed.
+2000), §1-1 (the affine action whose pullback this is) and Ch. 3 (covariance of Wightman
+functions under the induced action on test functions); Weinberg, *The Quantum Theory of
+Fields*, Vol. I (1995), §2.3. -/
+noncomputable def PoincareGroup.schwartzActionCLM (g : PoincareGroup) :
+    𝓢(M4, ℂ) →L[ℂ] 𝓢(M4, ℂ) :=
+  (SchwartzMap.compSubConstCLM ℂ g.translation).comp
+    (SchwartzMap.compCLMOfContinuousLinearEquiv ℂ
+      ((g.lorentz⁻¹ : RestrictedLorentzGroup) : M4 ≃L[ℝ] M4))
+
+@[simp]
+theorem PoincareGroup.schwartzActionCLM_apply_apply (g : PoincareGroup)
+    (f : 𝓢(M4, ℂ)) (x : M4) :
+    schwartzActionCLM g f x = f (g⁻¹ • x) := by
+  simp only [schwartzActionCLM, ContinuousLinearMap.coe_comp, Function.comp_apply,
+    SchwartzMap.compSubConstCLM_apply, SchwartzMap.compCLMOfContinuousLinearEquiv_apply,
+    inv_smul_def]
+
+/-- The exact display formula: `(g ▷ f)(x) = f (Λ⁻¹ (x - a))` for `g = (a, Λ)`. -/
+theorem PoincareGroup.schwartzActionCLM_apply' (g : PoincareGroup) (f : 𝓢(M4, ℂ)) (x : M4) :
+    schwartzActionCLM g f x
+      = f (((g.lorentz⁻¹ : RestrictedLorentzGroup) : M4 ≃L[ℝ] M4)
+        (x - g.translation)) := by
+  rw [schwartzActionCLM_apply_apply, inv_smul_def]
+
+/-- **Identity law**: the identity group element acts as the identity operator. -/
+@[simp]
+theorem PoincareGroup.schwartzActionCLM_one :
+    schwartzActionCLM (1 : PoincareGroup) = ContinuousLinearMap.id ℂ (𝓢(M4, ℂ)) := by
+  ext f x
+  simp
+
+/-- **Multiplication law — the group-law orientation**: the pullback is covariant,
+`▷(g₁ * g₂) = ▷g₁ ∘L ▷g₂` for the frozen semidirect product. This is what makes the
+action packageable as the monoid homomorphism `schwartzActionHom`; pulling back by the
+forward affine action would compose the other way round. -/
+@[simp]
+theorem PoincareGroup.schwartzActionCLM_mul (g₁ g₂ : PoincareGroup) :
+    schwartzActionCLM (g₁ * g₂) = (schwartzActionCLM g₁).comp (schwartzActionCLM g₂) := by
+  ext f x
+  simp only [ContinuousLinearMap.coe_comp, Function.comp_apply,
+    schwartzActionCLM_apply_apply]
+  rw [mul_inv_rev, mul_smul]
+
+/-- Inverse law, one side: `▷g⁻¹ ∘ ▷g = id`. -/
+theorem PoincareGroup.schwartzActionCLM_mul_inv (g : PoincareGroup) :
+    (schwartzActionCLM g⁻¹).comp (schwartzActionCLM g) =
+      ContinuousLinearMap.id ℂ (𝓢(M4, ℂ)) := by
+  rw [← schwartzActionCLM_mul, inv_mul_cancel, schwartzActionCLM_one]
+
+/-- Inverse law, the other side: `▷g ∘ ▷g⁻¹ = id`. -/
+theorem PoincareGroup.schwartzActionCLM_inv_mul (g : PoincareGroup) :
+    (schwartzActionCLM g).comp (schwartzActionCLM g⁻¹) =
+      ContinuousLinearMap.id ℂ (𝓢(M4, ℂ)) := by
+  rw [← schwartzActionCLM_mul, mul_inv_cancel, schwartzActionCLM_one]
+
+/-- Pointwise consequence of `schwartzActionCLM_mul_inv`: `▷g⁻¹` undoes `▷g`. -/
+theorem PoincareGroup.schwartzActionCLM_apply_comp_inv (g : PoincareGroup)
+    (f : 𝓢(M4, ℂ)) :
+    schwartzActionCLM g⁻¹ (schwartzActionCLM g f) = f :=
+  DFunLike.congr_fun (schwartzActionCLM_mul_inv g) f
+
+/-- Pointwise consequence of `schwartzActionCLM_inv_mul`: `▷g` undoes `▷g⁻¹`. -/
+theorem PoincareGroup.schwartzActionCLM_apply_inv_mul (g : PoincareGroup)
+    (f : 𝓢(M4, ℂ)) :
+    schwartzActionCLM g (schwartzActionCLM g⁻¹ f) = f :=
+  DFunLike.congr_fun (schwartzActionCLM_inv_mul g) f
+
+/-- **The Poincaré action as a continuous linear equivalence**; its inverse is the
+action of `g⁻¹`. -/
+noncomputable def PoincareGroup.schwartzActionCLE (g : PoincareGroup) :
+    𝓢(M4, ℂ) ≃L[ℂ] 𝓢(M4, ℂ) :=
+  ContinuousLinearEquiv.equivOfInverse (schwartzActionCLM g) (schwartzActionCLM g⁻¹)
+    (schwartzActionCLM_apply_comp_inv g) (schwartzActionCLM_apply_inv_mul g)
+
+@[simp]
+theorem PoincareGroup.schwartzActionCLE_apply (g : PoincareGroup) (f : 𝓢(M4, ℂ)) :
+    schwartzActionCLE g f = schwartzActionCLM g f := rfl
+
+/-- The inverse of the equivalence is the action of the inverted group element. -/
+@[simp]
+theorem PoincareGroup.schwartzActionCLE_symm_apply (g : PoincareGroup)
+    (f : 𝓢(M4, ℂ)) :
+    (schwartzActionCLE g).symm f = schwartzActionCLM g⁻¹ f := rfl
+
+/-- **The laws packaged**: `g ↦ ▷g` is a monoid homomorphism from the restricted
+Poincaré group into the endomorphism monoid of `𝓢(M4, ℂ)` under composition — the
+Schwartz-space counterpart of the frozen `PoincareRep` bundling
+(`PoincareGroup →* unitary (H →L[ℂ] H)`). -/
+noncomputable def PoincareGroup.schwartzActionHom :
+    PoincareGroup →* (𝓢(M4, ℂ) →L[ℂ] 𝓢(M4, ℂ)) where
+  toFun := schwartzActionCLM
+  map_one' := schwartzActionCLM_one
+  map_mul' := schwartzActionCLM_mul
 
 end Spacetime.Minkowski

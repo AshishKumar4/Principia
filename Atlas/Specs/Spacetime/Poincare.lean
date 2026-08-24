@@ -42,8 +42,8 @@ require a spec review and a `[spec-review]` commit (see CLAUDE.md).
   Hausdorff linear topology), and `PoincareGroup` the product topology of
   `M4 × RestrictedLorentzGroup`. This is the standard topology of `P↑₊`; strong
   continuity of representations (P2.4b) is stated against it.
-* The action on Schwartz functions (needed for covariant fields) is DEFERRED to the
-  P2.5a utilities node, per the P2.4/P2.5/P2.6 design dossier.
+* The action on Schwartz functions needed for covariant fields is frozen in
+  `Atlas/Specs/QFT/WightmanUtilities.lean` (P2.5a).
 
 ## Sources
 
@@ -232,7 +232,7 @@ theorem RestrictedLorentzGroup.map_massShell (Λ : RestrictedLorentzGroup) {m : 
 translation together with a restricted Lorentz transformation, acting affinely on
 Minkowski space by `(a, Λ) • x = Λ x + a` (Streater–Wightman, §1-1). Hand-rolled
 semidirect structure; see the module docstring for why Mathlib's `SemidirectProduct`
-is not used. The induced action on Schwartz functions is deferred to P2.5a. -/
+is not used. P2.5a defines its pullback action on Schwartz functions. -/
 @[ext]
 structure PoincareGroup where
   /-- The translation component `a`. -/
